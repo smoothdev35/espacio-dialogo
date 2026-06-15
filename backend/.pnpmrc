@@ -1,0 +1,4 @@
+node-linker=hoisted
+shamefully-hoist=true
+dedupe-direct-deps=true
+ignore-scripts=true

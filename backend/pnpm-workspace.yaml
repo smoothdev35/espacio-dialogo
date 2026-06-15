@@ -1,0 +1,13 @@
+engineStrict: true
+auditLevel: high
+audit: true
+minimumReleaseAge: 4320
+minimumReleaseAgeStrict: true
+blockExoticSubdeps: true
+strictDepBuilds: true
+
+allowBuilds:
+  "@swc/core": true
+  "core-js-pure": true
+  "esbuild": true
+  "sharp": true

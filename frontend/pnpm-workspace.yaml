@@ -1,0 +1,11 @@
+engineStrict: true
+auditLevel: high
+audit: true
+minimumReleaseAge: 4320
+minimumReleaseAgeStrict: true
+blockExoticSubdeps: true
+strictDepBuilds: true
+
+allowBuilds:
+  esbuild: true
+  sharp: true

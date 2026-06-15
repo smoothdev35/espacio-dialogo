@@ -1,0 +1,9 @@
+FROM node:22-alpine
+ENV CI=true
+WORKDIR /opt/app
+RUN corepack enable
+COPY package.json .pnpmrc pnpm-workspace.yaml ./
+RUN pnpm install
+COPY . .
+EXPOSE 4321
+CMD ["pnpm", "exec", "astro", "dev", "--host", "0.0.0.0"]
