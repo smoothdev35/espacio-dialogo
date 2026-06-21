@@ -1,24 +1,49 @@
-# build output
-dist/
-# generated types
-.astro/
-
-# dependencies
-node_modules/
-
-# logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# ==============================================================================
+# 📦 Dependency Managers & System Artifacts
+# ==============================================================================
+**/node_modules/
+**/.pnpm-store*
+**/.npm/
 pnpm-debug.log*
 
-
-# environment variables
-.env
-.env.production
-
-# macOS-specific files
+# OS specific files
 .DS_Store
+Thumbs.db
+**/.vscode/
 
-# jetbrains setting folder
-.idea/
+# ==============================================================================
+# 🚀 Turborepo Caching Layer
+# ==============================================================================
+**/.turbo/
+
+# ==============================================================================
+# 🛠️ Build Output Targets & Compilers
+# ==============================================================================
+**/.astro/
+**/dist/
+**/.next/
+**/out/
+**/build/
+**/*.tsbuildinfo
+
+# Local dev/test execution outputs
+**/coverage/
+**/*.log
+**/.vite/
+
+# ==============================================================================
+# 🔑 Absolute Security & Secrets Containment (NEVER COMMIT THESE)
+# ==============================================================================
+**/.env*
+**/*.pem
+**/*.key
+**/*.cert
+
+# ==============================================================================
+# 🐳 Docker Virtualization & Local Testing Persistence
+# ==============================================================================
+**/.inngest/
+**/.models/
+
+# Local File Ingestion Uploads
+**/uploads/

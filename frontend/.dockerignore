@@ -1,5 +1,54 @@
-node_modules
-.astro
-dist
-.env
-.env.*
+# ==============================================================================
+# 📦 Dependency Managers & System Artifacts
+# ==============================================================================
+**/node_modules/
+**/.pnpm-store*
+**/.npm
+pnpm-debug.log*
+
+# OS specific files
+.DS_Store
+Thumbs.db
+**/.vscode/
+
+
+# ==============================================================================
+# 🚀 Turborepo Caching Layer
+# ==============================================================================
+**/.turbo
+
+# ==============================================================================
+# 🛠️ Build Output Targets & Compilers
+# ==============================================================================
+**/.astro
+**/dist
+**/.next
+**/out
+**/build
+**/*.tsbuildinfo
+
+# Local dev/test execution outputs
+**/coverage
+**/*.log
+**/.vite
+
+# ==============================================================================
+# 🔑 Absolute Security & Secrets Containment (NEVER COMMIT THESE)
+# ==============================================================================
+**/.env*
+**/*.pem
+**/*.key
+**/*.cert
+
+# ==============================================================================
+# 🐳 Docker Virtualization & Local Testing Persistence
+# ==============================================================================
+**/.inngest
+**/.models
+
+# Local File Ingestion Uploads
+**/uploads
+
+# Version control and system tracking files
+.git
+.gitignore
