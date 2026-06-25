@@ -1,7 +1,7 @@
 ---
 version: "alpha"
-name: "Agentic Harness Design System"
-description: "Core design tokens generated from staging/raw-primitives.md"
+name: "Espacio Dialogo Design System"
+description: "Core design tokens generated from raw-primitives (relume)"
 
 base_primitives:
   palette:
@@ -24,15 +24,15 @@ applied_semantics:
     input: "md"
   layout_containers:
     max_width: "7xl"
-    page_gutters: "clamp-anchor"
+    page_gutters: "clamp(1rem, 0.471rem + 2.254vw, 2.5rem)"
   vertical_hierarchy:
-    section_gap: "clamp-anchor"
-    component_gap: "clamp-anchor"
+    section_gap: "clamp(3rem, 1.239rem + 7.512vw, 8rem)"
+    component_gap: "clamp(1rem, 0.648rem + 1.502vw, 2rem)"
   typography_sizes:
-    h1: "clamp-anchor"
-    h2: "clamp-anchor"
-    h3: "clamp-anchor"
-    body: "clamp-anchor"
+    h1: "clamp(2.25rem, 1.722rem + 2.254vw, 3.75rem)"
+    h2: "clamp(1.75rem, 1.486rem + 1.127vw, 2.5rem)"
+    h3: "clamp(1.25rem, 1.074rem + 0.751vw, 1.75rem)"
+    body: "clamp(1rem, 0.956rem + 0.188vw, 1.125rem)"
     button: "md"
     ghost_link: "sm"
     input: "md"
@@ -150,10 +150,10 @@ Light mode: page bg #F2F2F2, surfaces #FFFFFF, text #232B3D. Dark mode: page bg 
 
 | Level | Font | Weight | Fluid Range |
 |-------|------|--------|-------------|
-| H1 | Lora | Bold | 2.25rem → 3.75rem |
-| H2 | Lora | Bold | 1.75rem → 2.5rem |
-| H3 | Lora | Semibold | 1.25rem → 1.75rem |
-| Body | Inter | Medium | 1rem → 1.125rem |
+| H1 | Lora | Bold | `clamp(2.25rem, 1.722rem + 2.254vw, 3.75rem)` |
+| H2 | Lora | Bold | `clamp(1.75rem, 1.486rem + 1.127vw, 2.5rem)` |
+| H3 | Lora | Semibold | `clamp(1.25rem, 1.074rem + 0.751vw, 1.75rem)` |
+| Body | Inter | Medium | `clamp(1rem, 0.956rem + 0.188vw, 1.125rem)` |
 | Button | Inter | Semibold | md |
 | Link | Inter | Semibold | sm |
 | Input | Inter | Semibold | md |
@@ -164,9 +164,9 @@ Import: `@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,w
 ## Layout
 
 - **Max container width:** 7xl (80rem / 1280px)
-- **Page gutters:** clamp(1rem, ..., 2.5rem) — 375px→1440px
-- **Section gap:** clamp(3rem, ..., 8rem)
-- **Component gap:** clamp(1rem, ..., 2rem)
+- **Page gutters:** `clamp(1rem, 0.471rem + 2.254vw, 2.5rem)` — 375px→1440px
+- **Section gap:** `clamp(3rem, 1.239rem + 7.512vw, 8rem)`
+- **Component gap:** `clamp(1rem, 0.648rem + 1.502vw, 2rem)`
 
 ## Shapes
 
