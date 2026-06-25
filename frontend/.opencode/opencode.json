@@ -12,5 +12,10 @@
       ],
       "enabled": true
     }
+  },
+  "permission": {
+    "mcp": {
+      "chrome-devtools-mcp": "deny"
+    }
   }
 }

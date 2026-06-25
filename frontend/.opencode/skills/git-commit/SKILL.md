@@ -1,7 +1,6 @@
 ---
 name: git-commit
 description: Run git status, select files to stage, and generate a validated conventional commit message from the staged diff.
-allowed-tools: Bash(git:status) Bash(git:diff) Bash(git:add) Bash(git:commit) Bash(git:push)
 ---
 
 ## Prerequisites
