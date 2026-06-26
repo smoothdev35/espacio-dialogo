@@ -14,8 +14,11 @@
     }
   },
   "permission": {
-    "mcp": {
-      "chrome-devtools-mcp": "deny"
+    "tool": {
+      "chrome-devtools-mcp_*": "deny"
+    },
+    "skill": {
+      "astro-rules": "deny"
     }
   }
 }

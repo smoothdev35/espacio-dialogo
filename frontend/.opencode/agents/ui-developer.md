@@ -6,7 +6,7 @@ permissions:
   read: allow
   edit: allow
   skill:
-    - astro-rules
+    "astro-rules": allow
 ---
 
 # UI Developer Persona & Constraints
