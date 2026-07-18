@@ -1,22 +1,22 @@
 ---
-import "../styles/global.css";
+import '../styles/global.css'
 
 export interface Props {
-  title?: string;
+  title?: string
 }
 
-const { title = "EDD" } = Astro.props;
+const { title = 'EDD' } = Astro.props
 
 const navLinks = [
-  { label: "Home", href: "/", current: true },
-  { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "/contact" },
-];
+  { label: 'Home', href: '/', current: true },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Contact', href: '/contact' },
+]
 
 const navActions = [
-  { label: "Subscribe", variant: "secondary-on-dark" as const },
-  { label: "Donate", variant: "primary-on-dark" as const },
-];
+  { label: 'Subscribe', variant: 'secondary-on-dark' as const },
+  { label: 'Donate', variant: 'primary-on-dark' as const },
+]
 ---
 
 <!doctype html>
@@ -29,17 +29,17 @@ const navActions = [
     <title>{title}</title>
     <slot name="head" />
     <script is:inline>
-      (function () {
-        var t = localStorage.getItem("theme");
+      ;(function () {
+        var t = localStorage.getItem('theme')
         if (
-          t === "dark" ||
-          (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)
+          t === 'dark' ||
+          (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)
         ) {
-          document.documentElement.classList.add("dark");
+          document.documentElement.classList.add('dark')
         } else {
-          document.documentElement.classList.remove("dark");
+          document.documentElement.classList.remove('dark')
         }
-      })();
+      })()
     </script>
   </head>
   <body class="bg-page text-page-text">

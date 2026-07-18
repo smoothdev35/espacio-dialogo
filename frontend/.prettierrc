@@ -2,7 +2,6 @@
   "semi": false,
   "singleQuote": true,
   "tabWidth": 2,
-  "tailwindStylesheet": "./src/styles/global.css"
   "plugins": [
     "prettier-plugin-astro",
     "prettier-plugin-tailwindcss"

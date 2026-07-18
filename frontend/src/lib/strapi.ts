@@ -1,4 +1,11 @@
-import type { Article, Author, Category, StrapiMeta, StrapiQueryParams, Tag } from '@/types/strapi'
+import type {
+  Article,
+  Author,
+  Category,
+  StrapiMeta,
+  StrapiQueryParams,
+  Tag,
+} from '@/types/strapi'
 
 interface StrapiConfig {
   url: string
@@ -19,7 +26,7 @@ function encodeValue(key: string, value: unknown): string {
 
   if (Array.isArray(value)) {
     return value
-      .filter(v => v !== null && v !== undefined)
+      .filter((v) => v !== null && v !== undefined)
       .map((v, i) => encodeValue(`${key}[${i}]`, v))
       .join('&')
   }
@@ -49,7 +56,7 @@ export class StrapiError extends Error {
   constructor(
     public status: number,
     message: string,
-    public url: string
+    public url: string,
   ) {
     super(message)
     this.name = 'StrapiError'
@@ -66,7 +73,10 @@ interface StrapiSingleResponse<T> {
   meta: StrapiMeta
 }
 
-async function request<T>(path: string, params?: StrapiQueryParams): Promise<T> {
+async function request<T>(
+  path: string,
+  params?: StrapiQueryParams,
+): Promise<T> {
   const queryString = buildQueryString(params)
   const url = `${config.url}${path}${queryString}`
 
@@ -84,7 +94,7 @@ async function request<T>(path: string, params?: StrapiQueryParams): Promise<T> 
     throw new StrapiError(
       response.status,
       `Strapi API error (${response.status}${body ? `: ${body}` : ''})`,
-      url
+      url,
     )
   }
 
@@ -98,11 +108,11 @@ export interface FetchCollectionResult<T> {
 
 export async function fetchCollection<T>(
   pluralApiId: string,
-  params?: StrapiQueryParams
+  params?: StrapiQueryParams,
 ): Promise<FetchCollectionResult<T>> {
   const response = await request<StrapiCollectionResponse<T>>(
     `/api/${pluralApiId}`,
-    params
+    params,
   )
   return { data: response.data, meta: response.meta }
 }
@@ -110,11 +120,11 @@ export async function fetchCollection<T>(
 export async function fetchSingle<T>(
   pluralApiId: string,
   documentId: string,
-  params?: StrapiQueryParams
+  params?: StrapiQueryParams,
 ): Promise<T | null> {
   const response = await request<StrapiSingleResponse<T>>(
     `/api/${pluralApiId}/${documentId}`,
-    params
+    params,
   )
   return response.data
 }

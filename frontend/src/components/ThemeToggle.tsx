@@ -1,25 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 
 export default function ThemeToggle() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(false)
 
   useEffect(() => {
-    setDark(document.documentElement.classList.contains("dark"));
-  }, []);
+    setDark(document.documentElement.classList.contains('dark'))
+  }, [])
 
   function toggle() {
-    const next = !document.documentElement.classList.contains("dark");
-    document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem("theme", next ? "dark" : "light");
-    setDark(next);
+    const next = !document.documentElement.classList.contains('dark')
+    document.documentElement.classList.toggle('dark', next)
+    localStorage.setItem('theme', next ? 'dark' : 'light')
+    setDark(next)
   }
 
   return (
     <button
       type="button"
       onClick={toggle}
-      aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-      className="rounded-button p-2 text-page-text hover:bg-surface"
+      aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+      className="rounded-button text-page-text hover:bg-surface p-2"
     >
       <svg
         className="block dark:hidden"
@@ -60,5 +60,5 @@ export default function ThemeToggle() {
         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
       </svg>
     </button>
-  );
+  )
 }

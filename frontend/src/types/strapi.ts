@@ -45,13 +45,16 @@ export interface Media {
   height: number
   mime: string
   size: number
-  formats: Record<string, {
-    url: string
-    width: number
-    height: number
-    mime: string
-    size: number
-  }> | null
+  formats: Record<
+    string,
+    {
+      url: string
+      width: number
+      height: number
+      mime: string
+      size: number
+    }
+  > | null
 }
 
 export interface TextInline {
@@ -111,7 +114,13 @@ export interface ImageBlock {
 
 export type Inline = TextInline | LinkInline
 
-export type Block = ParagraphBlock | HeadingBlock | ListBlock | QuoteBlock | CodeBlock | ImageBlock
+export type Block =
+  | ParagraphBlock
+  | HeadingBlock
+  | ListBlock
+  | QuoteBlock
+  | CodeBlock
+  | ImageBlock
 
 export interface Category extends StrapiDocument {
   name: string
