@@ -1,0 +1,12 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "lsp": true,
+  "mcp": {
+    "chrome-devtools-mcp@latest": {
+      "enabled": true
+    },
+    "figma-mcp-go": {
+      "enabled": true
+    }
+  }
+}
