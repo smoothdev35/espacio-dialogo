@@ -25,11 +25,17 @@ services:
     container_name: espacio-dialogo-backend
     ports:
       - "1337:1337"
+    command: ["pnpm", "run", "develop"]
     env_file:
       - ./backend/.env
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
     volumes:
+      - ./backend/config:/opt/app/config
+      - ./backend/src:/opt/app/src
+      - ./backend/package.json:/opt/app/package.json
+      - ./backend/pnpm-workspace.yaml:/opt/app/pnpm-workspace.yaml
+      - ./backend/tsconfig.json:/opt/app/tsconfig.json
       - /opt/app/node_modules
       - /opt/app/.strapi
       - /opt/app/.cache
