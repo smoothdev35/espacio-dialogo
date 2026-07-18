@@ -22,11 +22,11 @@
 #### 🛠️ Execution Task Matrix
 | Task ID | Type | Target Technical Scope / Objective | Pri | Size | Status | Relations / Lineage |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Epic0-chore-01** | `[chore]` | Environment variable hygiene — sync .env.example files across stack, rename PUBLIC_STRAPI_API_URL → PUBLIC_STRAPI_URL, add STRAPI_URL (Docker-internal), create root .env.example for compose DB_* vars, add frontend ImportMetaEnv types | P0 | S | `[ACTIVE]` | None |
-| **Epic0-chore-02** | `[chore]` | Create Strapi 5 data adapter — fetchApi wrapper handling flattened REST responses (documentId extraction, unwrapped attributes). Adds src/lib/strapi.ts, src/types/strapi.ts, src/lib/index.ts. Generic fetchCollection<T> + typed helpers per content type. | P0 | M | `[ACTIVE]` | 🔗 Related ADR Epic0-chore-01 |
+| **Epic0-chore-01** | `[chore]` | Environment variable hygiene — sync .env.example files across stack, rename PUBLIC_STRAPI_API_URL → PUBLIC_STRAPI_URL, add STRAPI_URL (Docker-internal), create root .env.example for compose DB_* vars, add frontend ImportMetaEnv types | P0 | S | `[MERGED]` | None |
+| **Epic0-chore-02** | `[chore]` | Create Strapi 5 data adapter — fetchApi wrapper handling flattened REST responses (documentId extraction, unwrapped attributes). Adds src/lib/strapi.ts, src/types/strapi.ts, src/lib/index.ts. Generic fetchCollection<T> + typed helpers per content type. | P0 | M | `[MERGED]` | 🔗 Related ADR Epic0-chore-01 |
 | **Epic0-chore-03** | `[chore]` | Configure Strapi content types — Article, Author, Category, Tag with fields, relations, and draft/publish enabled. Schema JSONs, controllers, services, routes in src/api/. Bootstrap grants public find/findOne permissions. | P0 | M | `[MERGED]` | 🔗 Related ADR Epic0-chore-02 |
-| **Epic0-chore-04** | `[chore]` | Bootstrap verification — docker compose up --build, confirm zero console errors across all 3 services | P0 | S | `[ACTIVE]` | None |
-| **Epic0-chore-05** | `[chore]` | Verify dev pipeline — eslint, prettier, husky hooks operational | P1 | S | `[ACTIVE]` | None |
+| **Epic0-chore-04** | `[chore]` | Bootstrap verification — docker compose up --build, confirm zero console errors across all 3 services | P0 | S | `[MERGED]` | None |
+| **Epic0-chore-05** | `[chore]` | Verify dev pipeline — eslint, prettier, husky hooks operational | P1 | S | `[MERGED]` | None |
 
 ---
 
