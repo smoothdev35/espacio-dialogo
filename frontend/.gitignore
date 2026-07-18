@@ -5,6 +5,7 @@
 **/.pnpm-store*
 **/.npm/
 pnpm-debug.log*
+.repomap*
 
 # OS specific files
 .DS_Store
