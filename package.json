@@ -1,0 +1,28 @@
+{
+  "private": true,
+  "scripts": {
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "eslint": "9.5.0",
+    "husky": "9.1.7",
+    "lint-staged": "15.4.3",
+    "prettier": "3.3.1",
+    "prettier-plugin-astro": "0.14.0",
+    "prettier-plugin-tailwindcss": "0.6.4",
+    "typescript": "5",
+    "typescript-eslint": "8.0.0-alpha.30"
+  },
+  "lint-staged": {
+    "frontend/**/*.{ts,tsx,astro}": [
+      "eslint --config frontend/eslint.config.mjs --fix",
+      "prettier --config frontend/.prettierrc --write"
+    ],
+    "frontend/**/*.{css,json,md}": "prettier --config frontend/.prettierrc --write",
+    "backend/**/*.{ts,js,mjs,cjs}": [
+      "eslint --config backend/eslint.config.mjs --fix",
+      "prettier --config backend/.prettierrc --write"
+    ]
+  },
+  "packageManager": "pnpm@11.6.0"
+}
