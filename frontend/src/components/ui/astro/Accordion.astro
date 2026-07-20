@@ -1,0 +1,45 @@
+---
+interface AccordionItem {
+  id: string
+  summary: string
+  content?: string
+}
+
+interface Props {
+  items: AccordionItem[]
+  allowMultiple?: boolean
+  class?: string
+}
+
+const { items, allowMultiple = false, class: className = '' } = Astro.props
+---
+
+<div class:list={['flex flex-col gap-2', className]}>
+  {
+    items.map((item) => (
+      <details
+        class="group overflow-hidden rounded-[var(--radius-medium)] border border-[var(--color-border)]"
+        {...(!allowMultiple && { name: 'accordion' })}
+      >
+        <summary class="flex cursor-pointer list-none items-center justify-between bg-[var(--color-surface)] px-4 py-3 text-sm font-medium text-[var(--color-surface-text)] transition-colors hover:bg-[var(--color-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)] focus-visible:ring-offset-2">
+          <span>{item.summary}</span>
+          <svg
+            class="h-4 w-4 shrink-0 transition-transform group-open:rotate-180"
+            viewBox="0 0 12 12"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M3 4.5l3 3 3-3" />
+          </svg>
+        </summary>
+        <div class="px-4 pb-3 text-sm text-[var(--color-surface-text)]">
+          {item.content ? <p>{item.content}</p> : <slot name={item.id} />}
+        </div>
+      </details>
+    ))
+  }
+</div>

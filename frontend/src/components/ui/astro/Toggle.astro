@@ -1,0 +1,77 @@
+---
+interface Props {
+  label: string
+  id: string
+  name?: string
+  checked?: boolean
+  disabled?: boolean
+  required?: boolean
+  errorMessage?: string
+  class?: string
+}
+
+const {
+  label,
+  id,
+  name,
+  checked = false,
+  disabled = false,
+  required = false,
+  errorMessage,
+  class: className = '',
+  ...rest
+} = Astro.props
+
+const hasError = !!errorMessage
+const errorId = `${id}-error`
+
+const trackClasses = [
+  'relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200',
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)] focus-visible:ring-offset-2',
+  'disabled:cursor-not-allowed disabled:opacity-60',
+  checked
+    ? 'bg-[var(--color-toggle-track-on)]'
+    : 'bg-[var(--color-toggle-track)] border border-[var(--color-toggle-track-border)]',
+  hasError ? 'border-[var(--color-error)]' : '',
+  className,
+].join(' ')
+
+const thumbClasses = [
+  'pointer-events-none inline-block h-4 w-4 rounded-full shadow-sm ring-0 transition-transform duration-200',
+  checked
+    ? 'translate-x-5 bg-[var(--color-toggle-thumb-on)]'
+    : 'translate-x-1 bg-[var(--color-toggle-thumb)]',
+].join(' ')
+---
+
+<div class:list={['flex flex-col gap-1', className]}>
+  <label for={id} class="flex items-center gap-2">
+    <button
+      type="button"
+      role="switch"
+      id={id}
+      name={name}
+      disabled={disabled}
+      aria-checked={checked}
+      aria-required={required ? 'true' : undefined}
+      aria-invalid={hasError ? 'true' : undefined}
+      aria-describedby={hasError ? errorId : undefined}
+      class:list={[trackClasses]}
+      {...rest}
+    >
+      <span class:list={[thumbClasses]} aria-hidden="true" />
+    </button>
+    <span class="text-sm text-[var(--color-surface-text)]">{label}</span>
+  </label>
+  {
+    hasError && (
+      <p
+        id={errorId}
+        class="text-sm text-[var(--color-error)]"
+        role="alert"
+      >
+        {errorMessage}
+      </p>
+    )
+  }
+</div>

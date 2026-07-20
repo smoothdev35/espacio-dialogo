@@ -1,0 +1,99 @@
+---
+interface Tab {
+  id: string
+  label: string
+}
+
+interface Props {
+  tabs: Tab[]
+  defaultTab?: string
+  ariaLabel: string
+  class?: string
+}
+
+const { tabs, defaultTab, ariaLabel, class: className = '' } = Astro.props
+
+const activeId = defaultTab || tabs[0]?.id
+---
+
+<div class:list={['flex flex-col', className]}>
+  <div
+    role="tablist"
+    aria-label={ariaLabel}
+    class="flex border-b border-[var(--color-tab-border)]"
+  >
+    {
+      tabs.map((tab) => {
+        const isActive = tab.id === activeId
+        return (
+          <button
+            role="tab"
+            id={`tab-${tab.id}`}
+            aria-selected={isActive ? 'true' : 'false'}
+            aria-controls={`panel-${tab.id}`}
+            class:list={[
+              'px-4 py-2 text-sm font-medium transition-colors',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)] focus-visible:ring-offset-2',
+              isActive
+                ? 'border-b-2 border-current bg-[var(--color-tab-active-bg)] text-[var(--color-tab-active-text)]'
+                : 'bg-[var(--color-tab-inactive-bg)] text-[var(--color-tab-inactive-text)] hover:bg-[var(--color-surface)]',
+            ]}
+          >
+            {tab.label}
+          </button>
+        )
+      })
+    }
+  </div>
+  <div class="p-4">
+    {
+      tabs.map((tab) => {
+        const isActive = tab.id === activeId
+        return (
+          <div
+            role="tabpanel"
+            id={`panel-${tab.id}`}
+            aria-labelledby={`tab-${tab.id}`}
+            tabindex="0"
+            hidden={!isActive}
+            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)]"
+          >
+            <slot name={tab.id} />
+          </div>
+        )
+      })
+    }
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('[role="tablist"]').forEach((tablist) => {
+    const tabs = tablist.querySelectorAll('[role="tab"]')
+    tablist.addEventListener('keydown', (e: KeyboardEvent) => {
+      const current = tablist.querySelector(
+        '[role="tab"][aria-selected="true"]',
+      ) as HTMLElement
+      if (!current) return
+
+      let next: HTMLElement | null = null
+      if (e.key === 'ArrowRight') {
+        next = current.nextElementSibling as HTMLElement
+        if (!next) next = tabs[0] as HTMLElement
+      } else if (e.key === 'ArrowLeft') {
+        next = current.previousElementSibling as HTMLElement
+        if (!next) next = tabs[tabs.length - 1] as HTMLElement
+      } else if (e.key === 'Home') {
+        next = tabs[0] as HTMLElement
+      } else if (e.key === 'End') {
+        next = tabs[tabs.length - 1] as HTMLElement
+      }
+
+      if (next) {
+        e.preventDefault()
+        ;(current as HTMLElement).click()
+        next.click()
+        next.focus()
+      }
+    })
+  })
+</script>

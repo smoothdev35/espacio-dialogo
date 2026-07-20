@@ -1,0 +1,72 @@
+---
+interface Props {
+  label: string
+  id: string
+  name: string
+  value: string
+  checked?: boolean
+  disabled?: boolean
+  errorMessage?: string
+  class?: string
+}
+
+const {
+  label,
+  id,
+  name,
+  value,
+  checked = false,
+  disabled = false,
+  errorMessage,
+  class: className = '',
+  ...rest
+} = Astro.props
+
+const hasError = !!errorMessage
+const errorId = `${id}-error`
+---
+
+<div class:list={['flex flex-col gap-1', className]}>
+  <label for={id} class="flex cursor-pointer items-center gap-2">
+    <input
+      type="checkbox"
+      id={id}
+      name={name}
+      value={value}
+      checked={checked}
+      disabled={disabled}
+      aria-invalid={hasError ? 'true' : undefined}
+      aria-describedby={hasError ? errorId : undefined}
+      class="peer sr-only"
+      {...rest}
+    />
+    <span
+      class="flex h-4 w-4 shrink-0 items-center justify-center rounded-[var(--radius-checkbox)] border border-[var(--color-checkbox-border)] bg-[var(--color-checkbox-bg)] transition-colors peer-checked:border-[var(--color-checkbox-bg-checked)] peer-checked:bg-[var(--color-checkbox-bg-checked)] peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--color-border-focus)] peer-focus-visible:ring-offset-2 peer-disabled:opacity-50"
+      aria-hidden="true"
+    >
+      <svg
+        class="h-3 w-3 text-[var(--color-checkbox-check)] opacity-0 transition-opacity peer-checked:opacity-100"
+        viewBox="0 0 12 10"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M1 5l3.5 3.5L11 1"></path>
+      </svg>
+    </span>
+    <span class="text-sm text-[var(--color-surface-text)]">{label}</span>
+  </label>
+  {
+    hasError && (
+      <p
+        id={errorId}
+        class="ml-6 text-sm text-[var(--color-error)]"
+        role="alert"
+      >
+        {errorMessage}
+      </p>
+    )
+  }
+</div>

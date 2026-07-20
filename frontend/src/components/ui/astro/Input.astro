@@ -1,0 +1,117 @@
+---
+interface Props {
+  label: string
+  id: string
+  name: string
+  type?: 'text' | 'email' | 'tel' | 'url' | 'number' | 'search' | 'password'
+  placeholder?: string
+  helperText?: string
+  errorMessage?: string
+  disabled?: boolean
+  required?: boolean
+  value?: string
+  class?: string
+}
+
+const {
+  label,
+  id,
+  name,
+  type = 'text',
+  placeholder,
+  helperText,
+  errorMessage,
+  disabled = false,
+  required = false,
+  value,
+  class: className = '',
+  ...rest
+} = Astro.props
+
+const hasError = !!errorMessage
+const describedBy =
+  [helperText ? `${id}-helper` : '', errorMessage ? `${id}-error` : '']
+    .filter(Boolean)
+    .join(' ') || undefined
+
+const hasLeftIcon = Astro.slots.has('left-icon')
+const hasRightIcon = Astro.slots.has('right-icon')
+
+const inputClasses = [
+  'w-full rounded-[var(--radius-input)] border bg-[var(--color-input)] text-[var(--color-input-text)] py-2 text-[var(--text-input)] font-[var(--font-body)]',
+  'placeholder:text-[var(--color-input-placeholder)]',
+  'focus:bg-[var(--color-input-focus)] focus:border-[var(--color-input-focus-border)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)]',
+  'disabled:bg-[var(--color-input-disabled)] disabled:cursor-not-allowed disabled:opacity-60',
+  hasError
+    ? 'border-[var(--color-error)]'
+    : 'border-[var(--color-input-border)]',
+  // Adjust padding based on icon presence
+  hasLeftIcon ? 'pl-9' : 'pl-3',
+  hasRightIcon ? 'pr-9' : 'pr-3',
+  className,
+].join(' ')
+---
+
+<div class="flex flex-col gap-1">
+  <label for={id} class="text-sm font-medium text-[var(--color-surface-text)]">
+    {label}
+    {
+      required && (
+        <span class="ml-1 text-[var(--color-error)]" aria-hidden="true">
+          *
+        </span>
+      )
+    }
+  </label>
+  <div class="relative">
+    {
+      hasLeftIcon && (
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-input-placeholder)]">
+          <slot name="left-icon" />
+        </span>
+      )
+    }
+    <input
+      type={type}
+      id={id}
+      name={name}
+      placeholder={placeholder}
+      value={value}
+      disabled={disabled}
+      required={required}
+      aria-required={required ? 'true' : undefined}
+      aria-invalid={hasError ? 'true' : undefined}
+      aria-describedby={describedBy}
+      class:list={[inputClasses]}
+      {...rest}
+    />
+    {
+      hasRightIcon && (
+        <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-input-placeholder)]">
+          <slot name="right-icon" />
+        </span>
+      )
+    }
+  </div>
+  {
+    helperText && !hasError && (
+      <p
+        id={`${id}-helper`}
+        class="text-sm text-[var(--color-surface-text)] opacity-70"
+      >
+        {helperText}
+      </p>
+    )
+  }
+  {
+    hasError && (
+      <p
+        id={`${id}-error`}
+        class="text-sm text-[var(--color-error)]"
+        role="alert"
+      >
+        {errorMessage}
+      </p>
+    )
+  }
+</div>

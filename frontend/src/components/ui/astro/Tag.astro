@@ -1,0 +1,61 @@
+---
+interface Props {
+  label: string
+  iconPosition?: 'leading' | 'trailing'
+  onDismiss?: string
+  class?: string
+}
+
+const {
+  label,
+  iconPosition = 'leading',
+  onDismiss,
+  class: className = '',
+  ...rest
+} = Astro.props
+
+const hasIcon = Astro.slots.has('icon')
+
+const tagClasses = [
+  'inline-flex items-center gap-1 rounded-[var(--radius-tag)] border bg-[var(--color-tag)] text-[var(--color-tag-text)] border-[var(--color-tag-border)] px-2 py-0.5 text-sm',
+  className,
+].join(' ')
+---
+
+<span class:list={[tagClasses]} {...rest}>
+  {
+    hasIcon && iconPosition === 'leading' && (
+      <span class="inline-flex shrink-0">
+        <slot name="icon" />
+      </span>
+    )
+  }
+  <span>{label}</span>
+  {
+    hasIcon && iconPosition === 'trailing' && (
+      <span class="inline-flex shrink-0">
+        <slot name="icon" />
+      </span>
+    )
+  }
+  {
+    onDismiss && (
+      <button
+        type="button"
+        aria-label={`Remove ${label}`}
+        class="ml-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full text-current opacity-60 transition-opacity hover:opacity-100"
+      >
+        <svg
+          class="h-3 w-3"
+          viewBox="0 0 12 12"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        >
+          <path d="M2 2l8 8M10 2l-8 8" />
+        </svg>
+      </button>
+    )
+  }
+</span>
