@@ -1,0 +1,313 @@
+---
+/**
+ * Nav
+ *
+ * Props:
+ *   links — array of { label, href, active? } for primary nav links
+ *   moreLinks — array of { label, href } for dropdown under "More"
+ *   actions — array of { label, href, variant: 'primary' | 'secondary' } for CTA buttons
+ *   class? (string) — spread onto root <nav> for consumer overrides
+ *
+ * Slots:
+ *   logo — site logo or branding (rich content); defaults to "Espacio Diálogo" text
+ *
+ * Tokens: --color-nav-bg, --color-nav-text, --color-nav-border
+ *         --spacing-page-gutters, --max-width
+ *
+ * Hardcoded literals:
+ *   hamburger/close SVG icons (no token equivalent — confirm)
+ *   dropdown chevron SVG (no token equivalent — confirm)
+ *   nav height h-[72px] / max-md:h-16 (no token equivalent — confirm)
+ *   gap-6 between logo + nav links, gap-8 between nav links, gap-4 between actions
+ *
+ * Context variants: not needed (nav follows page theme via --color-nav-*)
+ * Composed from: Container, Button (Astro)
+ */
+
+import Container from '../../../layouts/Container.astro'
+import Button from './Button.astro'
+import ThemeToggle from '../../ThemeToggle.tsx'
+
+interface NavLink {
+  label: string
+  href: string
+  active?: boolean
+}
+
+interface NavAction {
+  label: string
+  href: string
+  variant: 'primary' | 'secondary'
+}
+
+interface Props {
+  links: NavLink[]
+  moreLinks?: NavLink[]
+  actions: NavAction[]
+  class?: string
+}
+
+const {
+  links,
+  moreLinks = [
+    { label: 'Análisis', href: '/analisis' },
+    { label: 'Archivo', href: '/archivo' },
+    { label: 'Acerca de', href: '/acerca' },
+    { label: 'Colaboradores', href: '/colaboradores' },
+  ],
+  actions,
+  class: className = '',
+} = Astro.props
+
+const navId = 'main-nav'
+const menuId = 'mobile-menu'
+const toggleId = 'mobile-menu-toggle'
+const moreId = 'nav-more-dropdown'
+---
+
+<nav
+  id={navId}
+  class:list={[
+    'w-full bg-(--color-nav-bg) text-(--color-nav-text) border-b border-(--color-nav-border)',
+    className,
+  ]}
+  aria-label="Main navigation"
+>
+  <Container>
+    <div class="flex items-center justify-between h-[72px] max-md:h-16">
+      {/* Logo + nav links — together on the left per Figma */}
+      <div class="flex items-center gap-6">
+        {/* Logo slot */}
+        <a href="/" class="shrink-0" aria-label="Go to homepage">
+          <slot name="logo">
+            <span class="font-headline text-xl font-bold tracking-heading">
+              Espacio Diálogo
+            </span>
+          </slot>
+        </a>
+
+        {/* Desktop nav links — hidden on mobile */}
+        <ul class="hidden md:flex items-center gap-8" role="list">
+          {links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class:list={[
+                  'text-(--color-nav-text) text-regular font-body transition-opacity hover:opacity-80',
+                  link.active ? 'opacity-100 font-medium' : 'opacity-70',
+                ]}
+                aria-current={link.active ? 'page' : undefined}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+          {/* "More" dropdown — desktop only */}
+          <li class="relative">
+            <details id={moreId} class="group">
+              <summary
+                class="flex items-center gap-1 text-(--color-nav-text) text-regular font-body opacity-70 cursor-pointer list-none hover:opacity-80 transition-opacity"
+                aria-label="More pages"
+              >
+                More
+                {/* Chevron down (hardcoded: no token equivalent — confirm) */}
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="transition-transform group-open:rotate-180"
+                  aria-hidden="true"
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </summary>
+              <ul
+                class="absolute top-full right-0 mt-2 min-w-[180px] bg-(--color-nav-bg) border border-(--color-nav-border) rounded-(--radius-small) shadow-lg py-2 z-50"
+                role="list"
+              >
+                {moreLinks.map((ml) => (
+                  <li>
+                    <a
+                      href={ml.href}
+                      class="block px-4 py-2 text-(--color-nav-text) text-regular font-body opacity-70 hover:opacity-100 hover:bg-[--brand-neutral-lightest] dark:hover:bg-[--brand-neutral-darker] transition-colors"
+                      aria-current={ml.active ? 'page' : undefined}
+                    >
+                      {ml.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </div>
+
+      {/* Actions + ThemeToggle — on the right */}
+      <div class="hidden md:flex items-center gap-4">
+        <!-- ThemeToggle is a client:load React island — added even if not in Figma -->
+        <ThemeToggle client:load />
+        {actions.map((action) => (
+          <Button
+            label={action.label}
+            href={action.href}
+            variant={action.variant}
+            size="sm"
+          />
+        ))}
+      </div>
+
+      {/* Mobile hamburger — visible only on mobile */}
+      <button
+        id={toggleId}
+        class="md:hidden flex items-center justify-center w-12 h-12 text-(--color-nav-text) hover:opacity-80 transition-opacity"
+        aria-controls={menuId}
+        aria-expanded="false"
+        aria-label="Toggle navigation menu"
+        type="button"
+      >
+        {/* Hamburger icon (hardcoded: no token equivalent — confirm) */}
+        <svg
+          id="hamburger-icon"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+        {/* Close icon (hardcoded: no token equivalent — confirm) */}
+        <svg
+          id="close-icon"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          class="hidden"
+          aria-hidden="true"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+
+    {/* Mobile menu panel — hidden by default */}
+    <div
+      id={menuId}
+      class="hidden md:hidden pb-6 border-t border-(--color-nav-border) pt-4"
+      role="region"
+      aria-labelledby={toggleId}
+    >
+      <ul class="flex flex-col gap-4 mb-6" role="list">
+        {links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class:list={[
+                'block text-(--color-nav-text) text-regular font-body py-1 transition-opacity hover:opacity-80',
+                link.active ? 'opacity-100 font-medium' : 'opacity-70',
+              ]}
+              aria-current={link.active ? 'page' : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+        {/* More links in mobile — rendered flat */}
+        {moreLinks.map((ml) => (
+          <li>
+            <a
+              href={ml.href}
+              class="block text-(--color-nav-text) text-regular font-body py-1 opacity-70 hover:opacity-80 transition-opacity"
+            >
+              {ml.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div class="flex flex-col gap-3 mb-4">
+        {actions.map((action) => (
+          <Button
+            label={action.label}
+            href={action.href}
+            variant={action.variant}
+            size="sm"
+          />
+        ))}
+      </div>
+      <div class="flex items-center gap-2 text-(--color-nav-text) text-regular opacity-70">
+        <span>Theme:</span>
+        <ThemeToggle client:load />
+      </div>
+    </div>
+  </Container>
+</nav>
+
+<script>
+  const toggle = document.getElementById('mobile-menu-toggle')
+  const menu = document.getElementById('mobile-menu')
+  const hamburger = document.getElementById('hamburger-icon')
+  const closeIcon = document.getElementById('close-icon')
+  const details = document.getElementById('nav-more-dropdown')
+
+  if (toggle && menu) {
+    toggle.addEventListener('click', () => {
+      const isOpen = menu.classList.toggle('hidden')
+      toggle.setAttribute('aria-expanded', String(!isOpen))
+      if (hamburger) hamburger.classList.toggle('hidden')
+      if (closeIcon) closeIcon.classList.toggle('hidden')
+    })
+  }
+
+  if (details) {
+    document.addEventListener('click', (e) => {
+      if (details.open && !details.contains(e.target as Node)) {
+        details.removeAttribute('open')
+      }
+    })
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && details.open) {
+        details.removeAttribute('open')
+        details.querySelector('summary')?.focus()
+      }
+    })
+  }
+
+  if (toggle && menu) {
+    document.addEventListener('click', (e) => {
+      if (
+        !menu.classList.contains('hidden') &&
+        !menu.contains(e.target as Node) &&
+        !toggle.contains(e.target as Node)
+      ) {
+        menu.classList.add('hidden')
+        toggle.setAttribute('aria-expanded', 'false')
+        if (hamburger) hamburger.classList.remove('hidden')
+        if (closeIcon) closeIcon.classList.add('hidden')
+      }
+    })
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden')
+        toggle.setAttribute('aria-expanded', 'false')
+        if (hamburger) hamburger.classList.remove('hidden')
+        if (closeIcon) closeIcon.classList.add('hidden')
+        toggle.focus()
+      }
+    })
+  }
+</script>

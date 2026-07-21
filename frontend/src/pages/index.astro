@@ -1,50 +1,30 @@
 ---
-import '../styles/global.css'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import HomeLayout from '@/features/home/HomeLayout.astro'
+import { fetchArticles } from '@/features/article/article.api'
 
 export interface Props {
   title?: string
 }
 
-const { title = 'EDD' } = Astro.props
+const { title = 'Home — EDD' } = Astro.props
 
-const navLinks = [
-  { label: 'Home', href: '/', current: true },
-  { label: 'Blog', href: '/blog' },
-  { label: 'Contact', href: '/contact' },
-]
-
-const navActions = [
-  { label: 'Subscribe', variant: 'secondary' as const },
-  { label: 'Donate', variant: 'primary' as const },
-]
+// Fetch articles with error fallback
+const articleData = await fetchArticles().catch((err) => {
+  console.error('Failed to fetch articles:', err)
+  return {
+    featured: null,
+    grid: [],
+    slider: [],
+    categories: [],
+  }
+})
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="generator" content={Astro.generator} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title}</title>
-    <slot name="head" />
-    <script is:inline>
-      ;(function () {
-        var t = localStorage.getItem('theme')
-        if (
-          t === 'dark' ||
-          (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)
-        ) {
-          document.documentElement.classList.add('dark')
-        } else {
-          document.documentElement.classList.remove('dark')
-        }
-      })()
-    </script>
-  </head>
-  <body class="bg-page text-page-text">
-    <main>
-      <h1>EDD</h1>
-    </main>
-  </body>
-</html>
+<BaseLayout title={title}>
+  <HomeLayout
+    featured={articleData.featured}
+    gridArticles={articleData.grid}
+    categories={articleData.categories}
+  />
+</BaseLayout>

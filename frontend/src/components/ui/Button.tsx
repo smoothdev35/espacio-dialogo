@@ -15,27 +15,27 @@ export interface ButtonProps {
 
 const variantStyles: Record<string, string> = {
   primary:
-    'bg-[var(--color-btn-primary)] text-[var(--color-btn-primary-text)] hover:bg-[var(--color-btn-primary-hover)] active:bg-[var(--color-btn-primary-active)] disabled:bg-[var(--color-btn-primary-disabled)] disabled:text-[var(--color-btn-primary-disabled-text)]',
+    'bg-btn-primary text-btn-primary-text border border-btn-primary-border hover:bg-btn-primary-hover active:bg-btn-primary-active disabled:bg-btn-primary-disabled disabled:text-btn-primary-disabled-text',
   secondary:
-    'bg-[var(--color-btn-secondary)] text-[var(--color-btn-secondary-text)] border border-[var(--color-btn-secondary-border)] hover:bg-[var(--color-btn-secondary-hover)] active:bg-[var(--color-btn-secondary-active)] disabled:bg-[var(--color-btn-secondary-disabled)] disabled:text-[var(--color-btn-secondary-disabled-text)]',
+    'bg-btn-secondary text-btn-secondary-text border border-btn-secondary-border hover:bg-btn-secondary-hover active:bg-btn-secondary-active disabled:bg-btn-secondary-disabled disabled:text-btn-secondary-disabled-text',
   tertiary:
-    'bg-[var(--color-btn-tertiary)] text-[var(--color-btn-tertiary-text)] hover:bg-[var(--color-btn-tertiary-hover)] active:bg-[var(--color-btn-tertiary-active)] disabled:bg-[var(--color-btn-tertiary-disabled)] disabled:text-[var(--color-btn-tertiary-disabled-text)]',
-  link: 'bg-[var(--color-btn-link)] text-[var(--color-btn-link-text)] hover:text-[var(--color-btn-link-hover)] active:text-[var(--color-btn-link-active)] disabled:text-[var(--color-btn-link-disabled-text)] underline-offset-4 hover:underline',
+    'bg-btn-tertiary text-btn-tertiary-text hover:bg-btn-tertiary-hover active:bg-btn-tertiary-active disabled:bg-btn-tertiary-disabled disabled:text-btn-tertiary-disabled-text',
+  link: 'bg-btn-link text-btn-link-text hover:text-btn-link-hover active:text-btn-link-active disabled:text-btn-link-disabled-text underline-offset-4 hover:underline',
 }
 
 const sizeStyles: Record<string, (iconPosition?: string) => string> = {
   sm: (ip) =>
     ip === 'only'
-      ? 'p-[var(--spacing-btn-icon-sm)]'
-      : 'px-[var(--spacing-btn-x-sm)] py-[var(--spacing-btn-y-sm)] text-[var(--text-small)]',
+      ? 'p-btn-icon-sm'
+      : 'px-btn-x-sm py-btn-y-sm text-small',
   md: (ip) =>
     ip === 'only'
-      ? 'p-[var(--spacing-btn-icon-md)]'
-      : 'px-[var(--spacing-btn-x-md)] py-[var(--spacing-btn-y-md)] text-[var(--text-button)]',
+      ? 'p-btn-icon-md'
+      : 'px-btn-x-md py-btn-y-md',
   lg: (ip) =>
     ip === 'only'
-      ? 'p-[var(--spacing-btn-icon-lg)]'
-      : 'px-[var(--spacing-btn-x-lg)] py-[var(--spacing-btn-y-lg)] text-[var(--text-large)]',
+      ? 'p-btn-icon-lg'
+      : 'px-btn-x-lg py-btn-y-lg text-large',
 }
 
 export function Button({
@@ -51,7 +51,7 @@ export function Button({
   onClick,
 }: ButtonProps) {
   const base =
-    'inline-flex items-center justify-center font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)] focus-visible:ring-offset-2 disabled:cursor-not-allowed'
+    'inline-flex items-center justify-center rounded-(--radius-button) transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2 disabled:cursor-not-allowed'
 
   const v = variantStyles[variant]
   const s = sizeStyles[size]?.(iconPosition) ?? ''

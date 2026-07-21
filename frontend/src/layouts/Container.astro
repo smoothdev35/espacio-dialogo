@@ -1,0 +1,28 @@
+---
+/**
+ * Container
+ *
+ * Props: class? (string) — spread onto root element for consumer overrides
+ * Slots: default — content that must respect max-width and page gutters
+ * Tokens: --max-width, --spacing-page-gutters
+ * Hardcoded literals: calc expression for gutter-accounted outer max-width
+ * Context variants: not needed
+ * Composed from: none
+ */
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div
+  class:list={[
+    "w-full mx-auto px-page-gutters",
+    "max-w-[calc(var(--max-width)+calc(var(--spacing-page-gutters)*2))]",
+    className,
+  ]}
+>
+  <slot />
+</div>

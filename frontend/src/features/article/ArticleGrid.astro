@@ -1,0 +1,38 @@
+---
+/**
+ * ArticleGrid
+ *
+ * Props: articles (ArticleCardProps[]) — list of articles to render in 2-column grid
+ *        class? (string) — spread onto root <ul> for consumer overrides
+ * Slots: none
+ * Tokens: --spacing-component-gap
+ * Hardcoded literals: none
+ * Context variants: not needed
+ * Composed from: ArticleCard
+ */
+
+import ArticleCard from './ArticleCard.astro'
+import type { ArticleCardProps } from './article.types'
+
+interface Props {
+  articles: ArticleCardProps[]
+  class?: string
+}
+
+const { articles, class: className } = Astro.props
+---
+
+<ul
+  class:list={[
+    "grid gap-component-gap md:grid-cols-2",
+    className,
+  ]}
+>
+  {
+    articles.map((article) => (
+      <li>
+        <ArticleCard {...article} />
+      </li>
+    ))
+  }
+</ul>

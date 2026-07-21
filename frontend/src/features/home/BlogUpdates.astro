@@ -1,0 +1,93 @@
+---
+/**
+ * BlogUpdates
+ *
+ * Props: featured (FeaturedArticleResult | null) — featured article card data
+ *        gridArticles (ArticleCardProps[]) — articles for the 2x2 grid
+ *        categories ({ name: string; slug: string }[]) — filter categories
+ *        class? (string) — spread onto root <section> for consumer overrides
+ * Slots: none
+ * Tokens: --spacing-section-pad, --spacing-component-gap, --font-headline, --font-body
+ * Hardcoded literals: none — page bg shows through via body
+ * Context variants: not needed
+ * Composed from: Container, FeaturedArticleCard, ArticleGrid, ArticleFilters
+ */
+
+import Container from '@/layouts/Container.astro'
+import FeaturedArticleCard from '@/features/article/FeaturedArticleCard.astro'
+import ArticleGrid from '@/features/article/ArticleGrid.astro'
+import ArticleFilters from '@/features/article/ArticleFilters.astro'
+import type { ArticleCardProps } from '@/features/article/article.types'
+
+interface Props {
+  featured: (ArticleCardProps & { readTime: string }) | null
+  gridArticles: ArticleCardProps[]
+  categories: { name: string; slug: string }[]
+  class?: string
+}
+
+const { featured, gridArticles, categories, class: className } = Astro.props
+---
+
+{/* Section bg is transparent — page background shows through via body */}
+<section
+  class:list={[
+    className,
+  ]}
+  style="padding-block: var(--spacing-section-pad-large)"
+>
+  <Container>
+    <div class="flex flex-col gap-component-gap">
+      <!-- Tagline + heading + description -->
+      <div class="flex flex-col">
+        <p class="text-tagline font-semibold uppercase tracking-widest text-surface-text opacity-60 mb-4">
+          Updates
+        </p>
+        <h1 class="mb-6">
+          What's happening now
+        </h1>
+        <p class="max-w-2xl opacity-80">
+          The latest developments in Nicaragua's ongoing transition.
+        </p>
+      </div>
+
+      <!-- Filters -->
+      <ArticleFilters categories={categories} />
+
+      <!-- Featured article card -->
+      {
+        featured ? (
+          <FeaturedArticleCard {...featured} />
+        ) : (
+          <p class="text-small opacity-60">No featured article available.</p>
+        )
+      }
+
+      <!-- Article grid (2x2) -->
+      <ArticleGrid articles={gridArticles} />
+
+      <!-- View all link -->
+      <div class="flex justify-center">
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-2 text-regular font-medium underline-offset-4 hover:underline"
+        >
+          View all articles
+          <svg
+            aria-hidden="true"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M6 3l5 5-5 5" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </Container>
+</section>

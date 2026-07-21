@@ -50,12 +50,12 @@ const describedBy =
 const hasLeftIcon = Astro.slots.has('left-icon')
 
 const selectClasses = [
-  'w-full rounded-[var(--radius-input)] border bg-[var(--color-input)] text-[var(--color-input-text)] py-2 text-[var(--text-select)] font-[var(--font-body)]',
-  'focus:bg-[var(--color-input-focus)] focus:border-[var(--color-input-focus-border)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)]',
-  'disabled:bg-[var(--color-input-disabled)] disabled:cursor-not-allowed disabled:opacity-60',
+  'w-full rounded-input border bg-input text-input-text py-2',
+  'focus:bg-input-focus focus:border-input-focus-border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus',
+  'disabled:bg-input-disabled disabled:cursor-not-allowed disabled:opacity-60',
   hasError
     ? 'border-[var(--color-error)]'
-    : 'border-[var(--color-input-border)]',
+    : 'border-input-border',
   // Adjust padding based on icon presence
   hasLeftIcon ? 'pl-9' : 'pl-3',
   'pr-3',
@@ -64,7 +64,7 @@ const selectClasses = [
 ---
 
 <div class="flex flex-col gap-1">
-  <label for={id} class="text-sm font-medium text-[var(--color-surface-text)]">
+  <label for={id} class="text-sm font-medium text-surface-text">
     {label}
     {
       required && (
@@ -77,7 +77,7 @@ const selectClasses = [
   <div class="relative">
     {
       hasLeftIcon && (
-        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-input-placeholder)]">
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-input-placeholder">
           <slot name="left-icon" />
         </span>
       )
@@ -132,7 +132,7 @@ const selectClasses = [
     helperText && !hasError && (
       <p
         id={`${id}-helper`}
-        class="text-sm text-[var(--color-surface-text)] opacity-70"
+        class="text-sm text-surface-text opacity-70"
       >
         {helperText}
       </p>

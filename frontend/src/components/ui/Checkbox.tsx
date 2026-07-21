@@ -42,11 +42,11 @@ export function Checkbox({
           className="peer sr-only"
         />
         <span
-          className="flex h-4 w-4 shrink-0 items-center justify-center rounded-[var(--radius-checkbox)] border border-[var(--color-checkbox-border)] bg-[var(--color-checkbox-bg)] transition-colors peer-checked:border-[var(--color-checkbox-bg-checked)] peer-checked:bg-[var(--color-checkbox-bg-checked)] peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--color-border-focus)] peer-focus-visible:ring-offset-2 peer-disabled:opacity-50"
+          className="flex h-4 w-4 shrink-0 items-center justify-center rounded-checkbox border border-checkbox-border bg-checkbox-bg transition-colors peer-checked:border-checkbox-bg-checked peer-checked:bg-checkbox-bg-checked peer-focus-visible:ring-2 peer-focus-visible:ring-border-focus peer-focus-visible:ring-offset-2 peer-disabled:opacity-50"
           aria-hidden="true"
         >
           <svg
-            className="h-3 w-3 text-[var(--color-checkbox-check)] opacity-0 transition-opacity peer-checked:opacity-100"
+            className="h-3 w-3 text-checkbox-check opacity-0 transition-opacity peer-checked:opacity-100"
             viewBox="0 0 12 10"
             fill="none"
             stroke="currentColor"
@@ -57,7 +57,7 @@ export function Checkbox({
             <path d="M1 5l3.5 3.5L11 1" />
           </svg>
         </span>
-        <span className="text-sm text-[var(--color-surface-text)]">
+        <span className="text-sm text-surface-text">
           {label}
         </span>
       </label>

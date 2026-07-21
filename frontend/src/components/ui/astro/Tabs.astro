@@ -20,7 +20,7 @@ const activeId = defaultTab || tabs[0]?.id
   <div
     role="tablist"
     aria-label={ariaLabel}
-    class="flex border-b border-[var(--color-tab-border)]"
+    class="flex border-b border-tab-border"
   >
     {
       tabs.map((tab) => {
@@ -32,11 +32,11 @@ const activeId = defaultTab || tabs[0]?.id
             aria-selected={isActive ? 'true' : 'false'}
             aria-controls={`panel-${tab.id}`}
             class:list={[
-              'px-4 py-2 text-sm font-medium transition-colors',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)] focus-visible:ring-offset-2',
+              'px-4 py-2 text-small',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2',
               isActive
-                ? 'border-b-2 border-current bg-[var(--color-tab-active-bg)] text-[var(--color-tab-active-text)]'
-                : 'bg-[var(--color-tab-inactive-bg)] text-[var(--color-tab-inactive-text)] hover:bg-[var(--color-surface)]',
+                ? 'border-b-2 border-current bg-tab-active-bg text-tab-active-text'
+                : 'bg-tab-inactive-bg text-tab-inactive-text hover:bg-surface',
             ]}
           >
             {tab.label}
@@ -56,7 +56,7 @@ const activeId = defaultTab || tabs[0]?.id
             aria-labelledby={`tab-${tab.id}`}
             tabindex="0"
             hidden={!isActive}
-            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)]"
+            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus"
           >
             <slot name={tab.id} />
           </div>

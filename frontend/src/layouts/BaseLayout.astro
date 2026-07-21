@@ -1,0 +1,92 @@
+---
+/**
+ * BaseLayout
+ *
+ * Props: title (string) — page title, default 'EDD'
+ *        class? (string) — spread onto <body> for consumer overrides
+ *        navLinks? — custom nav link array (defaults to site links)
+ *        navActions? — custom nav action array (defaults to site CTAs)
+ *        moreLinks? — custom dropdown links under "More" (defaults to suggested items)
+ * Slots: default — page content inside <main>
+ *        head — page-specific <head> injections (canonical, meta, etc.)
+ * Tokens: --color-page, --color-page-text, --color-nav-bg, etc.
+ * Hardcoded literals: theme detection script, html structure
+ * Context variants: not needed
+ * Composed from: Nav
+ */
+
+import '../styles/global.css'
+import Nav from '../components/ui/astro/Nav.astro'
+
+interface NavLink {
+  label: string
+  href: string
+  active?: boolean
+}
+
+interface NavAction {
+  label: string
+  href: string
+  variant: 'primary' | 'secondary'
+}
+
+interface Props {
+  title?: string
+  class?: string
+  navLinks?: NavLink[]
+  navActions?: NavAction[]
+  moreLinks?: NavLink[]
+}
+
+const {
+  title = 'EDD',
+  class: className,
+  navLinks = [
+    { label: 'Home', href: '/' },
+    { label: 'Blog', href: '/blog' },
+    { label: 'Contact', href: '/contact' },
+  ],
+  navActions = [
+    { label: 'Subscribe', href: '#', variant: 'secondary' },
+    { label: 'Donate', href: '#', variant: 'primary' },
+  ],
+  moreLinks,
+} = Astro.props
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <slot name="head" />
+    <script is:inline>
+      ;(function () {
+        var t = localStorage.getItem('theme')
+        if (
+          t === 'dark' ||
+          (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ) {
+          document.documentElement.classList.add('dark')
+        } else {
+          document.documentElement.classList.remove('dark')
+        }
+      })()
+    </script>
+  </head>
+  <!-- bg + text removed: global body selector sets --color-page and --color-page-text -->
+  <body class:list={[className]}>
+    <Nav
+      links={navLinks}
+      actions={navActions}
+      moreLinks={moreLinks}
+    />
+
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

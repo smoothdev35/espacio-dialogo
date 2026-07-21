@@ -1,0 +1,94 @@
+---
+/**
+ * ArticleCard
+ *
+ * Props: title, slug, excerpt, readTime, featuredImage, category — from ArticleCardProps
+ *        class? (string) — spread onto root <article> for consumer overrides
+ * Slots: none
+ * Tokens: --color-surface-text, --color-border, --radius-lg, --font-headline, --font-body
+ * Hardcoded literals: none
+ *                     image aspect-video (16:9) — from Figma grid card ratio
+ * Context variants: not needed
+ * Composed from: Tag (astro), Link (astro)
+ */
+
+import Tag from '@components/ui/astro/Tag.astro'
+import Link from '@components/ui/astro/Link.astro'
+import type { ArticleCardProps } from './article.types'
+
+interface Props extends ArticleCardProps {
+  class?: string
+}
+
+const {
+  title,
+  slug,
+  excerpt,
+  readTime,
+  featuredImage,
+  category,
+  class: className,
+} = Astro.props
+---
+
+<article
+  class:list={[
+    "flex flex-col rounded-lg text-surface-text",
+    "bg-(--color-card-bg) border border-border overflow-hidden",
+    className,
+  ]}
+>
+  <!-- Featured image: 16:9 aspect ratio (matches Figma grid card) -->
+  {
+    featuredImage && (
+      <a
+        href={`/blog/${slug}`}
+        class="block overflow-hidden"
+        aria-label={title}
+      >
+        <img
+          src={featuredImage.url}
+          alt={featuredImage.alternativeText ?? title}
+          class="aspect-video h-full w-full object-cover"
+          loading="lazy"
+        />
+      </a>
+    )
+  }
+
+  <!-- Content: 24px padding, button pinned to bottom -->
+  <div class="flex flex-col justify-between gap-4 p-6">
+    <!-- Top group: info row + heading + excerpt -->
+    <div class="flex flex-col gap-4">
+      <!-- Info row: category tag + readTime (no date) -->
+      <div class="flex items-center gap-2">
+        {
+          category && (
+            <Tag label={category.name} />
+          )
+        }
+        <span class="text-small font-semibold opacity-80">
+          {readTime}
+        </span>
+      </div>
+
+      <!-- Title: global h3 handles font/weight/leading; override size to h5 level (28/20px) -->
+      <h3 class="text-h5">
+        <a href={`/blog/${slug}`} class="hover:underline">
+          {title}
+        </a>
+      </h3>
+
+      <!-- Excerpt: card body 16px (section-level body is 18px); clamp from design -->
+      <p class="text-regular opacity-80 line-clamp-3">
+        {excerpt}
+      </p>
+    </div>
+
+    <!-- Read more -->
+    <Link
+      href={`/blog/${slug}`}
+      label="Read more"
+    />
+  </div>
+</article>

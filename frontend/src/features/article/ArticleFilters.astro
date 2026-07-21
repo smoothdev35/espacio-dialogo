@@ -1,0 +1,50 @@
+---
+/**
+ * ArticleFilters
+ *
+ * Props: categories ({ name: string; slug: string }[]) — list of filter categories
+ *        class? (string) — spread onto root <nav> for consumer overrides
+ * Slots: none
+ * Tokens: --color-surface, --color-surface-text, --color-border, --radio-bg-checked, --radius-*
+ * Hardcoded literals: none
+ * Context variants: not needed
+ * Composed from: none (inline buttons)
+ */
+
+interface Props {
+  categories: { name: string; slug: string }[]
+  class?: string
+}
+
+const { categories, class: className } = Astro.props
+---
+
+<nav aria-label="Article category filters" class:list={[className]}>
+  <ul class="flex flex-wrap gap-2">
+    <!-- "All updates" is the default active filter — always rendered first -->
+    <li>
+      <button
+        type="button"
+        aria-current="true"
+        class="rounded-tabs bg-surface text-surface-text border border-border px-4 py-2.5 hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus"
+      >
+        All updates
+      </button>
+    </li>
+
+    {
+      categories.length > 0
+        ? categories.map((cat) => (
+            <li>
+              <button
+                type="button"
+                class="rounded-tabs border border-border bg-transparent text-surface-text px-4 py-2.5 hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus"
+              >
+                {cat.name}
+              </button>
+            </li>
+          ))
+        : null
+    }
+  </ul>
+</nav>

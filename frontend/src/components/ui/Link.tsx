@@ -16,7 +16,7 @@ export function Link({
   return (
     <a
       href={href}
-      className={`text-[var(--color-link-text)] underline-offset-4 transition-colors duration-150 hover:text-[var(--color-link-hover)] hover:underline active:text-[var(--color-link-active)] ${className}`}
+      className={`underline-offset-4 hover:underline ${className}`}
       target={external ? '_blank' : undefined}
       rel={external ? 'noopener noreferrer' : undefined}
       aria-label={external ? `${label} (opens in new tab)` : undefined}

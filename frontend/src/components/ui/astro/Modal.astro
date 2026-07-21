@@ -25,7 +25,7 @@ const { id, title, triggerLabel, class: className = '' } = Astro.props
   id={id}
   aria-labelledby={`${id}-title`}
   class:list={[
-    'rounded-[var(--radius-large)] border border-[var(--color-border)] bg-[var(--color-surface)] p-0 text-[var(--color-surface-text)] backdrop:bg-black/50',
+    'rounded-large border border-border bg-surface p-0 text-surface-text backdrop:bg-black/50',
     'w-full max-w-lg',
     className,
   ]}
@@ -34,7 +34,7 @@ const { id, title, triggerLabel, class: className = '' } = Astro.props
     <div class="flex items-center justify-between">
       <h2
         id={`${id}-title`}
-        class="text-lg font-[var(--font-headline)] font-semibold"
+        class="text-lg font-semibold"
       >
         {title}
       </h2>
@@ -42,7 +42,7 @@ const { id, title, triggerLabel, class: className = '' } = Astro.props
         type="button"
         data-modal-close={id}
         aria-label="Close dialog"
-        class="inline-flex h-8 w-8 items-center justify-center rounded-full text-[var(--color-surface-text)] opacity-60 transition-colors hover:bg-[var(--color-surface)] hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)]"
+        class="inline-flex h-8 w-8 items-center justify-center rounded-full text-surface-text opacity-60 transition-colors hover:bg-surface hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus"
       >
         <svg
           class="h-4 w-4"

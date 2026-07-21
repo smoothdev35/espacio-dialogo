@@ -27,7 +27,7 @@ const errorId = `${groupId}-error`
 ---
 
 <fieldset class:list={['flex flex-col gap-2', className]} {...rest}>
-  <legend class="text-sm font-medium text-[var(--color-surface-text)]"
+  <legend class="text-sm font-medium text-surface-text"
     >{legend}</legend
   >
   {
@@ -47,12 +47,12 @@ const errorId = `${groupId}-error`
             class="peer sr-only"
           />
           <span
-            class="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-[var(--color-radio-border)] bg-[var(--color-radio-bg)] transition-colors peer-checked:border-[var(--color-radio-bg-checked)] peer-checked:bg-[var(--color-radio-bg-checked)] peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--color-border-focus)] peer-focus-visible:ring-offset-2 peer-disabled:opacity-50"
+            class="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-radio-border bg-radio-bg transition-colors peer-checked:border-radio-bg-checked peer-checked:bg-radio-bg-checked peer-focus-visible:ring-2 peer-focus-visible:ring-border-focus peer-focus-visible:ring-offset-2 peer-disabled:opacity-50"
             aria-hidden="true"
           >
-            <span class="h-2 w-2 rounded-full bg-[var(--color-radio-dot)] opacity-0 transition-opacity peer-checked:opacity-100" />
+            <span class="h-2 w-2 rounded-full bg-radio-dot opacity-0 transition-opacity peer-checked:opacity-100" />
           </span>
-          <span class="text-sm text-[var(--color-surface-text)]">
+          <span class="text-sm text-surface-text">
             {opt.label}
           </span>
         </label>

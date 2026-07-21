@@ -1,11 +1,14 @@
 import type {
   Article,
+  ArticleCard,
   Author,
   Category,
+  StrapiCollectionResponse,
   StrapiMeta,
   StrapiQueryParams,
+  StrapiSingleResponse,
   Tag,
-} from '@/types/strapi'
+} from '@shared/strapi'
 
 interface StrapiConfig {
   url: string
@@ -63,16 +66,6 @@ export class StrapiError extends Error {
   }
 }
 
-interface StrapiCollectionResponse<T> {
-  data: T[]
-  meta: StrapiMeta
-}
-
-interface StrapiSingleResponse<T> {
-  data: T
-  meta: StrapiMeta
-}
-
 async function request<T>(
   path: string,
   params?: StrapiQueryParams,
@@ -101,15 +94,10 @@ async function request<T>(
   return response.json() as Promise<T>
 }
 
-export interface FetchCollectionResult<T> {
-  data: T[]
-  meta: StrapiMeta
-}
-
 export async function fetchCollection<T>(
   pluralApiId: string,
   params?: StrapiQueryParams,
-): Promise<FetchCollectionResult<T>> {
+): Promise<StrapiCollectionResponse<T>> {
   const response = await request<StrapiCollectionResponse<T>>(
     `/api/${pluralApiId}`,
     params,
@@ -135,6 +123,17 @@ export function getArticles(params?: StrapiQueryParams) {
 
 export function getArticle(documentId: string, params?: StrapiQueryParams) {
   return fetchSingle<Article>('articles', documentId, params)
+}
+
+export async function getArticleBySlug(
+  slug: string,
+  params?: StrapiQueryParams,
+): Promise<Article | null> {
+  const result = await fetchCollection<Article>('articles', {
+    filters: { slug: { $eq: slug } },
+    ...params,
+  })
+  return result.data[0] ?? null
 }
 
 export function getCategories(params?: StrapiQueryParams) {

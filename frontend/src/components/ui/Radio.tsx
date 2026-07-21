@@ -30,7 +30,7 @@ export function RadioGroup({
 
   return (
     <fieldset className={`flex flex-col gap-2 ${className}`}>
-      <legend className="text-sm font-medium text-[var(--color-surface-text)]">
+      <legend className="text-sm font-medium text-surface-text">
         {legend}
       </legend>
       {options.map((opt) => {
@@ -54,12 +54,12 @@ export function RadioGroup({
               className="peer sr-only"
             />
             <span
-              className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-[var(--color-radio-border)] bg-[var(--color-radio-bg)] transition-colors peer-checked:border-[var(--color-radio-bg-checked)] peer-checked:bg-[var(--color-radio-bg-checked)] peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--color-border-focus)] peer-focus-visible:ring-offset-2 peer-disabled:opacity-50"
+              className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-radio-border bg-radio-bg transition-colors peer-checked:border-radio-bg-checked peer-checked:bg-radio-bg-checked peer-focus-visible:ring-2 peer-focus-visible:ring-border-focus peer-focus-visible:ring-offset-2 peer-disabled:opacity-50"
               aria-hidden="true"
             >
-              <span className="h-2 w-2 rounded-full bg-[var(--color-radio-dot)] opacity-0 transition-opacity peer-checked:opacity-100" />
+              <span className="h-2 w-2 rounded-full bg-radio-dot opacity-0 transition-opacity peer-checked:opacity-100" />
             </span>
-            <span className="text-sm text-[var(--color-surface-text)]">
+            <span className="text-sm text-surface-text">
               {opt.label}
             </span>
           </label>

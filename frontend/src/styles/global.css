@@ -67,12 +67,15 @@
     /* ════════════════════════════════════════════════════════ */
 
     /* Page surface */
-    --page:       var(--brand-white);
+    --page:       var(--brand-neutral-lightest);
     --page-text:  var(--brand-neutral-darkest);
 
     /* Component surface */
     --surface:      var(--brand-neutral-lightest);
     --surface-text: var(--brand-neutral-darkest);
+
+    /* Card surface */
+    --card-bg: var(--brand-white);
 
     /* Contrast text — readable on both light and dark surfaces */
     --contrast-text: var(--brand-white);
@@ -93,7 +96,7 @@
     /* Primary button */
     --btn-primary:          var(--brand-bay-of-many);
     --btn-primary-text:     var(--brand-white);
-    --btn-primary-border:   transparent;
+    --btn-primary-border:   var(--brand-bay-of-many-dark);
     --btn-primary-hover:    var(--brand-bay-of-many-dark);
     --btn-primary-active:   var(--brand-bay-of-many-darker);
     --btn-primary-disabled: var(--brand-neutral-lighter);
@@ -119,7 +122,7 @@
 
     /* Link button */
     --btn-link:          transparent;
-    --btn-link-text:     var(--link-text);
+    --btn-link-text:     var(--brand-neutral-darkest);
     --btn-link-border:   transparent;
     --btn-link-hover:    var(--link-hover);
     --btn-link-active:   var(--link-active);
@@ -127,18 +130,23 @@
     --btn-link-disabled-text: var(--brand-neutral-light);
 
     /* ─── Button size geometry tokens ──────────────────── */
-    --btn-padding-x-sm: 0.75rem;
-    --btn-padding-y-sm: 0.375rem;
-    --btn-padding-x-md: 1rem;
-    --btn-padding-y-md: 0.5rem;
+    --btn-padding-x-sm: 1.25rem;
+    --btn-padding-y-sm: 0.5rem;
+    --btn-padding-x-md: 1.5rem;
+    --btn-padding-y-md: 0.625rem;
     --btn-padding-x-lg: 1.5rem;
     --btn-padding-y-lg: 0.75rem;
-    --btn-padding-icon-sm: 0.375rem;
-    --btn-padding-icon-md: 0.5rem;
+    --btn-padding-icon-sm: 0.5rem;
+    --btn-padding-icon-md: 0.625rem;
     --btn-padding-icon-lg: 0.75rem;
 
     /* ─── Error tokens ─────────────────────────────────── */
     --color-error: #dc2626;
+
+    /* ─── Nav tokens — light mode defaults; overridden in @variant dark ── */
+    --nav-bg:     var(--brand-white);
+    --nav-text:   var(--brand-neutral-darkest);
+    --nav-border: var(--border);
 
     /* ─── Input tokens ─────────────────────────────────── */
     --input:              var(--brand-neutral-lightest);
@@ -193,17 +201,25 @@
 
     @variant dark {
       /* Page surface — dark */
-      --page:      var(--brand-bay-of-many-darkest);
+      --page:      var(--brand-neutral-darker);
       --page-text: var(--brand-white);
 
       /* Component surface */
       --surface:      var(--brand-bay-of-many-darker);
       --surface-text: var(--brand-white);
 
+      /* Card surface */
+      --card-bg: var(--brand-neutral-darkest);
+
       /* Contrast text unchanged in dark (white text on dark surfaces) */
 
       /* Border */
       --border: color-mix(in srgb, var(--brand-white) 20%, transparent);
+
+      /* Nav — dark mode swaps bg/text */
+      --nav-bg:     var(--brand-neutral-darkest);
+      --nav-text:   var(--brand-white);
+      --nav-border: var(--border);
 
       /* Link */
       --link-text:   var(--brand-white);
@@ -213,7 +229,7 @@
       /* Primary button — dark mode inverts */
       --btn-primary:          var(--brand-white);
       --btn-primary-text:     var(--brand-neutral-darkest);
-      --btn-primary-border:   transparent;
+      --btn-primary-border:   var(--brand-neutral-lighter);
       --btn-primary-hover:    var(--brand-neutral-lighter);
       --btn-primary-active:   var(--brand-neutral-lighter);
       --btn-primary-disabled: var(--brand-neutral-dark);
@@ -314,6 +330,7 @@
   --container-large: 1280px;
   --container-medium: 1024px;
   --container-small: 768px;
+  --max-width: var(--container-large);
 
   /* ─── Button size geometry spacing ──────────────────── */
   --spacing-btn-x-sm: var(--btn-padding-x-sm);
@@ -386,6 +403,7 @@
   --color-page-text: var(--page-text);
   --color-surface: var(--surface);
   --color-surface-text: var(--surface-text);
+  --color-card-bg: var(--card-bg);
   --color-contrast-text: var(--contrast-text);
   --color-border: var(--border);
   --color-border-focus: var(--border-focus);
@@ -424,6 +442,11 @@
   --color-btn-link-active: var(--btn-link-active);
   --color-btn-link-disabled: var(--btn-link-disabled);
   --color-btn-link-disabled-text: var(--btn-link-disabled-text);
+
+  /* Nav colors */
+  --color-nav-bg:     var(--nav-bg);
+  --color-nav-text:   var(--nav-text);
+  --color-nav-border: var(--nav-border);
 
   /* Input colors */
   --color-input: var(--input);

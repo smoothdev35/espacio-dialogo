@@ -19,7 +19,7 @@ export function Tag({
 
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-[var(--radius-tag)] border border-[var(--color-tag-border)] bg-[var(--color-tag)] px-2 py-0.5 text-sm text-[var(--color-tag-text)] ${className}`}
+      className={`inline-flex items-center gap-1 rounded-tag border border-tag-border bg-tag px-2.5 py-1 text-small text-tag-text ${className}`}
     >
       {hasIcon && iconPosition === 'leading' && (
         <span className="inline-flex shrink-0">{icon}</span>

@@ -27,12 +27,12 @@ export function Toggle({
   const errorId = `${id}-error`
 
   const trackClasses = [
-    'relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)] focus-visible:ring-offset-2',
+    'relative inline-flex h-6 w-11 shrink-0 items-center rounded-full',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2',
     'disabled:cursor-not-allowed disabled:opacity-60',
     checked
-      ? 'bg-[var(--color-toggle-track-on)]'
-      : 'bg-[var(--color-toggle-track)] border border-[var(--color-toggle-track-border)]',
+      ? 'bg-toggle-track-on'
+      : 'bg-toggle-track border border-toggle-track-border',
     hasError ? 'border-[var(--color-error)]' : '',
     className,
   ].join(' ')
@@ -40,8 +40,8 @@ export function Toggle({
   const thumbClasses = [
     'pointer-events-none inline-block h-4 w-4 rounded-full shadow-sm ring-0 transition-transform duration-200',
     checked
-      ? 'translate-x-5 bg-[var(--color-toggle-thumb-on)]'
-      : 'translate-x-1 bg-[var(--color-toggle-thumb)]',
+      ? 'translate-x-5 bg-toggle-thumb-on'
+      : 'translate-x-1 bg-toggle-thumb',
   ].join(' ')
 
   return (
@@ -63,7 +63,7 @@ export function Toggle({
         >
           <span className={thumbClasses} aria-hidden="true" />
         </button>
-        <span className="text-sm text-[var(--color-surface-text)]">{label}</span>
+        <span className="text-sm text-surface-text">{label}</span>
       </label>
       {hasError && (
         <p

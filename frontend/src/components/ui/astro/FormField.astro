@@ -21,7 +21,7 @@ const hasError = !!errorMessage
 ---
 
 <div class:list={['flex flex-col gap-1', className]}>
-  <label for={id} class="text-sm font-medium text-[var(--color-surface-text)]">
+  <label for={id} class="text-sm font-medium text-surface-text">
     {label}
     {
       required && (
@@ -36,7 +36,7 @@ const hasError = !!errorMessage
     helperText && !hasError && (
       <p
         id={`${id}-helper`}
-        class="text-sm text-[var(--color-surface-text)] opacity-70"
+        class="text-sm text-surface-text opacity-70"
       >
         {helperText}
       </p>

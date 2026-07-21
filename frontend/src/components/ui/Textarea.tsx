@@ -45,13 +45,13 @@ export function Textarea({
       .join(' ') || undefined
 
   const textareaClasses = [
-    'w-full rounded-[var(--radius-input)] border bg-[var(--color-input)] text-[var(--color-input-text)] px-3 py-2 text-[var(--text-input)] font-[var(--font-body)]',
-    'placeholder:text-[var(--color-input-placeholder)]',
-    'focus:bg-[var(--color-input-focus)] focus:border-[var(--color-input-focus-border)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)]',
-    'disabled:bg-[var(--color-input-disabled)] disabled:cursor-not-allowed disabled:opacity-60',
+    'w-full rounded-input border bg-input text-input-text px-3 py-2',
+    'placeholder:text-input-placeholder',
+    'focus:bg-input-focus focus:border-input-focus-border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus',
+    'disabled:bg-input-disabled disabled:cursor-not-allowed disabled:opacity-60',
     hasError
       ? 'border-[var(--color-error)]'
-      : 'border-[var(--color-input-border)]',
+      : 'border-input-border',
     resizeMap[resize] ?? 'resize-y',
     className,
   ].join(' ')
@@ -60,7 +60,7 @@ export function Textarea({
     <div className="flex flex-col gap-1">
       <label
         htmlFor={id}
-        className="text-sm font-medium text-[var(--color-surface-text)]"
+        className="text-sm font-medium text-surface-text"
       >
         {label}
         {required && (
@@ -85,7 +85,7 @@ export function Textarea({
       {helperText && !hasError && (
         <p
           id={helperId}
-          className="text-sm text-[var(--color-surface-text)] opacity-70"
+          className="text-sm text-surface-text opacity-70"
         >
           {helperText}
         </p>
