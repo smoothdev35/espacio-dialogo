@@ -83,7 +83,7 @@ export function toSlug(text: string): string {
     .replace(/[^a-z0-9-]/g, '')
 }
 
-export interface ArticleSeed {
+export interface UpdateSeed {
   categorySlug: string
   tagNames: string[]
   authorIndex: number
@@ -94,7 +94,7 @@ export interface ArticleSeed {
   imageSeed: string
 }
 
-export const articles: ArticleSeed[] = [
+export const updates: UpdateSeed[] = [
   {
     categorySlug: 'campaign',
     tagNames: ['Sociedad Civil', 'Protestas', 'Derechos Humanos'],
@@ -307,9 +307,100 @@ export const articles: ArticleSeed[] = [
       h3('Museos de la memoria'),
       ...p(
         'Paralelamente, iniciativas de memoria histórica han comenzado a documentar y preservar testimonios, fotografías y documentos de la crisis actual. Archivos digitales, exposiciones virtuales y publicaciones clandestinas buscan contrarrestar la narrativa oficial y garantizar que las futuras generaciones conozcan lo que está ocurriendo.',
-        '"No sabemos cuándo terminará esto, pero sí sabemos que cuando termine, la verdad debe estar documentada", afirma una historiadora que coordina uno de estos archivos. "La cultura de la impunidad se alimenta del olvido. Nuestro trabajo es hacer que nadie pueda decir \'no sabíamos\'."',
+        '"No sabemos cuándo terminará esto, pero sí sabemos que cuando termine, la verdad debe estar documentada", afirma una historiadora que coordina uno de estos archivos. "La cultura de la impunidad se alimenta del olvido. Nuestro trabajo es hacer que nadie pueda decir \'no sabíamos\'".',
       ),
     ],
     imageSeed: 'article-voices-2',
+  },
+]
+
+export interface BlogPostSeed {
+  tagNames: string[]
+  authorIndex: number
+  title: string
+  subtitle: string
+  slug: string
+  body: Record<string, any>[]
+  imageSeed: string
+}
+
+export const blogPosts: BlogPostSeed[] = [
+  {
+    tagNames: ['Derechos Humanos', 'Sociedad Civil'],
+    authorIndex: 0,
+    title: 'Nicaragua: el largo camino hacia la reconciliación nacional',
+    subtitle: 'Reflexiones sobre los desafíos de construir paz en un país dividido',
+    slug: 'nicaragua-el-largo-camino-hacia-la-reconciliacion-nacional',
+    body: [
+      h2('Una herida que no cierra'),
+      ...p(
+        'Nicaragua vive desde 2018 una crisis que ha trascendido lo político para convertirse en una fractura social de dimensiones históricas. Las familias divididas, las comunidades rotas, los amigos que dejaron de hablarse: la polarización ha dejado cicatrices que ningún acuerdo diplomático podrá sanar por sí solo.',
+        'La reconciliación, ese término que los diplomáticos pronuncian con facilidad, implica en la práctica un proceso doloroso de reconocimiento mutuo. Significa que quienes apoyaron el régimen y quienes lo combatieron deben aprender a convivir en el mismo espacio, compartir la misma calle, sentarse en la misma mesa. No hay atajos para semejante empresa.',
+      ),
+      h2('Lecciones de otros procesos'),
+      ...p(
+        'Los casos de Sudáfrica, Colombia y Guatemala ofrecen aprendizajes parciales. En todos ellos, la justicia transicional fue necesaria pero insuficiente. La comisión de la verdad puede establecer hechos, pero no devolver la dignidad a las víctimas. El perdón no se decreta, se construye con hechos concretos de reparación y garantías de no repetición.',
+        'En Nicaragua, el contexto es particularmente complejo porque no existe un vencedor claro ni un derrotado absoluto. El régimen mantiene el control del aparato estatal, pero ha perdido legitimidad ante amplios sectores. La oposición tiene apoyo popular, pero carece de estructura y liderazgo unificado. Esta ambigüedad, lejos de facilitar la negociación, la dificulta porque ninguno de los dos bandos siente que necesita ceder.',
+      ),
+      h2('La sociedad civil como puente'),
+      ...p(
+        'En este escenario desolador, las organizaciones de la sociedad civil emergen como el actor más prometedor para liderar el proceso de reconciliación. No están contaminadas por la lógica partidaria, tienen credibilidad acumulada y, sobre todo, trabajan en terreno: conocen las necesidades reales de las comunidades.',
+        'Iniciativas como los tribunales de paz comunitarios, los programas de salud mental colectiva y los proyectos de desarrollo económico local están demostrando que es posible reconstruir el tejido social desde abajo. No sustituyen la voluntad política, pero sí crean las condiciones para que esa voluntad eventualmente emerja.',
+        'El camino será largo y probablemente más de una generación tendrá que pasar para que Nicaragua pueda hablar de reconciliación real. Pero cada paso que se da hoy, por pequeño que parezca, es un paso hacia un futuro donde el diálogo reemplace al silencio y la convivencia al miedo.',
+      ),
+    ],
+    imageSeed: 'blog-reconciliation',
+  },
+  {
+    tagNames: ['Política Exterior', 'Economía'],
+    authorIndex: 1,
+    title: 'La diáspora nicaragüense: entre la nostalgia y la reinventión',
+    subtitle: 'Cómo cientos de miles de exiliados están transformando comunidades en el exterior',
+    slug: 'la-diaspora-nicaraguense-entre-la-nostalgia-y-la-reinvencion',
+    body: [
+      h2('Un éxodo sin precedentes'),
+      ...p(
+        'Desde 2018, más de 200,000 nicaragüenses han abandonado el país, creando una de las diásporas más grandes de América Latina proporcionalmente. Costa Rica ha absorbido la mayor parte, pero comunidades significativas se han establecido en México, Estados Unidos, España y otros países europeos.',
+        'Este éxodo no es un fenómeno nuevo en la historia centroamericana — los salvadoreños y guatemaltecos conocieron procesos similares durante sus guerras civiles — pero tiene características propias que lo distinguen. La rapidez de la salida, la diversidad socioeconómica de los emigrados y la naturaleza política del exilio configuran una diáspora con demandas y necesidades específicas.',
+      ),
+      h2('La economía del exilio'),
+      ...p(
+        'Los remesas se han convertido en uno de los pilares fundamentales de la economía familiar en Nicaragua. Según datos del Banco Central, las transferencias desde el exterior representan más del 25% del PIB, una cifra que revela tanto la dependencia del país como la generosidad de quienes se fueron.',
+        'Pero las remesas no son solo dinero: son también conocimientos, habilidades y redes de contacto que los nicaragüenses en el exterior están poniendo al servicio de sus comunidades de origen. Empresas textiles administradas por exiliados en Costa Rica, cooperativas de artesanías organizadas desde México, plataformas tecnológicas desarrolladas por ingenieros en Estados Unidos: la diáspora está creando una economía paralela que podría ser clave para la reconstrucción futura.',
+      ),
+      h2('La identidad en el limbo'),
+      ...p(
+        'Vivir en el exilio plantea preguntas existenciales que van más allá de lo material. ¿Sigue siendo nicaragüense alguien que lleva cinco años viviendo en San José? ¿Qué significa pertenecer a un país que te expulsó? ¿Cómo se mantiene viva la conexión con una tierra que cada vez se siente más lejana?',
+        'Las comunidades de exiliados han creado espacios de memoria y resistencia que funcionan como anclaje identitario. Centros culturales, escuelas de español para hijos de emigrados, festivales de música tradicional, grupos de lectura sobre literatura nicaragüense: todos ellos son intentos de preservar una identidad que amenaza con disolverse en la acelerada asimilación del país de acogida.',
+        'La paradoja del exilio es que te obliga a ser más nicaragüense de lo que eras cuando vivías en Nicaragua. En el país, la identidad era un dato; en el exterior, se convierte en una elección. Y esa elección, repetida cada día en mil pequeños gestos, es lo que mantiene viva la esperanza de retorno.',
+      ),
+    ],
+    imageSeed: 'blog-diaspora',
+  },
+  {
+    tagNames: ['Reformas', 'Opinión'],
+    authorIndex: 0,
+    title: 'La educación como campo de batalla silencioso',
+    subtitle: 'Cómo el control académico ha moldeado una generación de nicaragüenses',
+    slug: 'la-educacion-como-campo-de-batalla-silencioso',
+    body: [
+      h2('Universidades bajo asedio'),
+      ...p(
+        'La intervención de las universidades públicas y privadas de Nicaragua no fue un acto aislado sino parte de una estrategia sistemática de control social. Desde 2018, el gobierno ha desmantelado la autonomía universitaria, depurado profesorado disidente y reorientado planes de estudio para eliminar lo que considera "desestabilización ideológica".',
+        'Las consecuencias van más allá de lo académico. Las universidades nicaragüenses eran espacios de pensamiento crítico, formación de liderazgo y movilización social. Al cerrar esos espacios, el régimen no solo controla el acceso al conocimiento, sino que corta las redes de organización que podrían desafiar su poder.',
+      ),
+      h2('Una generación en la encrucijada'),
+      ...p(
+        'Los estudiantes que comenzaron su formación universitaria en 2018 vivieron en carne propia el momento más convulso de la crisis. Muchos de ellos participaron en las protestas, fueron testigos de la violencia policial y vieron cómo sus compañeros eran detenidos o expulsados. Para esta generación, la universidad no fue un espacio de aprendizaje sino de politización forzada.',
+        'Ahora, varios años después, los estudiantes que permanecen en el país enfrentan un panorama desolador: carreras con planes de estudio censurados, profesores que han aprendido a autopreservarse, bibliotecas depuradas de literatura "subversiva". Los que se fueron al exilio, por su parte, han tenido que reinventarse en sistemas educativos radicalmente diferentes, cargando con el peso de una formación interrumpida.',
+      ),
+      h2('La resistencia desde las aulas vacías'),
+      ...p(
+        'A pesar del control férreo, han surgido iniciativas de resistencia educativa que operan en los márgenes. Círculos de lectura clandestinos, tutorías en línea a través de plataformas cifradas, intercambios académicos con universidades extranjeras que mantienen vínculos con profesores exiliados.',
+        '"La educación no se detiene porque cierren un edificio", afirma un profesor de filosofía que imparte clases por videollamada a estudiantes repartidos en cinco países. "El conocimiento es el recurso más difícil de confiscar porque viaja en la mente de la gente".',
+        'Estas iniciativas, aunque valiosas, no pueden sustituir el ecosistema universitario completo: laboratorios, bibliotecas, espacios de encuentro, la vida comunitaria que forja carácter y crea lazos. La verdadera batalla educativa tomará años para revertirse, y el costo de esta generación perdida será incalculable.',
+      ),
+    ],
+    imageSeed: 'blog-education',
   },
 ]

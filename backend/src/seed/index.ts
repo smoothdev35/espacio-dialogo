@@ -5,48 +5,48 @@ import { createWriteStream } from 'fs'
 import { Transform } from 'stream'
 import { pipeline } from 'stream/promises'
 
-import { categories, tags, authors, articles, toSlug } from './data'
+import { categories, tags, authors, updates, blogPosts, toSlug } from './data'
 
 const ALLOWED_IMAGE_HOSTS = ['picsum.photos']
 const FETCH_TIMEOUT_MS = 10_000
 const MAX_RESPONSE_BYTES = 5 * 1024 * 1024
-const EXPECTED_COUNTS = { categories: 4, tags: 10, authors: 2, articles: 8 } as const
+const EXPECTED_COUNTS = { categories: 4, tags: 10, authors: 2, updates: 8, blogPosts: 3 } as const
 const EXPECTED_TOTAL =
-  EXPECTED_COUNTS.categories + EXPECTED_COUNTS.tags + EXPECTED_COUNTS.authors + EXPECTED_COUNTS.articles
+  EXPECTED_COUNTS.categories +
+  EXPECTED_COUNTS.tags +
+  EXPECTED_COUNTS.authors +
+  EXPECTED_COUNTS.updates +
+  EXPECTED_COUNTS.blogPosts
 
 export async function seed({ strapi }: { strapi: any }) {
-  const publishedCount = await strapi.db
-    .query('api::article.article')
-    .count({ where: { publishedAt: { $ne: null } } })
-
-  if (publishedCount > 0) {
-    strapi.log.info('Seed skipped: published articles already exist')
+  const catsExist = await strapi.db.query('api::category.category').findOne({})
+  if (catsExist) {
+    strapi.log.info('Seed skipped: data already exists')
     return
-  }
-
-  const totalCount = await strapi.db.query('api::article.article').count()
-  if (totalCount > 0) {
-    strapi.log.info('Cleaning stale draft data before re-seed...')
-    await cleanDrafts(strapi)
   }
 
   strapi.log.info('Seeding data...')
 
   const imageMap = await uploadImages(strapi)
 
-  await strapi.db.transaction(async () => {
-    const categoryMap = await createCategories(strapi)
-    const tagMap = await createTags(strapi)
-    const authorMap = await createAuthors(strapi, imageMap)
-    await createArticles(strapi, imageMap, categoryMap, tagMap, authorMap)
-  })
+  const categoryMap = await createCategories(strapi)
+  const tagMap = await createTags(strapi)
+  const authorMap = await createAuthors(strapi, imageMap)
+  await createUpdates(strapi, imageMap, categoryMap, tagMap, authorMap)
+  await createBlogPosts(strapi, imageMap, tagMap, authorMap)
 
   await verifySeedCount(strapi)
   strapi.log.info('Seed completed')
 }
 
 async function cleanDrafts(strapi: any) {
-  const uids = ['api::article.article', 'api::author.author', 'api::category.category', 'api::tag.tag'] as const
+  const uids = [
+    'api::update.update',
+    'api::blog-post.blog-post',
+    'api::author.author',
+    'api::category.category',
+    'api::tag.tag',
+  ] as const
 
   for (const uid of uids) {
     const entries = await strapi.db.query(uid).findMany()
@@ -171,11 +171,17 @@ async function uploadImages(strapi: any) {
       fileName: `${a.slug}.jpg`,
       altText: a.name,
     })),
-    ...articles.map((a) => ({
-      key: a.imageSeed,
-      url: `https://picsum.photos/seed/${a.imageSeed}/1200/600`,
-      fileName: `${a.imageSeed}.jpg`,
-      altText: a.title,
+    ...updates.map((u) => ({
+      key: u.imageSeed,
+      url: `https://picsum.photos/seed/${u.imageSeed}/1200/600`,
+      fileName: `${u.imageSeed}.jpg`,
+      altText: u.title,
+    })),
+    ...blogPosts.map((b) => ({
+      key: b.imageSeed,
+      url: `https://picsum.photos/seed/${b.imageSeed}/1200/600`,
+      fileName: `${b.imageSeed}.jpg`,
+      altText: b.title,
     })),
   ]
 
@@ -204,6 +210,15 @@ async function createCategories(strapi: any) {
   const map: Record<string, string> = {}
 
   for (const cat of categories) {
+    const existing = await strapi.db
+      .query('api::category.category')
+      .findOne({ where: { slug: cat.slug } })
+
+    if (existing) {
+      map[cat.slug] = existing.documentId
+      continue
+    }
+
     const created = await strapi.documents('api::category.category').create({
       data: {
         name: cat.name,
@@ -223,10 +238,20 @@ async function createTags(strapi: any) {
   const map: Record<string, string> = {}
 
   for (const name of tags) {
+    const slug = toSlug(name)
+    const existing = await strapi.db
+      .query('api::tag.tag')
+      .findOne({ where: { slug } })
+
+    if (existing) {
+      map[name] = existing.documentId
+      continue
+    }
+
     const created = await strapi.documents('api::tag.tag').create({
       data: {
         name,
-        slug: toSlug(name),
+        slug,
       },
       status: 'published',
     })
@@ -241,6 +266,15 @@ async function createAuthors(strapi: any, imageMap: Record<string, MediaEntry>) 
   const map: Record<string, string> = {}
 
   for (const author of authors) {
+    const existing = await strapi.db
+      .query('api::author.author')
+      .findOne({ where: { slug: author.slug } })
+
+    if (existing) {
+      map[author.slug] = existing.documentId
+      continue
+    }
+
     const avatarMedia = imageMap[author.avatarSeed]
 
     const created = await strapi.documents('api::author.author').create({
@@ -259,30 +293,39 @@ async function createAuthors(strapi: any, imageMap: Record<string, MediaEntry>) 
   return map
 }
 
-async function createArticles(
+async function createUpdates(
   strapi: any,
   imageMap: Record<string, MediaEntry>,
   categoryMap: Record<string, string>,
   tagMap: Record<string, string>,
   authorMap: Record<string, string>,
 ) {
-  for (const article of articles) {
-    if (article.authorIndex >= authors.length) {
-      strapi.log.warn(`Article "${article.title}" has invalid authorIndex ${article.authorIndex}, skipping`)
+  for (const update of updates) {
+    if (update.authorIndex >= authors.length) {
+      strapi.log.warn(`Update "${update.title}" has invalid authorIndex ${update.authorIndex}, skipping`)
       continue
     }
 
-    const featuredImage = imageMap[article.imageSeed]
-    const authorId = authorMap[authors[article.authorIndex].slug]
-    const categoryId = categoryMap[article.categorySlug]
-    const tagIds = article.tagNames.map((name) => tagMap[name]).filter(Boolean)
+    const existing = await strapi.db
+      .query('api::update.update')
+      .findOne({ where: { slug: update.slug } })
 
-    await strapi.documents('api::article.article').create({
+    if (existing) {
+      strapi.log.info(`Update "${update.title}" already exists, skipping`)
+      continue
+    }
+
+    const featuredImage = imageMap[update.imageSeed]
+    const authorId = authorMap[authors[update.authorIndex].slug]
+    const categoryId = categoryMap[update.categorySlug]
+    const tagIds = update.tagNames.map((name) => tagMap[name]).filter(Boolean)
+
+    await strapi.documents('api::update.update').create({
       data: {
-        title: article.title,
-        slug: article.slug,
-        excerpt: article.excerpt,
-        body: article.body,
+        title: update.title,
+        slug: update.slug,
+        excerpt: update.excerpt,
+        body: update.body,
         featuredImage: featuredImage ? featuredImage.id : null,
         category: categoryId,
         tags: tagIds,
@@ -293,16 +336,63 @@ async function createArticles(
   }
 }
 
-async function verifySeedCount(strapi: any) {
-  const [categories, tags, authors, articles] = await Promise.all([
-    strapi.db.query('api::category.category').count(),
-    strapi.db.query('api::tag.tag').count(),
-    strapi.db.query('api::author.author').count(),
-    strapi.db.query('api::article.article').count(),
-  ])
+async function createBlogPosts(
+  strapi: any,
+  imageMap: Record<string, MediaEntry>,
+  tagMap: Record<string, string>,
+  authorMap: Record<string, string>,
+) {
+  for (const blogPost of blogPosts) {
+    if (blogPost.authorIndex >= authors.length) {
+      strapi.log.warn(`BlogPost "${blogPost.title}" has invalid authorIndex ${blogPost.authorIndex}, skipping`)
+      continue
+    }
 
-  const total = categories + tags + authors + articles
+    const existing = await strapi.db
+      .query('api::blog-post.blog-post')
+      .findOne({ where: { slug: blogPost.slug } })
+
+    if (existing) {
+      strapi.log.info(`BlogPost "${blogPost.title}" already exists, skipping`)
+      continue
+    }
+
+    const featuredImage = imageMap[blogPost.imageSeed]
+    const authorId = authorMap[authors[blogPost.authorIndex].slug]
+    const tagIds = blogPost.tagNames.map((name) => tagMap[name]).filter(Boolean)
+
+    await strapi.documents('api::blog-post.blog-post').create({
+      data: {
+        title: blogPost.title,
+        slug: blogPost.slug,
+        subtitle: blogPost.subtitle,
+        body: blogPost.body,
+        featuredImage: featuredImage ? featuredImage.id : null,
+        tags: tagIds,
+        author: authorId,
+      },
+      status: 'published',
+    })
+  }
+}
+
+async function verifySeedCount(strapi: any) {
+  const allCats = await strapi.db.query('api::category.category').findMany()
+  const allTags = await strapi.db.query('api::tag.tag').findMany()
+  const allAuthors = await strapi.db.query('api::author.author').findMany()
+  const allUpdates = await strapi.db.query('api::update.update').findMany()
+  const allBlogPosts = await strapi.db.query('api::blog-post.blog-post').findMany()
+
+  const categories = new Set(allCats.map((e: any) => e.documentId)).size
+  const tags = new Set(allTags.map((e: any) => e.documentId)).size
+  const authors = new Set(allAuthors.map((e: any) => e.documentId)).size
+  const updates = new Set(allUpdates.map((e: any) => e.documentId)).size
+  const blogPosts = new Set(allBlogPosts.map((e: any) => e.documentId)).size
+
+  const total = categories + tags + authors + updates + blogPosts
   if (total !== EXPECTED_TOTAL) {
-    strapi.log.warn(`Seed count mismatch: expected ${EXPECTED_TOTAL}, got ${total} (categories=${categories}, tags=${tags}, authors=${authors}, articles=${articles})`)
+    strapi.log.warn(
+      `Seed count mismatch: expected ${EXPECTED_TOTAL}, got ${total} (categories=${categories}, tags=${tags}, authors=${authors}, updates=${updates}, blogPosts=${blogPosts})`,
+    )
   }
 }

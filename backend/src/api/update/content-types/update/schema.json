@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "articles",
+  "collectionName": "updates",
   "info": {
-    "singularName": "article",
-    "pluralName": "articles",
-    "displayName": "Article",
+    "singularName": "update",
+    "pluralName": "updates",
+    "displayName": "Update",
     "description": ""
   },
   "options": {
@@ -35,20 +35,20 @@
     "author": {
       "type": "relation",
       "relation": "manyToOne",
-"target": "api::author.author",
-      "inversedBy": "articles"
+      "target": "api::author.author",
+      "inversedBy": "updates"
     },
     "category": {
       "type": "relation",
       "relation": "manyToOne",
-"target": "api::category.category",
-      "inversedBy": "articles"
+      "target": "api::category.category",
+      "inversedBy": "updates"
     },
     "tags": {
       "type": "relation",
       "relation": "manyToMany",
-"target": "api::tag.tag",
-      "inversedBy": "articles"
+      "target": "api::tag.tag",
+      "inversedBy": "updates"
     }
   }
 }

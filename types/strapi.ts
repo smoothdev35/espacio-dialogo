@@ -156,7 +156,7 @@ export interface Author extends StrapiDocument {
   bio: string | null;
 }
 
-export interface Article extends StrapiDocument {
+export interface Update extends StrapiDocument {
   title: string;
   slug: string;
   excerpt: string;
@@ -167,7 +167,7 @@ export interface Article extends StrapiDocument {
   tags: Tag[];
 }
 
-export interface ArticleCard {
+export interface UpdateCard {
   title: string;
   slug: string;
   excerpt: string;
@@ -179,6 +179,35 @@ export interface ArticleCard {
   category: {
     name: string;
     slug: string;
+  };
+  tags: {
+    name: string;
+    slug: string;
+  }[];
+  author: {
+    name: string;
+    slug: string;
+  };
+}
+
+export interface BlogPost extends StrapiDocument {
+  title: string;
+  slug: string;
+  subtitle: string | null;
+  body: Block[];
+  featuredImage: Media | null;
+  author: Author | null;
+  tags: Tag[];
+}
+
+export interface BlogPostCard {
+  title: string;
+  slug: string;
+  subtitle: string | null;
+  publishedAt: string;
+  featuredImage: {
+    url: string;
+    alternativeText: string | null;
   };
   tags: {
     name: string;

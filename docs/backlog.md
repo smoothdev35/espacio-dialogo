@@ -47,8 +47,8 @@
 | :----------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-- | :--- | :--------- | :--------------------------- |
 | **Epic1-chore-01** | `[chore]` | Configure Strapi content types — Update (Article), Author, Category, Tag with fields, relations, and draft/publish enabled. Schema JSONs, controllers, services, routes in src/api/. Bootstrap grants public find/findOne permissions. | P0  | M    | `[MERGED]` | None                         |
 | **Epic1-chore-02** | `[chore]` | Seed bootstrap data — 4 categories, 10 tags, 2 authors, 8 updates (articles) with images from picsum.photos. Idempotent seed via bootstrap().                                                                                          | P0  | M    | `[MERGED]` | None                         |
-| **Epic1-chore-03** | `[chore]` | Rename Article → Update (schema, routes, UIDs, TS types, seed refs). Create BlogPost content type — schema, controller, services, routes, bootstrap permissions, TS types.                                                             | P0  | M    | `[DRAFT]`  | None                         |
-| **Epic1-chore-04** | `[chore]` | Seed BlogPost bootstrap data — 3-4 sample blog posts in Spanish, reusing existing authors/categories, picsum images. Idempotent.                                                                                                       | P0  | S    | `[DRAFT]`  | 🛑 Blocked by Epic1-chore-03 |
+| **Epic1-chore-03** | `[chore]` | Rename Article → Update (schema, routes, UIDs, TS types, seed refs). Create BlogPost content type — schema, controller, services, routes, bootstrap permissions, TS types.                                                                     | P0  | M    | `[MERGED]` | None                         |
+| **Epic1-chore-04** | `[chore]` | Seed BlogPost bootstrap data — 3 sample blog posts in Spanish, reusing existing authors/tags, picsum images. Idempotent.                                                                                                       | P0  | S    | `[MERGED]` | 🔗 Related to Epic1-chore-03 |
 
 #### US-01: Hero Section Content Type
 
@@ -58,8 +58,8 @@
 
 #### US-02: BlogPost Content Type
 
-- **Intent:** As an Editor, I want to manage blog posts (title, subtitle, body, featured image, author, category) from the admin panel, so that I can publish long-form content separate from news updates.
-- **Scope Bounds:** Strapi collection type `BlogPost`. Fields: title, slug, subtitle, body (blocks), featuredImage (media), author (relation), category (relation). No tags. Public find/findOne permissions. Shared TypeScript contract in `types/strapi.ts`.
+- **Intent:** As an Editor, I want to manage blog posts (title, subtitle, body, featured image, author, tags) from the admin panel, so that I can publish long-form content separate from news updates.
+- **Scope Bounds:** Strapi collection type `BlogPost`. Fields: title, slug, subtitle, body (blocks), featuredImage (media), author (relation), tags (relation). No category. Public find/findOne permissions. Shared TypeScript contract in `types/strapi.ts`.
 - **Artifact Link:** `backend/src/api/blog-post/`
 
 ### Epic 2: Site Foundation
@@ -114,7 +114,7 @@
 #### US-08: BlogPost Listing
 
 - **Intent:** As a Reader, I want to view a paginated list of published blog posts sorted by date, so that I can read long-form articles.
-- **Scope Bounds:** Dedicated Blog section showing BlogPost cards (title, subtitle, date, category badge, author). Pagination or infinite scroll.
+- **Scope Bounds:** Dedicated Blog section showing BlogPost cards (title, subtitle, date, tags, author). Pagination or infinite scroll.
 - **Artifact Link:** `docs/stories/US-08.md`
 
 #### US-09: BlogPost Detail

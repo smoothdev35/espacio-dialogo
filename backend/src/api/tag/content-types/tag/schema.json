@@ -20,10 +20,16 @@
       "type": "uid",
       "targetField": "name"
     },
-    "articles": {
+    "updates": {
       "type": "relation",
       "relation": "manyToMany",
-      "target": "api::article.article",
+      "target": "api::update.update",
+      "mappedBy": "tags"
+    },
+    "blog_posts": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::blog-post.blog-post",
       "mappedBy": "tags"
     }
   }

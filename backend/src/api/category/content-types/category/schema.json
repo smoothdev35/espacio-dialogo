@@ -23,10 +23,10 @@
     "description": {
       "type": "richtext"
     },
-    "articles": {
+    "updates": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::article.article",
+      "target": "api::update.update",
       "mappedBy": "category"
     }
   }
