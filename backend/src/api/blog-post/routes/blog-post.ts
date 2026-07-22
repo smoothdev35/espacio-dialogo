@@ -16,19 +16,19 @@ export default {
       method: 'POST',
       path: '/blog-posts',
       handler: 'blog-post.create',
-      config: { auth: false, policies: [] },
+      config: { policies: [] },
     },
     {
       method: 'PUT',
       path: '/blog-posts/:documentId',
       handler: 'blog-post.update',
-      config: { auth: false, policies: [] },
+      config: { policies: [] },
     },
     {
       method: 'DELETE',
       path: '/blog-posts/:documentId',
       handler: 'blog-post.delete',
-      config: { auth: false, policies: [] },
+      config: { policies: [] },
     },
   ],
 }

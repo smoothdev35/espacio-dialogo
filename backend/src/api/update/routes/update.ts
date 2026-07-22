@@ -16,19 +16,19 @@ export default {
       method: 'POST',
       path: '/updates',
       handler: 'update.create',
-      config: { auth: false, policies: [] },
+      config: { policies: [] },
     },
     {
       method: 'PUT',
       path: '/updates/:documentId',
       handler: 'update.update',
-      config: { auth: false, policies: [] },
+      config: { policies: [] },
     },
     {
       method: 'DELETE',
       path: '/updates/:documentId',
       handler: 'update.delete',
-      config: { auth: false, policies: [] },
+      config: { policies: [] },
     },
   ],
 }
