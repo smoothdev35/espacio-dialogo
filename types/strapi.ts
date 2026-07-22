@@ -156,65 +156,48 @@ export interface Author extends StrapiDocument {
   bio: string | null;
 }
 
-export interface Update extends StrapiDocument {
+// --- Card-level flattened shapes ---
+
+export interface CardLink {
+  name: string;
+  slug: string;
+}
+
+export interface CardImage {
+  url: string;
+  alternativeText: string | null;
+}
+
+// --- Content document bases ---
+
+export interface ContentFields {
   title: string;
   slug: string;
   excerpt: string;
   body: Block[];
   featuredImage: Media | null;
   author: Author | null;
+  tags: Tag[];
+}
+
+export interface CardFields {
+  title: string;
+  slug: string;
+  excerpt: string;
+  publishedAt: string;
+  featuredImage: CardImage;
+  tags: CardLink[];
+  author: CardLink;
+}
+
+export interface Update extends StrapiDocument, ContentFields {
   category: Category | null;
-  tags: Tag[];
 }
 
-export interface UpdateCard {
-  title: string;
-  slug: string;
-  excerpt: string;
-  publishedAt: string;
-  featuredImage: {
-    url: string;
-    alternativeText: string | null;
-  };
-  category: {
-    name: string;
-    slug: string;
-  };
-  tags: {
-    name: string;
-    slug: string;
-  }[];
-  author: {
-    name: string;
-    slug: string;
-  };
+export interface UpdateCard extends CardFields {
+  category: CardLink;
 }
 
-export interface BlogPost extends StrapiDocument {
-  title: string;
-  slug: string;
-  subtitle: string | null;
-  body: Block[];
-  featuredImage: Media | null;
-  author: Author | null;
-  tags: Tag[];
-}
+export interface BlogPost extends StrapiDocument, ContentFields {}
 
-export interface BlogPostCard {
-  title: string;
-  slug: string;
-  subtitle: string | null;
-  publishedAt: string;
-  featuredImage: {
-    url: string;
-    alternativeText: string | null;
-  };
-  tags: {
-    name: string;
-    slug: string;
-  }[];
-  author: {
-    name: string;
-    slug: string;
-  };
-}
+export interface BlogPostCard extends CardFields {}

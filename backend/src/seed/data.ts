@@ -312,13 +312,151 @@ export const updates: UpdateSeed[] = [
     ],
     imageSeed: 'article-voices-2',
   },
+  {
+    categorySlug: 'campaign',
+    tagNames: ['Derechos Humanos', 'Sociedad Civil', 'Elecciones'],
+    authorIndex: 0,
+    title: 'Mujeres organizadas: el liderazgo femenino en la resistencia nicaragüense',
+    slug: 'mujeres-organizadas-el-liderazgo-femenino-en-la-resistencia-nicaraguense',
+    excerpt: 'Colectivos de mujeres han emergido como actores clave en la defensa de derechos humanos y la reconstrucción del tejido social en comunidades urbanas y rurales del país.',
+    body: [
+      h2('El rostro femenino de la resistencia'),
+      ...p(
+        'En los últimos años, las organizaciones de mujeres nicaragüenses han pasado de ser actores secundarios a protagonistas indiscutibles de la lucha por la democracia. Lideresas comunitarias, defensoras de derechos humanos y madres de presos políticos han tejido una red de solidaridad que trasciende fronteras partidarias y geográficas.',
+        'Colectivos como la Red de Mujeres contra la Violencia y la Alianza de Mujeres Nicaragüenses han documentado más de mil casos de violencia política de género, un fenómeno que las organizaciones internacionales de derechos humanos apenas comienzan a visibilizar.',
+      ),
+      h3('Estrategias de autoprotección'),
+      ...p(
+        'Ante la creciente criminalización de su labor, las defensoras han desarrollado sofisticados protocolos de seguridad colectiva. Sistemas de alerta temprana, casas de acogida rotativas y redes de apoyo legal han permitido que muchas lideresas continúen su trabajo a pesar de las amenazas constantes.',
+        '"Nos hemos organizado porque el Estado no nos protege. Al contrario: nos persigue", explica una coordinadora de una red de defensoras que pidió mantener su identidad reservada. "La solidaridad entre mujeres es nuestra única protección real".',
+        'Estos mecanismos han demostrado ser efectivos: la tasa de desaparición forzada de defensoras ha disminuido significativamente en comunidades donde operan redes organizadas de autoprotección.',
+      ),
+      h3('Impacto en la agenda internacional'),
+      ...p(
+        'El trabajo de las organizaciones de mujeres nicaragüenses ha traspasado fronteras. Sus informes sobre violencia política de género han sido citados por la Comisión Interamericana de Derechos Humanos y han influido en la adopción de resoluciones específicas en el Parlamento Europeo.',
+        'La red de defensoras ha logrado algo que parecía imposible: mantener el tema de Nicaragua en la agenda internacional a pesar de la fatiga informativa y la competencia de crisis globales. La clave ha sido la articulación constante con organizaciones feministas en América Latina y Europa.',
+        'Sin embargo, las lideresas advierten que el costo personal de su activismo es cada vez más alto. Al menos doce defensoras han tenido que salir al exilio en los últimos dos años, y varias más enfrentan procesos judiciales por cargos que las organizaciones internacionales consideran fabricados.',
+      ),
+    ],
+    imageSeed: 'article-campana-3',
+  },
+  {
+    categorySlug: 'news',
+    tagNames: ['Corrupción', 'Economía', 'Reformas'],
+    authorIndex: 1,
+    title: 'Nuevo escándalo de corrupción sacude a la administración pública',
+    slug: 'nuevo-escandalo-de-corrupcion-sacude-a-la-administracion-publica',
+    excerpt: 'Investigaciones periodísticas revelan un esquema de desvío de fondos públicos que involucra a altos funcionarios y empresas fantasma, con un monto estimado de 50 millones de dólares.',
+    body: [
+      h2('Los mecanismos del desvío'),
+      ...p(
+        'Una investigación conjunta de varios medios independientes ha destapado lo que podría ser el mayor escándalo de corrupción administrativa desde 2018. El esquema, que operaba a través de contratos de obra pública sobrevalorados y empresas fantasma registradas en paraísos fiscales, habría desviado al menos 50 millones de dólares de las arcas del Estado.',
+        'Los documentos revelan un patrón sistemático: licitaciones amañadas, facturación por obras no ejecutadas y transferencias a cuentas offshore vinculadas a funcionarios de alto rango. El caso ha provocado reacciones encontradas: mientras el gobierno guarda silencio, organizaciones anticorrupción exigen una investigación independiente.',
+      ),
+      h3('Las empresas fantasma'),
+      ...p(
+        'El entramado societario incluye al menos quince empresas creadas entre 2020 y 2024, muchas de ellas registradas en Panamá y Belice. Estas empresas compartían direcciones fiscales, representantes legales y, en varios casos, los mismos beneficiarios finales.',
+        'Una de las empresas, constituida apenas tres meses antes de recibir un contrato por 8 millones de dólares para la construcción de un hospital en la Costa Caribe, nunca había ejecutado obras de infraestructura. La investigación reveló que su capital social declarado era de apenas 500 dólares.',
+        'Expertos en lavado de dinero consultados señalaron que el esquema presentaba todas las características del "crimen organizado con traje de corbata", utilizando estructuras corporativas para dar apariencia de legalidad a operaciones ilícitas.',
+      ),
+      h3('Reacciones y consecuencias'),
+      ...p(
+        'La publicación de la investigación ha generado una ola de reacciones. La Unión Europea ha expresado su preocupación y ha solicitado a la administración nicaragüense una explicación oficial. Organizaciones de la sociedad civil han convocado a movilizaciones pacíficas para exigir transparencia.',
+        'El gobierno, por su parte, ha calificado la investigación de "campaña de desprestigio orquestada desde el exterior" y ha anunciado que iniciará acciones legales contra los medios que publicaron la información. Mientras tanto, los fondos desviados equivalen al presupuesto anual de salud de dos departamentos del país.',
+      ),
+    ],
+    imageSeed: 'article-news-3',
+  },
+  {
+    categorySlug: 'analysis',
+    tagNames: ['Política Exterior', 'Economía', 'Elecciones'],
+    authorIndex: 0,
+    title: 'El tablero geopolítico de Centroamérica: Nicaragua en el nuevo orden regional',
+    slug: 'el-tablero-geopolitico-de-centroamerica-nicaragua-en-el-nuevo-orden-regional',
+    excerpt: 'Los cambios en la correlación de fuerzas en América Latina, el reposicionamiento de China y la nueva administración estadounidense reconfiguran el entorno estratégico de Nicaragua.',
+    body: [
+      h2('Un vecindario en transformación'),
+      ...p(
+        'El panorama geopolítico de Centroamérica ha experimentado cambios profundos en los últimos tres años. La llegada de nuevos gobiernos progresistas en la región, combinada con la intensificación de la competencia entre Estados Unidos y China, ha creado un entorno diplomático complejo para Nicaragua que el régimen ha sabido aprovechar.',
+        'Mientras que el país enfrenta sanciones y aislamiento por parte de las democracias occidentales, ha encontrado aliados estratégicos en Rusia, China e Irán, que han proporcionado asistencia financiera, técnica y militar. Este reposicionamiento no es gratuito: implica una creciente dependencia que condiciona las decisiones de política exterior del régimen.',
+      ),
+      h3('El factor migratorio como presión'),
+      ...p(
+        'La crisis migratoria nicaragüense se ha convertido en un tema central en las relaciones bilaterales con Estados Unidos y Costa Rica. El flujo constante de nicaragüenses hacia el norte ha generado tensiones diplomáticas y ha sido utilizado tanto como herramienta de presión como de negociación.',
+        'Costa Rica, que ha acogido a la mayor parte de los exiliados, enfrenta una saturación de sus servicios públicos y ha solicitado reiteradamente apoyo financiero internacional para atender la crisis. Estados Unidos, por su parte, ha vinculado la ayuda migratoria a avances democráticos en Nicaragua, aunque sin resultados tangibles hasta ahora.',
+        'Analistas señalan que la migración forzada se ha convertido en una de las principales herramientas de presión que la comunidad internacional tiene sobre el régimen, pero también uno de los temas más difíciles de resolver sin generar un colapso humanitario.',
+      ),
+      h3('El papel de China en la región'),
+      ...p(
+        'La creciente presencia china en Centroamérica ha cambiado las reglas del juego. Nicaragua, que rompió relaciones con Taiwán en 2021 para alinearse con Pekín, se ha convertido en un punto focal de la inversión china en la región. Proyectos de infraestructura, préstamos blandos y asistencia técnica han fluido hacia el país.',
+        'Sin embargo, esta relación tiene costos ocultos. La deuda de Nicaragua con China ha crecido exponencialmente, y varios proyectos anunciados han quedado paralizados por falta de transparencia en las condiciones de financiamiento. La experiencia de otros países latinoamericanos sugiere que la "diplomacia del dragón" puede ser tan exigente como cualquier otra.',
+      ),
+    ],
+    imageSeed: 'article-analysis-3',
+  },
+  {
+    categorySlug: 'voices',
+    tagNames: ['Libertad de Prensa', 'Derechos Humanos', 'Opinión'],
+    authorIndex: 1,
+    title: 'Periodismo en la cuerda floja: reportear en un país sin garantías',
+    slug: 'periodismo-en-la-cuerda-floja-reportear-en-un-pais-sin-garantias',
+    excerpt: 'La experiencia de una periodista independiente que documenta la realidad nicaragüense bajo amenaza constante, entre la autocensura y la necesidad de contar la verdad.',
+    body: [
+      h2('El oficio del riesgo'),
+      ...p(
+        'Hace seis meses recibí la última amenaza directa. Un mensaje de texto desde un número desconocido: "Sabemos dónde vives, sabemos dónde estudian tus hijos. Deja de escribir o te arrepentirás". No fue la primera ni será la última. Así es el oficio del periodismo independiente en Nicaragua hoy.',
+        'He aprendido a vivir con el miedo. A revisar debajo del coche cada mañana. A no tener rutinas predecibles. A cambiar de teléfono cada dos meses. A hablar con mis fuentes a través de aplicaciones cifradas que borran los mensajes automáticamente. Esta no es la profesión que elegí, pero es la que tengo.',
+      ),
+      h3('La autocensura como mecanismo de supervivencia'),
+      ...p(
+        'Lo peor no son las amenazas directas, sino la autocensura silenciosa que te vas imponiendo. Hay temas que aprendes a evitar, palabras que dejas de usar, ángulos que decides no explorar porque sabes que cruzar cierta línea puede significar el fin de tu carrera o algo peor.',
+        'Cada artículo que publico pasa por un filtro interno que no existía antes: ¿puedo identificar a esta fuente sin ponerla en riesgo? ¿Este dato puede ser usado en mi contra? ¿Vale la pena la historia si mañana tengo que salir del país? Son preguntas que ningún periodista debería tener que hacerse.',
+        'He visto a colegas desaparecer del mapa informativo. Algunos están en el exilio, otros en la cárcel, otros simplemente dejaron de escribir porque el costo era demasiado alto. Cada vez somos menos los que seguimos reporteando desde dentro, y los que quedamos sabemos que nuestra suerte puede cambiar en cualquier momento.',
+      ),
+      h3('Por qué sigo'),
+      ...p(
+        'Me preguntan a menudo por qué no me voy. Por qué sigo arriesgando mi vida y la de mi familia por un trabajo que no paga bien y que la mayoría de la gente no valora. La respuesta es simple: porque alguien tiene que hacerlo.',
+        'Cuando dejamos de documentar la realidad, dejamos de existir como sociedad. Cuando el único relato permitido es el oficial, la historia la escriben los verdugos. Mientras tenga fuerzas, mientras pueda sostener un lápiz o abrir una computadora, voy a seguir contando lo que pasa en este país.',
+        'No soy heroína, solo soy una periodista que cree que la verdad importa. Incluso cuando contarla puede costarte todo.',
+      ),
+    ],
+    imageSeed: 'article-voices-3',
+  },
+  {
+    categorySlug: 'voices',
+    tagNames: ['Derechos Humanos', 'Sociedad Civil', 'Economía'],
+    authorIndex: 0,
+    title: 'El campo nicaragüense: voces de una crisis silenciada',
+    slug: 'el-campo-nicaraguense-voces-de-una-crisis-silenciada',
+    excerpt: 'Campesinos y pequeños productores relatan cómo la crisis política, la falta de insumos y el cambio climático están transformando la vida en las zonas rurales del país.',
+    body: [
+      h2('La tierra que agoniza'),
+      ...p(
+        'Don Óscar tiene 67 años y ha cultivado maíz y frijoles en el mismo pedazo de tierra en el departamento de Jinotega durante cuatro décadas. "Nunca había visto algo así", dice mientras señala sus parcelas resecas. "Antes sabíamos cuándo sembrar y cuándo cosechar. Ahora el clima está loco y nadie nos ayuda".',
+        'Su historia se repite en cientos de comunidades rurales de Nicaragua, donde la crisis climática se suma a la crisis política para crear una tormenta perfecta. La falta de crédito agrícola, la ausencia de asistencia técnica y el encarecimiento de los insumos básicos han llevado a muchos pequeños productores al borde del abandono de sus tierras.',
+      ),
+      h3('Cooperativas bajo sospecha'),
+      ...p(
+        'Las cooperativas agrícolas, que durante décadas fueron el motor de la economía rural nicaragüense, enfrentan ahora una persecución sistemática. El gobierno las acusa de ser focos de "desestabilización" y ha intervenido varias de ellas, acusando a sus dirigentes de malversación de fondos.',
+        '"Nos acusan de todo", relata doña Rosa, presidenta de una cooperativa de café en Matagalpa. "Dicen que somos políticos disfrazados de campesinos. Solo queremos trabajar la tierra y vivir dignamente. ¿Eso es político?". La cooperativa de doña Rosa perdió la certificación orgánica el año pasado después de que inspectores gubernamentales bloquearan la visita de los auditores internacionales.',
+        'El acoso ha tenido consecuencias concretas: la producción de café, uno de los principales productos de exportación del país, ha caído un 15% en los últimos dos años, según datos del sector.',
+      ),
+      h3('La migración silenciosa del campo'),
+      ...p(
+        'Ante la imposibilidad de sostener sus medios de vida, miles de campesinos están abandonando sus tierras. No hacia Managua, como ocurría en el pasado, sino directamente hacia Costa Rica y Estados Unidos. Es una migración silenciosa que no aparece en los titulares, pero que está vaciando comunidades enteras.',
+        '"Se fueron los jóvenes primero", cuenta don Óscar. "Luego se fueron los que tenían hijos pequeños. Ahora empiezan a irse los que nunca pensaron que dejarían su tierra. Me pregunto si valdrá la pena quedarse cuando ya no quede nadie".',
+        'El despoblamiento rural tendrá consecuencias profundas para el país a largo plazo, no solo económicas sino culturales. La Nicaragua campesina, la de los pueblos originarios y las comunidades rurales, está desapareciendo sin que nadie parezca notarlo.',
+      ),
+    ],
+    imageSeed: 'article-voices-4',
+  },
 ]
 
 export interface BlogPostSeed {
   tagNames: string[]
   authorIndex: number
   title: string
-  subtitle: string
+  excerpt: string
   slug: string
   body: Record<string, any>[]
   imageSeed: string
@@ -329,7 +467,7 @@ export const blogPosts: BlogPostSeed[] = [
     tagNames: ['Derechos Humanos', 'Sociedad Civil'],
     authorIndex: 0,
     title: 'Nicaragua: el largo camino hacia la reconciliación nacional',
-    subtitle: 'Reflexiones sobre los desafíos de construir paz en un país dividido',
+    excerpt: 'Reflexiones sobre los desafíos de construir paz en un país dividido',
     slug: 'nicaragua-el-largo-camino-hacia-la-reconciliacion-nacional',
     body: [
       h2('Una herida que no cierra'),
@@ -355,7 +493,7 @@ export const blogPosts: BlogPostSeed[] = [
     tagNames: ['Política Exterior', 'Economía'],
     authorIndex: 1,
     title: 'La diáspora nicaragüense: entre la nostalgia y la reinventión',
-    subtitle: 'Cómo cientos de miles de exiliados están transformando comunidades en el exterior',
+    excerpt: 'Cómo cientos de miles de exiliados están transformando comunidades en el exterior',
     slug: 'la-diaspora-nicaraguense-entre-la-nostalgia-y-la-reinvencion',
     body: [
       h2('Un éxodo sin precedentes'),
@@ -381,7 +519,7 @@ export const blogPosts: BlogPostSeed[] = [
     tagNames: ['Reformas', 'Opinión'],
     authorIndex: 0,
     title: 'La educación como campo de batalla silencioso',
-    subtitle: 'Cómo el control académico ha moldeado una generación de nicaragüenses',
+    excerpt: 'Cómo el control académico ha moldeado una generación de nicaragüenses',
     slug: 'la-educacion-como-campo-de-batalla-silencioso',
     body: [
       h2('Universidades bajo asedio'),
@@ -402,5 +540,141 @@ export const blogPosts: BlogPostSeed[] = [
       ),
     ],
     imageSeed: 'blog-education',
+  },
+  {
+    tagNames: ['Sociedad Civil', 'Derechos Humanos'],
+    authorIndex: 1,
+    title: 'La trata de personas en la ruta migratoria nicaragüense',
+    excerpt: 'Una investigación sobre cómo las redes de trata aprovechan la vulnerabilidad de quienes huyen del país, y las iniciativas ciudadanas que intentan proteger a los más expuestos.',
+    slug: 'la-trata-de-personas-en-la-ruta-migratoria-nicaraguense',
+    body: [
+      h2('El negocio de la desesperación'),
+      ...p(
+        'Cada mes, miles de nicaragüenses emprenden la ruta hacia el norte. Huyen de la represión, de la falta de oportunidades, de un futuro que no promete nada. En ese camino, muchos caen en las redes de tratantes que operan con impunidad a lo largo de la ruta migratoria.',
+        'Organizaciones de derechos humanos han documentado un aumento alarmante de casos de trata de personas con fines de explotación laboral y sexual entre la población migrante nicaragüense. Las víctimas, en su mayoría mujeres jóvenes y adolescentes, son captadas por redes que prometen empleo digno en los países de tránsito o destino.',
+      ),
+      h2('Los puntos ciegos de la protección'),
+      ...p(
+        'Los consulados nicaragüenses en el exterior, controlados por el régimen, ofrecen escasa asistencia a los migrantes. Muchos reportan que al acudir a las representaciones diplomáticas son recibidos con hostilidad o simplemente ignorados, lo que los deja en una situación de vulnerabilidad extrema.',
+        'Las organizaciones de la sociedad civil han tratado de llenar este vacío, estableciendo redes de apoyo en puntos clave de la ruta migratoria. Albergues temporales, asesoría legal gratuita y líneas de emergencia operadas por voluntarios son algunas de las iniciativas que han surgido para proteger a los migrantes.',
+        '"No podemos reemplazar al Estado, pero podemos estar donde el Estado no está", explica una voluntaria de una organización de apoyo migrante en la frontera sur de México. "Cada persona que logramos orientar y proteger es una vida que no cae en las redes de la trata".',
+      ),
+      h2('Testimonios de sobrevivencia'),
+      ...p(
+        'Ana (nombre ficticio) tenía 22 años cuando aceptó la oferta de un "empleo seguro" en Panamá. La oferta llegó a través de una amiga de una amiga, en un grupo de WhatsApp de nicaragüenses en el exilio. "Me prometieron trabajo de recepcionista, con vivienda incluida. Sonaba legítimo".',
+        'Al llegar a la frontera, le quitaron el pasaporte y la trasladaron a una casa donde estaba encerrada con otras mujeres. Durante tres meses fue obligada a trabajar en un prostíbulo, hasta que logró escapar durante una redada policial. Ahora vive en un albergue en Costa Rica, esperando una resolución de asilo.',
+        'Historias como la de Ana se repiten con variaciones cada semana. Las organizaciones de derechos humanos estiman que solo uno de cada diez casos de trata es denunciado. La mayoría de las víctimas nunca recupera su libertad ni recibe justicia.',
+      ),
+    ],
+    imageSeed: 'blog-trafficking',
+  },
+  {
+    tagNames: ['Elecciones', 'Reformas', 'Opinión'],
+    authorIndex: 0,
+    title: 'El sistema de justicia en Nicaragua: del estado de derecho al estado de excepción permanente',
+    excerpt: 'Un análisis exhaustivo de cómo el poder judicial ha sido instrumentalizado para perseguir a la oposición y consolidar el control gubernamental sobre todas las esferas de la vida pública.',
+    slug: 'el-sistema-de-justicia-en-nicaragua-del-estado-de-derecho-al-estado-de-excepcion-permanente',
+    body: [
+      h2('La metamorfosis del poder judicial'),
+      ...p(
+        'En una década, Nicaragua ha pasado de tener un sistema judicial imperfecto pero funcional a un aparato de persecución política disfrazado de administración de justicia. La transformación no fue abrupta sino gradual: reformas legislativas, destitución de jueces independientes, nombramientos de leales y, sobre todo, la creación de una cultura de miedo que impide cualquier resistencia dentro del sistema.',
+        'El proceso comenzó con la purga de la Corte Suprema de Justicia en 2018, cuando magistrados críticos fueron destituidos bajo acusaciones de "incumplimiento de deberes". A partir de ahí, la depuración se extendió a tribunales de apelación, juzgados de distrito y, finalmente, a los juzgados locales. Hoy, no existe un solo juez en Nicaragua que pueda considerarse verdaderamente independiente.',
+      ),
+      h2('Jueces sin toga'),
+      ...p(
+        'Los llamados "jueces sin rostro", reintroducidos mediante una reforma legal en 2023, representan el punto más bajo de este proceso de degradación judicial. Bajo este sistema, los acusados no pueden conocer la identidad de los jueces que los juzgan, una medida que las organizaciones de derechos humanos califican como "una violación flagrante del debido proceso".',
+        'Este mecanismo se ha utilizado exclusivamente contra presos políticos. En los últimos dos años, más de 150 personas han sido procesadas bajo este sistema, y la tasa de condenas es del 99.7%. La única persona absuelta fue un caso en el que el propio fiscal solicitó la absolución por falta total de pruebas.',
+        'Los jueces que participan en estos tribunales lo hacen voluntariamente, atraídos por salarios triplicados y protección especial. Pero también bajo amenaza: negarse a participar puede significar la pérdida del empleo y, en algunos casos, la apertura de investigaciones penales contra el propio juez renuente.',
+      ),
+      h2('El costo de la injusticia'),
+      ...p(
+        'Las consecuencias de esta captura del sistema judicial son profundas y duraderas. No se trata solo de los presos políticos, que ya suman más de 300 según organizaciones de derechos humanos. Se trata de la imposibilidad de hacer valer cualquier derecho: laboral, de propiedad, de familia, de identidad.',
+        'Un contrato no vale el papel en que está escrito porque no hay un juez independiente que lo haga cumplir. Una propiedad puede ser expropiada sin recurso legal. Un padre puede perder la custodia de sus hijos si es señalado como "opositor". El estado de derecho se ha desmoronado por completo.',
+        'La reconstrucción del sistema judicial tomará generaciones. No basta con cambiar leyes o nombrar nuevos jueces: la cultura de impunidad y miedo está tan arraigada que incluso en un escenario de transición democrática, los abogados y jueces tendrían que aprender a ejercer su profesión sin temor a represalias.',
+      ),
+    ],
+    imageSeed: 'blog-justice',
+  },
+  {
+    tagNames: ['Economía', 'Política Exterior', 'Reformas'],
+    authorIndex: 0,
+    title: 'El cerco financiero: cómo las sanciones reconfiguraron la economía nicaragüense',
+    excerpt: 'Más allá del impacto macroeconómico, las sanciones internacionales han transformado las relaciones comerciales, el sistema bancario y las estrategias de supervivencia del empresariado local.',
+    slug: 'el-cerco-financiero-como-las-sanciones-reconfiguraron-la-economia-nicaraguense',
+    body: [
+      h2('La paradoja de las sanciones'),
+      ...p(
+        'Hay una escena que se repite cada mes en las bodegas del puerto de Corinto: contenedores enteros de mercancía que llegan y no pueden ser liberados porque el banco intermediario, temeroso de violar sanciones internacionales, ha congelado la transacción. La mercancía se pudre, el importador pierde su inversión y el exportador extranjero aprende a no hacer negocios con Nicaragua.',
+        'Esta es la realidad cotidiana de las sanciones financieras, cuyo impacto no siempre es visible en las estadísticas macroeconómicas pero que se siente en cada rincón del aparato productivo del país. El sistema bancario nicaragüense, desconectado progresivamente del sistema financiero global, opera en un aislamiento creciente.',
+      ),
+      h2('Bancos en la cuerda floja'),
+      ...p(
+        'Los bancos nicaragüenses enfrentan un dilema existencial. Por un lado, necesitan mantener corresponsalías internacionales para procesar transacciones en dólares, el pilar del comercio exterior del país. Por otro, cada vez menos bancos internacionales están dispuestos a asumir el riesgo reputacional y regulatorio de mantener relaciones con Nicaragua.',
+        'En los últimos tres años, al menos seis bancos internacionales han cortado sus relaciones de corresponsalía con entidades nicaragüenses. Esto significa que las transferencias internacionales tardan semanas en procesarse, cuando antes tomaban horas. Los costos de transacción se han disparado, y algunos sectores simplemente han dejado de exportar porque no pueden cobrar.',
+        'El gobierno ha intentado mitigar el impacto mediante acuerdos con bancos de países aliados, principalmente China y Rusia. Sin embargo, estas alternativas tienen limitaciones técnicas y geográficas que impiden sustituir completamente la infraestructura financiera global.',
+      ),
+      h2('La economía de la supervivencia'),
+      ...p(
+        'En este contexto, el empresariado nicaragüense ha desarrollado estrategias creativas de supervivencia. Algunos han establecido casas matrices en Costa Rica o Panamá para poder operar en el sistema financiero internacional. Otros han recurrido al trueque o a sistemas de compensación que recuerdan a las épocas de hiperinflación de los años ochenta.',
+        'La economía digital, particularmente las criptomonedas, ha encontrado un terreno fértil en Nicaragua. La adopción de USDT y Bitcoin ha crecido exponencialmente como mecanismo para eludir el cerco financiero. Sin embargo, esta solución tecnológica está fuera del alcance de la mayoría de la población, que depende de efectivo y transferencias bancarias tradicionales.',
+        '"Hemos vuelto a la economía de la subsistencia", resume un economista nicaragüense exiliado en México. "Las empresas gastan más recursos en sortear las restricciones financieras que en producir. Eso no es sostenible a largo plazo. La economía nicaragüense está encogiéndose, y las sanciones son solo una parte de la historia".',
+      ),
+    ],
+    imageSeed: 'blog-sanctions',
+  },
+  {
+    tagNames: ['Sociedad Civil', 'Derechos Humanos', 'Opinión'],
+    authorIndex: 1,
+    title: 'Iglesias bajo presión: la fe como resistencia en Nicaragua',
+    excerpt: 'Las comunidades religiosas, tanto católicas como evangélicas, enfrentan un asedio creciente mientras intentan mantener espacios de esperanza y solidaridad en medio de la represión.',
+    slug: 'iglesias-bajo-presion-la-fe-como-resistencia-en-nicaragua',
+    body: [
+      h2('Persecución selectiva'),
+      ...p(
+        'Cuando la policía ingresó a la fuerza en la Catedral de Managua en 2022, no solo violó la inmunidad eclesiástica: cruzó una línea que ni la dictadura de Somoza se había atrevido a cruzar. Ese momento marcó un punto de inflexión en la relación entre el régimen y las iglesias, que pasaron de ser actores mediadores a blancos directos de persecución.',
+        'La Iglesia Católica ha sido el objetivo principal, pero no el único. Denominaciones evangélicas que han mostrado solidaridad con presos políticos o han criticado abiertamente al gobierno también han sufrido hostigamiento. Pastores detenidos durante sus servicios, templos clausurados bajo acusaciones fiscales, líderes religiosos obligados al exilio.',
+      ),
+      h2('El silencio cómplice y la resistencia callada'),
+      ...p(
+        'La respuesta de las comunidades religiosas ha sido diversa. Algunas jerarquías han optado por un perfil bajo, negociando con el régimen la continuidad de sus actividades a cambio de silencio político. Otras, particularmente a nivel de base, han redoblado su compromiso con los más vulnerables, utilizando su infraestructura para albergar a perseguidos y distribuir ayuda humanitaria.',
+        '"La iglesia no es solo el templo, es la comunidad", dice un sacerdote que coordina una red de comedores infantiles en barrios marginales de Managua. "Pueden cerrar el edificio, pero no pueden cerrar la solidaridad. Lo que hacemos no es político, es cristiano. Pero en este país, ayudar al prójimo se ha vuelto un acto subversivo".',
+        'Las parroquias se han convertido en centros de resistencia silenciosa: espacios donde se reúnen familiares de presos políticos, se organizan colectas para exiliados y se ofrece asesoría legal gratuita. Son los únicos lugares donde la gente puede reunirse sin levantar sospechas inmediatas.',
+      ),
+      h2('La fe como refugio existencial'),
+      ...p(
+        'Para muchos nicaragüenses, la persecución religiosa ha reforzado la fe en lugar de debilitarla. Las iglesias llenas, las peregrinaciones multitudinarias y el crecimiento de comunidades de orión clandestinas son señales de que la represión no ha logrado quebrar la espiritualidad del pueblo.',
+        '"Cuando todo lo demás falla, nos queda la fe", dice una feligresa que asiste a misa diaria en una parroquia de León. "No sabemos cuándo terminará esto, pero sabemos que Dios está con los que sufren. Eso nos da fuerzas para seguir".',
+        'La pregunta que queda abierta es si la Iglesia, como institución, podrá jugar un papel relevante en una eventual transición democrática. Su legitimidad entre la población, fortalecida por su papel actual de defensora de derechos humanos, la posiciona como un actor potencialmente clave. Pero el costo pagado ha sido alto: decenas de sacerdotes exiliados, templos confiscados y una jerarquía dividida entre la resistencia y la supervivencia.',
+      ),
+    ],
+    imageSeed: 'blog-church',
+  },
+  {
+    tagNames: ['Política Exterior', 'Derechos Humanos', 'Sociedad Civil'],
+    authorIndex: 1,
+    title: 'Exilio nicaragüense: la diáspora política más joven de América Latina',
+    excerpt: 'Una generación de profesionales, estudiantes y activistas reconstruye sus vidas fuera del país mientras mantiene viva la lucha por la democracia desde la distancia.',
+    slug: 'exilio-nicaraguense-la-diaspora-politica-mas-joven-de-america-latina',
+    body: [
+      h2('Una generación dispersa'),
+      ...p(
+        'A diferencia de las migraciones económicas del pasado, el exilio político nicaragüense tiene un perfil distintivo: es joven (edad promedio de 29 años), altamente educado (más del 60% tiene estudios universitarios) y forzado por razones políticas directas. Esta combinación lo convierte en un fenómeno único en la historia migratoria latinoamericana.',
+        'Se estima que más de 120,000 nicaragüenses han salido del país por razones políticas desde 2018. De ellos, aproximadamente el 40% son profesionales: médicos, ingenieros, abogados, profesores universitarios. La pérdida de capital humano para Nicaragua es incalculable, pero la diáspora se ha convertido en un actor político relevante en los países de acogida.',
+      ),
+      h2('Organización transnacional'),
+      ...p(
+        'Lejos de dispersarse y asimilarse pasivamente, la diáspora nicaragüense ha creado una estructura organizativa que opera en múltiples países. Consejos de nicaragüenses en el exilio, asociaciones de profesionales y redes de estudiantes mantienen una coordinación constante a través de plataformas digitales.',
+        '"No somos refugiados esperando regresar, somos una comunidad política transnacional", explica una jurista nicaragüense exiliada en España que coordina una red de abogados que brindan asesoría legal gratuita a otros exiliados. "Nuestra lucha no terminó cuando cruzamos la frontera. Simplemente cambió de escenario".',
+        'Las organizaciones de la diáspora han logrado incidir en las políticas migratorias y de derechos humanos de varios países. Han conseguido que gobiernos europeos otorguen protección especial a nicaragüenses, que universidades ofrezcan becas para estudiantes exiliados y que medios internacionales cubran la situación del país.',
+      ),
+      h2('El dilema del retorno'),
+      ...p(
+        'A pesar de su organización y éxito en la integración, la mayoría de los exiliados vive con la incertidumbre del retorno. Una encuesta realizada entre nicaragüenses exiliados reveló que el 78% desea regresar al país, pero solo el 12% considera que las condiciones para hacerlo existirán en los próximos cinco años.',
+        'El retorno no es solo una decisión logística, sino profundamente emocional. Muchos exiliados describen la experiencia de vivir en el exterior como una "doble ausencia": ausentes del país que aman, pero nunca completamente integrados en el país que los acoge. La nostalgia, la culpa del sobreviviente y la ansiedad por los familiares que quedaron atrás son constantes.',
+        '"No sé si volveré", dice un joven ingeniero exiliado en Canadá. "Pero quiero que mis hijos sepan de dónde vienen, que conozcan la Nicaragua que yo conocí, no la que el régimen ha destruido. Mientras tanto, voy a trabajar desde aquí para que ese país vuelva a existir algún día".',
+        'Mientras el régimen se mantenga en el poder, la diáspora seguirá creciendo. Y con ella, la comunidad política nicaragüense más dispersa pero quizás también la más organizada y resiliente de la historia del país.',
+      ),
+    ],
+    imageSeed: 'blog-exile',
   },
 ]

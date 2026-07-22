@@ -10,7 +10,7 @@ import { categories, tags, authors, updates, blogPosts, toSlug } from './data'
 const ALLOWED_IMAGE_HOSTS = ['picsum.photos']
 const FETCH_TIMEOUT_MS = 10_000
 const MAX_RESPONSE_BYTES = 5 * 1024 * 1024
-const EXPECTED_COUNTS = { categories: 4, tags: 10, authors: 2, updates: 8, blogPosts: 3 } as const
+const EXPECTED_COUNTS = { categories: 4, tags: 10, authors: 2, updates: 12, blogPosts: 8 } as const
 const EXPECTED_TOTAL =
   EXPECTED_COUNTS.categories +
   EXPECTED_COUNTS.tags +
@@ -365,7 +365,7 @@ async function createBlogPosts(
       data: {
         title: blogPost.title,
         slug: blogPost.slug,
-        subtitle: blogPost.subtitle,
+        excerpt: blogPost.excerpt,
         body: blogPost.body,
         featuredImage: featuredImage ? featuredImage.id : null,
         tags: tagIds,

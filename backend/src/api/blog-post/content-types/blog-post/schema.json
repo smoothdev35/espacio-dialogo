@@ -21,7 +21,7 @@
       "targetField": "title",
       "required": true
     },
-    "subtitle": {
+    "excerpt": {
       "type": "text"
     },
     "body": {
