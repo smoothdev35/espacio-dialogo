@@ -1,6 +1,6 @@
 ---
 /**
- * BlogUpdates
+ * Updates
  *
  * Props: featured (FeaturedUpdateResult | null) — featured update card data
  *        gridArticles (UpdateCardProps[]) — updates for the 2x2 grid
@@ -51,13 +51,15 @@ const { featured, gridArticles, categories, class: className } = Astro.props
         </p>
       </div>
 
-      <!-- Filters -->
+      <!-- Filters — filtering handled client-side via script -->
       <UpdateFilters categories={categories} />
 
-      <!-- Featured update card -->
+      <!-- Featured update card — only filterable when there's data -->
       {
         featured ? (
-          <FeaturedUpdateCard {...featured} />
+          <div data-update-featured data-card-category={featured.category?.slug ?? ''}>
+            <FeaturedUpdateCard {...featured} />
+          </div>
         ) : (
           <p class="text-small opacity-60">No featured update available.</p>
         )
@@ -65,6 +67,11 @@ const { featured, gridArticles, categories, class: className } = Astro.props
 
       <!-- Update grid (2x2) -->
       <UpdateGrid articles={gridArticles} />
+
+      <!-- Empty state — shown when filter yields no results -->
+      <p data-update-empty hidden class="col-span-full text-center text-surface-text opacity-60 py-12">
+        No updates in this category
+      </p>
 
       <!-- View all link -->
       <div class="flex justify-center">
@@ -91,3 +98,56 @@ const { featured, gridArticles, categories, class: className } = Astro.props
     </div>
   </Container>
 </section>
+
+<script>
+  (function () {
+    var nav = document.querySelector('[data-update-filters]')
+    var grid = document.querySelector('[data-update-grid]')
+    if (!nav || !grid) return
+
+    var getItems = function () {
+      var items = Array.from(grid.querySelectorAll('[data-card-category]'))
+      var featured = document.querySelector('[data-update-featured]')
+      if (featured) items.push(featured)
+      return items
+    }
+
+    nav.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-filter-category]')
+      if (!btn) return
+
+      var category = btn.getAttribute('data-filter-category') || ''
+
+      // Update button active states
+      var buttons = nav.querySelectorAll('[data-filter-category]')
+      for (var i = 0; i < buttons.length; i++) {
+        var b = buttons[i]
+        var isActive = b.getAttribute('data-filter-category') === category
+        b.classList.toggle('bg-card-bg', isActive)
+        b.classList.toggle('bg-transparent', !isActive)
+        b.classList.toggle('font-normal', !isActive)
+        b.classList.toggle('hover:bg-card-bg', !isActive)
+        if (isActive) {
+          b.setAttribute('aria-current', 'true')
+        } else {
+          b.removeAttribute('aria-current')
+        }
+      }
+
+      // Show/hide cards by category
+      var items = getItems()
+      var anyVisible = false
+      for (var j = 0; j < items.length; j++) {
+        var el = items[j]
+        var itemCat = el.getAttribute('data-card-category') || ''
+        var hide = category !== '' && itemCat !== category
+        el.hidden = hide
+        if (!hide) anyVisible = true
+      }
+
+      // Show empty state when nothing matches filter
+      var empty = document.querySelector('[data-update-empty]')
+      if (empty) empty.hidden = anyVisible || category === ''
+    })
+  })()
+</script>

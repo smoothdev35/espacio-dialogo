@@ -11,11 +11,11 @@
  * Tokens: none directly — delegates to child components
  * Hardcoded literals: none
  * Context variants: not needed
- * Composed from: Hero, BlogUpdates
+ * Composed from: Hero, Updates
  */
 
 import Hero from './Hero.astro'
-import BlogUpdates from './BlogUpdates.astro'
+import Updates from './Updates.astro'
 import type { UpdateCardProps } from '@/features/update/update.types'
 import type { FeaturedUpdateResult } from '@/features/update/update.api'
 import type { HeroResult } from './hero.api'
@@ -39,8 +39,8 @@ const { hero, featured, gridArticles, categories, class: className } = Astro.pro
     heroImage={hero?.heroImage ?? undefined}
   />
 
-  <!-- Blog / 24 / — Article listing section -->
-  <BlogUpdates
+  <!-- Updates section -->
+  <Updates
     featured={featured}
     gridArticles={gridArticles}
     categories={categories}

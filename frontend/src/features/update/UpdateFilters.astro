@@ -5,7 +5,7 @@
  * Props: categories ({ name: string; slug: string }[]) — list of filter categories
  *        class? (string) — spread onto root <nav> for consumer overrides
  * Slots: none
- * Tokens: --color-surface, --color-surface-text, --color-border, --radio-bg-checked, --radius-*
+ * Tokens: --color-card-bg, --color-surface-text, --color-surface, --radius-tabs
  * Hardcoded literals: none
  * Context variants: not needed
  * Composed from: none (inline buttons)
@@ -19,14 +19,15 @@ interface Props {
 const { categories, class: className } = Astro.props
 ---
 
-<nav aria-label="Update category filters" class:list={[className]}>
+<nav aria-label="Update category filters" class:list={[className]} data-update-filters>
   <ul class="flex flex-wrap gap-2">
-    <!-- "All updates" is the default active filter — always rendered first -->
+    <!-- "All updates" — active by default -->
     <li>
       <button
         type="button"
+        data-filter-category=""
         aria-current="true"
-        class="rounded-tabs bg-surface text-surface-text border border-border px-4 py-2.5 hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus"
+        class="rounded-tabs bg-card-bg text-surface-text px-4 py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus"
       >
         All updates
       </button>
@@ -38,7 +39,8 @@ const { categories, class: className } = Astro.props
             <li>
               <button
                 type="button"
-                class="rounded-tabs border border-border bg-transparent text-surface-text px-4 py-2.5 hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus"
+                data-filter-category={cat.slug}
+                class="rounded-tabs bg-transparent text-surface-text font-normal px-4 py-2.5 hover:bg-card-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus"
               >
                 {cat.name}
               </button>

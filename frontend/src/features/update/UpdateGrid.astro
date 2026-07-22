@@ -23,6 +23,7 @@ const { articles, class: className } = Astro.props
 ---
 
 <ul
+  data-update-grid
   class:list={[
     "grid gap-component-gap md:grid-cols-2",
     className,
@@ -30,7 +31,7 @@ const { articles, class: className } = Astro.props
 >
   {
     articles.map((article) => (
-      <li>
+      <li data-card-category={article.category?.slug ?? ''}>
         <UpdateCard {...article} />
       </li>
     ))

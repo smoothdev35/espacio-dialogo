@@ -68,6 +68,17 @@
 - **Success Criteria:** Site has consistent layout, responsive design, basic SEO metadata, and acceptable Core Web Vitals.
 - **Out-of-Scope:** Analytics, cookie consent, multi-language i18n.
 
+#### 🛠️ Technical Subtasks
+
+| Task ID | Type | Target Technical Scope / Objective | Pri | Size | Status | Relations / Lineage |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Epic2-chore-01** | `[chore]` | Frontend hero section — consume Strapi Hero single type, render title/subtitle/image on homepage with responsive fallback. Companion to US-01. | P1 | S | `[MERGED]` | 🔗 Related to US-01 |
+| **Epic2-chore-02** | `[chore]` | Design token system — Tailwind v4 CSS custom properties, semantic token tiers, dark mode support | P0 | M | `[MERGED]` | None |
+| **Epic2-chore-03** | `[chore]` | Base UI component library — Button, Input, Select, Checkbox, Radio, Toggle, Tag, Tabs, Link, Modal, Accordion (Astro + React variants) | P0 | L | `[MERGED]` | None |
+| **Epic2-chore-04** | `[chore]` | Site footer — copyright line, credits, responsive layout | P2 | S | `[DRAFT]` | None |
+| **Epic2-chore-05** | `[chore]` | Responsiveness QA — verify all sections at mobile/tablet/desktop breakpoints against Figma, test in browser | P2 | S | `[DRAFT]` | None |
+| **Epic2-chore-06** | `[chore]` | Accessibility QA — keyboard navigation, screen reader, contrast ratios, focus management | P2 | S | `[DRAFT]` | None |
+
 #### US-03: Base Layout & Navigation
 
 - **Intent:** As a Reader, I want a consistent site layout with header, footer, and navigation, so that I can move around the site intuitively.
@@ -92,6 +103,8 @@
 | Task ID            | Type      | Target Technical Scope / Objective                                                                                                                                                                                                                           | Pri | Size | Status     | Relations / Lineage |
 | :----------------- | :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-- | :--- | :--------- | :------------------ |
 | **Epic3-chore-01** | `[chore]` | Create Strapi 5 data adapter — fetchApi wrapper handling flattened REST responses (documentId extraction, unwrapped attributes). Adds src/lib/strapi.ts, src/types/strapi.ts, src/lib/index.ts. Generic fetchCollection<T> + typed helpers per content type. | P0  | M    | `[MERGED]` | None                |
+| **Epic3-chore-02** | `[chore]` | Align UpdateFilters pill styling with Figma | P2 | S | `[MERGED]` | None |
+| **Epic3-chore-03** | `[chore]` | Implement client-side update filtering by category | P1 | M | `[MERGED]` | None |
 
 #### US-05: Update Listing
 
@@ -117,6 +130,12 @@
 - **Scope Bounds:** Dedicated Blog section showing BlogPost cards (title, subtitle, date, tags, author). Pagination or infinite scroll.
 - **Artifact Link:** `docs/stories/US-08.md`
 
+#### US-13: Blog Posts Homepage Section
+
+- **Intent:** As a Reader, I want to browse recent blog posts on the homepage, so that I can discover long-form content from the landing page.
+- **Scope Bounds:** Homepage section below Updates showing BlogPost cards (title, date, author, excerpt). Link to full blog listing. Responsive grid layout.
+- **Artifact Link:** `docs/stories/US-13.md`
+
 #### US-09: BlogPost Detail
 
 - **Intent:** As a Reader, I want to open a full blog post by its slug, so that I can read the complete content with featured image and author attribution.
@@ -134,3 +153,28 @@
 - **Intent:** As a Reader, I want to search both updates and blog posts by keyword, so that I can find specific topics quickly.
 - **Scope Bounds:** Search input with debounced query against Strapi REST API. Results from both content types displayed grouped or combined. Empty state for no results.
 - **Artifact Link:** `docs/stories/US-11.md`
+
+---
+
+### Epic 4: API Security & Access Control
+
+- **Core Domain Statement:** Lock down content API write endpoints while preserving public read access.
+- **Success Criteria:** Anonymous visitors can read all content via GET. Authenticated users and API token holders can create, update, and delete Updates and BlogPosts. Admin panel operation unaffected.
+- **Out-of-Scope:** Custom user registration flows, OAuth, rate limiting.
+- **Governing Constraints:** Strapi 5 content API dual auth (Users & Permissions JWT + API Tokens). Route-level `auth` flag controls guard.
+
+#### 🛠️ Technical Subtasks
+
+| Task ID            | Type      | Target Technical Scope / Objective                                                                                                                                                                                                                                                                          | Pri | Size | Status    | Relations / Lineage |
+| :----------------- | :-------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-- | :--- | :-------- | :------------------ |
+| **Epic4-chore-01** | `[chore]` | Lock write routes — remove `auth: false` from POST/PUT/DELETE on Update and BlogPost route configs. GET routes keep `auth: false`. Hero, Author, Category, Tag remain read-only (GET only).                                                                                                                 | P0  | S    | `[MERGED]` | None                |
+
+#### US-12: Write Endpoint Authorization
+
+- **Intent:** As an Editor, Super Admin, or Authenticated user, I can create, edit, and delete Updates and BlogPosts through the content API, but anonymous visitors cannot.
+- **Scope Bounds:**
+  - POST/PUT/DELETE on `/updates` and `/blog-posts` require authentication (default Strapi content API auth)
+  - GET on all endpoints stays public (`auth: false`)
+  - Write access via **API Tokens** only — create in admin panel (Settings → API Tokens) scoped to full CRUD. No user registration needed; no Users & Permissions bootstrap manipulation.
+  - Admin panel operation unaffected.
+- **Artifact Link:** `backend/src/api/update/routes/update.ts`, `backend/src/api/blog-post/routes/blog-post.ts`
