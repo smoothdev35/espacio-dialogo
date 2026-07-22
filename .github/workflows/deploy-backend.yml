@@ -1,0 +1,46 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/**'
+      - 'types/**'
+      - '.github/workflows/deploy-backend.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            set -e
+            cd /opt/strapi
+
+            echo "[deploy] Pulling latest"
+            git pull origin main
+
+            echo "[deploy] Installing production dependencies"
+            pnpm install --prod
+
+            echo "[deploy] Building admin panel"
+            pnpm run build
+
+            echo "[deploy] Updating systemd service"
+            cp deploy/strapi.service /etc/systemd/system/strapi.service
+            systemctl daemon-reload
+
+            echo "[deploy] Restarting Strapi"
+            systemctl restart strapi
+
+            echo "[deploy] Healthcheck"
+            sleep 5
+            curl -sSfI http://127.0.0.1:1337/admin > /dev/null 2>&1 \
+              && echo "OK" || echo "WARN: healthcheck failed"

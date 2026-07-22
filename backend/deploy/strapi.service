@@ -1,0 +1,27 @@
+[Unit]
+Description=Strapi CMS — Espacio Diálogo
+Documentation=https://docs.strapi.io
+After=network.target postgresql.service
+Requires=postgresql.service
+Wants=certbot.service
+
+[Service]
+Type=exec
+User=strapi
+Group=strapi
+WorkingDirectory=/opt/strapi
+
+EnvironmentFile=/opt/strapi/.env
+ExecStart=/usr/bin/node /opt/strapi/node_modules/.bin/strapi start
+
+Restart=always
+RestartSec=10
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/strapi/public/uploads
+
+[Install]
+WantedBy=multi-user.target
