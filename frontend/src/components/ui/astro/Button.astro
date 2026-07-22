@@ -1,7 +1,7 @@
 ---
 interface Props {
   label: string
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'link'
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'link' | 'inverse' | 'inverse-outline'
   size?: 'sm' | 'md' | 'lg'
   href?: string
   disabled?: boolean
@@ -35,6 +35,15 @@ const variantClasses: Record<string, string> = {
   secondary: `bg-btn-secondary text-btn-secondary-text border border-btn-secondary-border hover:bg-btn-secondary-hover active:bg-btn-secondary-active disabled:bg-btn-secondary-disabled disabled:text-btn-secondary-disabled-text`,
   tertiary: `bg-btn-tertiary text-btn-tertiary-text hover:bg-btn-tertiary-hover active:bg-btn-tertiary-active disabled:bg-btn-tertiary-disabled disabled:text-btn-tertiary-disabled-text`,
   link: `bg-btn-link text-btn-link-text hover:text-btn-link-hover active:text-btn-link-active disabled:text-btn-link-disabled-text underline-offset-4 hover:underline`,
+  /**
+   * 'inverse' variants hardcode light-mode colors so they don't swap on .dark toggle.
+   * Intended for buttons rendered on an always-dark surface (e.g., hero image overlay)
+   * where theme-based inversion would produce wrong contrast.
+   */
+  inverse:
+    'bg-(--color-contrast-text) text-[#020306] border border-[#d9d9d9] hover:bg-[#f5f5f5] active:bg-[#e8e8e8] disabled:bg-[#d9d9d9] disabled:text-[#b3b3b4]',
+  'inverse-outline':
+    'bg-transparent text-(--color-contrast-text) border border-white/20 hover:bg-white/10 active:bg-white/20 disabled:opacity-50',
 }
 
 const sizeClasses: Record<string, string> = {
