@@ -3,8 +3,8 @@ export {
   fetchCollection,
   fetchSingle,
   StrapiError,
-  getArticles,
-  getArticle,
+  getUpdates,
+  getUpdate,
   getCategories,
   getCategory,
   getAuthors,
@@ -13,4 +13,4 @@ export {
   getTag,
 } from './strapi'
 
-export type { FetchCollectionResult } from './strapi'
+

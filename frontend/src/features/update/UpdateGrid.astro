@@ -1,21 +1,21 @@
 ---
 /**
- * ArticleGrid
+ * UpdateGrid
  *
- * Props: articles (ArticleCardProps[]) — list of articles to render in 2-column grid
+ * Props: articles (UpdateCardProps[]) — list of updates to render in 2-column grid
  *        class? (string) — spread onto root <ul> for consumer overrides
  * Slots: none
  * Tokens: --spacing-component-gap
  * Hardcoded literals: none
  * Context variants: not needed
- * Composed from: ArticleCard
+ * Composed from: UpdateCard
  */
 
-import ArticleCard from './ArticleCard.astro'
-import type { ArticleCardProps } from './article.types'
+import UpdateCard from './UpdateCard.astro'
+import type { UpdateCardProps } from './update.types'
 
 interface Props {
-  articles: ArticleCardProps[]
+  articles: UpdateCardProps[]
   class?: string
 }
 
@@ -31,7 +31,7 @@ const { articles, class: className } = Astro.props
   {
     articles.map((article) => (
       <li>
-        <ArticleCard {...article} />
+        <UpdateCard {...article} />
       </li>
     ))
   }

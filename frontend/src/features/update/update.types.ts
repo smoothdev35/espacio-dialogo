@@ -1,4 +1,4 @@
-export interface ArticleCardProps {
+export interface UpdateCardProps {
   title: string
   slug: string
   excerpt: string
@@ -8,16 +8,16 @@ export interface ArticleCardProps {
   category: { name: string; slug: string } | null
 }
 
-export interface FeaturedArticleCardProps extends ArticleCardProps {}
+export interface FeaturedUpdateCardProps extends UpdateCardProps {}
 
-export interface ArticleCardSliderProps extends ArticleCardProps {
+export interface UpdateCardSliderProps extends UpdateCardProps {
   author: { name: string; slug: string; avatar: string | null } | null
 }
 
-export interface ArticleGridProps {
-  articles: ArticleCardProps[]
+export interface UpdateGridProps {
+  articles: UpdateCardProps[]
 }
 
-export interface ArticleFiltersProps {
+export interface UpdateFiltersProps {
   categories: { name: string; slug: string }[]
 }

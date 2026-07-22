@@ -1,6 +1,6 @@
 import type {
-  Article,
-  ArticleCard,
+  Update,
+  UpdateCard,
   Author,
   Category,
   StrapiCollectionResponse,
@@ -105,6 +105,17 @@ export async function fetchCollection<T>(
   return { data: response.data, meta: response.meta }
 }
 
+export async function fetchSingleType<T>(
+  pluralApiId: string,
+  params?: StrapiQueryParams,
+): Promise<T | null> {
+  const response = await request<StrapiSingleResponse<T>>(
+    `/api/${pluralApiId}`,
+    params,
+  )
+  return response.data
+}
+
 export async function fetchSingle<T>(
   pluralApiId: string,
   documentId: string,
@@ -117,19 +128,19 @@ export async function fetchSingle<T>(
   return response.data
 }
 
-export function getArticles(params?: StrapiQueryParams) {
-  return fetchCollection<Article>('articles', params)
+export function getUpdates(params?: StrapiQueryParams) {
+  return fetchCollection<Update>('updates', params)
 }
 
-export function getArticle(documentId: string, params?: StrapiQueryParams) {
-  return fetchSingle<Article>('articles', documentId, params)
+export function getUpdate(documentId: string, params?: StrapiQueryParams) {
+  return fetchSingle<Update>('updates', documentId, params)
 }
 
-export async function getArticleBySlug(
+export async function getUpdateBySlug(
   slug: string,
   params?: StrapiQueryParams,
-): Promise<Article | null> {
-  const result = await fetchCollection<Article>('articles', {
+): Promise<Update | null> {
+  const result = await fetchCollection<Update>('updates', {
     filters: { slug: { $eq: slug } },
     ...params,
   })

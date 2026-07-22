@@ -1,8 +1,8 @@
 ---
 /**
- * FeaturedArticleCard
+ * FeaturedUpdateCard
  *
- * Props: title, slug, excerpt, readTime, featuredImage, category — from ArticleCardProps
+ * Props: title, slug, excerpt, readTime, featuredImage, category — from UpdateCardProps
  *        class? (string) — spread onto root <article> for consumer overrides
  * Slots: none
  * Tokens: --color-surface-text, --color-border, --radius-lg, --font-headline, --font-body
@@ -14,9 +14,9 @@
 
 import Tag from '@components/ui/astro/Tag.astro'
 import Link from '@components/ui/astro/Link.astro'
-import type { ArticleCardProps } from './article.types'
+import type { UpdateCardProps } from './update.types'
 
-interface Props extends ArticleCardProps {
+interface Props extends UpdateCardProps {
   class?: string
 }
 

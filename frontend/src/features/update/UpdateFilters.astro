@@ -1,6 +1,6 @@
 ---
 /**
- * ArticleFilters
+ * UpdateFilters
  *
  * Props: categories ({ name: string; slug: string }[]) — list of filter categories
  *        class? (string) — spread onto root <nav> for consumer overrides
@@ -19,7 +19,7 @@ interface Props {
 const { categories, class: className } = Astro.props
 ---
 
-<nav aria-label="Article category filters" class:list={[className]}>
+<nav aria-label="Update category filters" class:list={[className]}>
   <ul class="flex flex-wrap gap-2">
     <!-- "All updates" is the default active filter — always rendered first -->
     <li>

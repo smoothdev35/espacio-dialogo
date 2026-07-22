@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import HomeLayout from '@/features/home/HomeLayout.astro'
-import { fetchArticles } from '@/features/article/article.api'
+import { fetchUpdates } from '@/features/update/update.api'
+import { getHero } from '@/features/home/hero.api'
 
 export interface Props {
   title?: string
@@ -9,9 +10,15 @@ export interface Props {
 
 const { title = 'Home — EDD' } = Astro.props
 
-// Fetch articles with error fallback
-const articleData = await fetchArticles().catch((err) => {
-  console.error('Failed to fetch articles:', err)
+// Fetch hero data with error fallback
+const heroData = await getHero().catch((err) => {
+  console.error('Failed to fetch hero:', err)
+  return null
+})
+
+// Fetch updates with error fallback
+const updateData = await fetchUpdates().catch((err) => {
+  console.error('Failed to fetch updates:', err)
   return {
     featured: null,
     grid: [],
@@ -23,8 +30,9 @@ const articleData = await fetchArticles().catch((err) => {
 
 <BaseLayout title={title}>
   <HomeLayout
-    featured={articleData.featured}
-    gridArticles={articleData.grid}
-    categories={articleData.categories}
+    hero={heroData}
+    featured={updateData.featured}
+    gridArticles={updateData.grid}
+    categories={updateData.categories}
   />
 </BaseLayout>

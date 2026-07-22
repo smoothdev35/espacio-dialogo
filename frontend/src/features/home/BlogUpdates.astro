@@ -2,26 +2,26 @@
 /**
  * BlogUpdates
  *
- * Props: featured (FeaturedArticleResult | null) — featured article card data
- *        gridArticles (ArticleCardProps[]) — articles for the 2x2 grid
+ * Props: featured (FeaturedUpdateResult | null) — featured update card data
+ *        gridArticles (UpdateCardProps[]) — updates for the 2x2 grid
  *        categories ({ name: string; slug: string }[]) — filter categories
  *        class? (string) — spread onto root <section> for consumer overrides
  * Slots: none
  * Tokens: --spacing-section-pad, --spacing-component-gap, --font-headline, --font-body
  * Hardcoded literals: none — page bg shows through via body
  * Context variants: not needed
- * Composed from: Container, FeaturedArticleCard, ArticleGrid, ArticleFilters
+ * Composed from: Container, FeaturedUpdateCard, UpdateGrid, UpdateFilters
  */
 
 import Container from '@/layouts/Container.astro'
-import FeaturedArticleCard from '@/features/article/FeaturedArticleCard.astro'
-import ArticleGrid from '@/features/article/ArticleGrid.astro'
-import ArticleFilters from '@/features/article/ArticleFilters.astro'
-import type { ArticleCardProps } from '@/features/article/article.types'
+import FeaturedUpdateCard from '@/features/update/FeaturedUpdateCard.astro'
+import UpdateGrid from '@/features/update/UpdateGrid.astro'
+import UpdateFilters from '@/features/update/UpdateFilters.astro'
+import type { UpdateCardProps } from '@/features/update/update.types'
 
 interface Props {
-  featured: (ArticleCardProps & { readTime: string }) | null
-  gridArticles: ArticleCardProps[]
+  featured: UpdateCardProps | null
+  gridArticles: UpdateCardProps[]
   categories: { name: string; slug: string }[]
   class?: string
 }
@@ -52,19 +52,19 @@ const { featured, gridArticles, categories, class: className } = Astro.props
       </div>
 
       <!-- Filters -->
-      <ArticleFilters categories={categories} />
+      <UpdateFilters categories={categories} />
 
-      <!-- Featured article card -->
+      <!-- Featured update card -->
       {
         featured ? (
-          <FeaturedArticleCard {...featured} />
+          <FeaturedUpdateCard {...featured} />
         ) : (
-          <p class="text-small opacity-60">No featured article available.</p>
+          <p class="text-small opacity-60">No featured update available.</p>
         )
       }
 
-      <!-- Article grid (2x2) -->
-      <ArticleGrid articles={gridArticles} />
+      <!-- Update grid (2x2) -->
+      <UpdateGrid articles={gridArticles} />
 
       <!-- View all link -->
       <div class="flex justify-center">
@@ -72,7 +72,7 @@ const { featured, gridArticles, categories, class: className } = Astro.props
           href="/blog"
           class="inline-flex items-center gap-2 text-regular font-medium underline-offset-4 hover:underline"
         >
-          View all articles
+          View all updates
           <svg
             aria-hidden="true"
             width="16"
