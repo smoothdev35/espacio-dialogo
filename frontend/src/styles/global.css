@@ -87,9 +87,9 @@
     --border-focus: var(--brand-bay-of-many);
 
     /* Link */
-    --link-text:   var(--brand-bay-of-many);
-    --link-hover:  var(--brand-bay-of-many-dark);
-    --link-active: var(--brand-bay-of-many-darker);
+    --link-text:   var(--brand-neutral-darkest);
+    --link-hover:  var(--brand-neutral-darkest);
+    --link-active: var(--brand-neutral-darkest);
 
     /* ─── Button tokens ────────────────────────────────── */
 
@@ -211,7 +211,7 @@
       /* Card surface */
       --card-bg: var(--brand-neutral-darkest);
 
-      /* Contrast text unchanged in dark (white text on dark surfaces) */
+      /* Contrast text unchanged in dark */
 
       /* Border */
       --border: color-mix(in srgb, var(--brand-white) 20%, transparent);
@@ -325,6 +325,8 @@
   --spacing-section-pad-small: clamp(2rem, 1.333rem + 2.792vw, 3rem);
   /* Component gap — default range */
   --spacing-component-gap: clamp(1rem, 0.648rem + 1.502vw, 2rem);
+  /* Navbar height — matches <header> rendered height */
+  --nav-height: 73px;
 
   /* ─── Container widths ───────────────────────────────── */
   --container-large: 1280px;

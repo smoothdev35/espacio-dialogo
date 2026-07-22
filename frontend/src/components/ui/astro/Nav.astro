@@ -17,7 +17,7 @@
  * Hardcoded literals:
  *   hamburger/close SVG icons (no token equivalent — confirm)
  *   dropdown chevron SVG (no token equivalent — confirm)
- *   nav height h-[72px] / max-md:h-16 (no token equivalent — confirm)
+  *   nav height uses --nav-height token / max-md:h-16
  *   gap-6 between logo + nav links, gap-8 between nav links, gap-4 between actions
  *
  * Context variants: not needed (nav follows page theme via --color-nav-*)
@@ -74,7 +74,7 @@ const moreId = 'nav-more-dropdown'
   aria-label="Main navigation"
 >
   <Container>
-    <div class="flex items-center justify-between h-[72px] max-md:h-16">
+    <div class="flex items-center justify-between h-(--nav-height) max-md:h-16">
       {/* Logo + nav links — together on the left per Figma */}
       <div class="flex items-center gap-6">
         {/* Logo slot */}
