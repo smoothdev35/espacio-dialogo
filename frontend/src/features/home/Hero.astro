@@ -1,0 +1,127 @@
+---
+/**
+ * Hero
+ *
+ * Props: title (string) — main heading; fallback: Figma copy
+ *        subtitle (string | null) — body text; fallback: Figma copy
+ *        heroImage ({ url: string; alt: string }) — full-bleed bg image; fallback: empty
+ *        class (string) — spread onto root <section> for consumer overrides
+ * Slots: none
+ * Tokens: --color-contrast-text
+ * Hardcoded literals:
+ *   - (bg removed per layout rules — page surface shows through)
+ *   - bg-black/50 — mobile overlay; gradient lg:from-black/60 via-black/30 to-black/10 — desktop fade
+ *   - rounded-lg — card corner radius matches Figma 8px — confirm
+ *   - max-w-[35rem] — content column width matches Figma 560px — confirm
+ *   - text-[#020306] on Button inverse — no token equivalent for always-dark text — confirm
+ *   - bg-[#d9d9d9], text-[#b3b3b4], bg-[#f5f5f5], bg-[#e8e8e8] on Button inverse — active/disabled states — confirm
+ *   - border-white/20 on Button inverse-outline — no token equivalent — confirm
+ * Context variants: not needed (hero overlay is always dark — invariant)
+ * Composed from: Container, Button
+ *
+ * Design notes (Figma: Header / 88 /):
+ *   - Section bg #1b1c1e (dark neutral) visible behind image
+ *   - Semi-transparent Card (#00000066) with rounded corners sits on image
+ *   - Card padding: 64px sides desktop, 32px all mobile
+ *   - Content column ~560px wide, LEFT-aligned (not centered)
+ */
+
+import Container from '@/layouts/Container.astro'
+import Button from '@/components/ui/astro/Button.astro'
+
+interface Props {
+  title?: string
+  subtitle?: string | null
+  heroImage?: { url: string; alt: string }
+  class?: string
+}
+
+const title = Astro.props.title || 'Democracy takes root in Nicaragua'
+const subtitle =
+  Astro.props.subtitle ||
+  'We believe in the power of ordinary people to build something better. This collective exists to document, support, and amplify the voices working toward a free and democratic Nicaragua.'
+const heroImage = Astro.props.heroImage || { url: '', alt: '' }
+const { class: className } = Astro.props
+---
+
+<section
+  class:list={[
+    'relative flex min-h-0 flex-col lg:h-[calc(100vh-var(--nav-height))] lg:max-h-[768px]',
+    className,
+  ]}
+>
+  <Container class="flex flex-1 flex-col">
+    {
+      /*
+        Card wrapper: relative so image + overlay are clipped to its bounds.
+        rounded-lg clips the image corners; overflow-hidden enforces the clip.
+        Card padding: 32px all sides mobile, 0 top/bottom + 64px sides desktop.
+      */
+    }
+    {
+      /*
+        Card spacing — Figma:
+          Mobile: padding 32px all around
+          Desktop: Column inside Card at y=100.5 (auto-layout centering
+                   creates ~100px visual spacing top & bottom),
+                   plus explicit 64px left/right padding.
+          md:py-24 ≈ 96px matches the ~100px visual spacing.
+      */
+    }
+    <div
+      class="relative flex flex-1 flex-col overflow-hidden rounded-lg text-(--color-contrast-text) px-8 py-8 sm:min-h-[420px] md:min-h-[520px] md:px-16 lg:pb-24 lg:pt-20"
+    >
+      {
+        /*
+          Background image: fills the card area only (not the full viewport).
+          Figma: image is behind the card, visible through the semi-transparent overlay.
+        */
+      }
+      <img
+        src={heroImage.url}
+        alt={heroImage.alt}
+        class="absolute inset-0 h-full w-full object-cover"
+        aria-hidden={!heroImage.alt}
+      />
+
+      {
+        /*
+          Overlay — mobile: solid dark (content spans full card width)
+          Desktop: left→right gradient, dark over text column, fades subtely
+          */
+      }
+      <div
+        class="absolute inset-0 bg-black/50 lg:bg-transparent lg:bg-[linear-gradient(to_right,rgba(0,0,0,0.6),rgba(0,0,0,0.4)_75%,rgba(0,0,0,0.15))]"
+      >
+      </div>
+
+      {
+        /*
+          Content column: ~560px wide (35rem), left-aligned, sits above overlay.
+          Figma Content frame is 560px with horizontalAlignment: LEFT.
+        */
+      }
+      <div class="relative z-10 max-w-[35rem] space-y-6">
+        <h1>
+          {title}
+        </h1>
+
+        <p class="opacity-90">
+          {subtitle}
+        </p>
+
+        {
+          /*
+            Actions: left-aligned buttons.
+            Figma gap between Content bottom and Actions: ~32px.
+            space-y-6 = 24px; this div gets pt-2 for total ~32px gap.
+          */
+        }
+        <div class="flex flex-wrap gap-4 pt-2">
+          <Button variant="inverse" label="Learn more" href="/about" />
+          <Button variant="inverse-outline" label="Donate" href="/donate" />
+        </div>
+      </div>
+    </div>
+  </Container>
+</section>

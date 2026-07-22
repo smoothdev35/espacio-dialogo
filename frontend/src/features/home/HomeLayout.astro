@@ -2,40 +2,42 @@
 /**
  * HomeLayout
  *
- * Props: featured (FeaturedArticleResult | null) — featured article for blog section
- *        gridArticles (ArticleCardProps[]) — grid articles for blog section
+ * Props: hero (HeroResult | null) — hero section content from Strapi
+ *        featured (FeaturedUpdateResult | null) — featured update for blog section
+ *        gridArticles (UpdateCardProps[]) — grid updates for blog section
  *        categories ({ name: string; slug: string }[]) — filter categories
  *        class? (string) — spread onto root <div> for consumer overrides
  * Slots: none
  * Tokens: none directly — delegates to child components
  * Hardcoded literals: none
  * Context variants: not needed
- * Composed from: BlogUpdates
+ * Composed from: Hero, BlogUpdates
  */
 
+import Hero from './Hero.astro'
 import BlogUpdates from './BlogUpdates.astro'
-import type { ArticleCardProps } from '@/features/article/article.types'
-import type { FeaturedArticleResult } from '@/features/article/article.api'
+import type { UpdateCardProps } from '@/features/update/update.types'
+import type { FeaturedUpdateResult } from '@/features/update/update.api'
+import type { HeroResult } from './hero.api'
 
 interface Props {
-  featured: FeaturedArticleResult | null
-  gridArticles: ArticleCardProps[]
+  hero: HeroResult | null
+  featured: FeaturedUpdateResult | null
+  gridArticles: UpdateCardProps[]
   categories: { name: string; slug: string }[]
   class?: string
 }
 
-const { featured, gridArticles, categories, class: className } = Astro.props
+const { hero, featured, gridArticles, categories, class: className } = Astro.props
 ---
 
 <div class:list={[className]}>
-  <!-- Placeholder: Navbar will go here -->
-
-  <!-- Placeholder: Header hero will go here -->
-  <section class="text-center">
-    <div class="max-w-(--container-large) px-page-gutters mx-auto">
-      <h1>Democracy takes root in Nicaragua</h1>
-    </div>
-  </section>
+  <!-- Hero renders fallback content when Strapi data is unavailable -->
+  <Hero
+    title={hero?.title}
+    subtitle={hero?.subtitle}
+    heroImage={hero?.heroImage ?? undefined}
+  />
 
   <!-- Blog / 24 / — Article listing section -->
   <BlogUpdates

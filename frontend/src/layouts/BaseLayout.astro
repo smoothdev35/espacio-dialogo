@@ -79,11 +79,13 @@ const {
   </head>
   <!-- bg + text removed: global body selector sets --color-page and --color-page-text -->
   <body class:list={[className]}>
-    <Nav
-      links={navLinks}
-      actions={navActions}
-      moreLinks={moreLinks}
-    />
+    <header>
+      <Nav
+        links={navLinks}
+        actions={navActions}
+        moreLinks={moreLinks}
+      />
+    </header>
 
     <main>
       <slot />
