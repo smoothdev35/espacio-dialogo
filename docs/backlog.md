@@ -229,7 +229,7 @@
 | :----------------- | :-------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-- | :--- | :-------- | :------------------ |
 | **Epic4-chore-01** | `[chore]` | Lock write routes — remove `auth: false` from POST/PUT/DELETE on Update and BlogPost route configs. GET routes keep `auth: false`. Hero, Author, Category, Tag remain read-only (GET only).                                                                                                                 | P0  | S    | `[MERGED]` | None                |
 
-#### US-12: Write Endpoint Authorization
+#### US-12: Write Endpoint Authorization `[MERGED]`
 
 - **Intent:** As an Editor, Super Admin, or Authenticated user, I can create, edit, and delete Updates and BlogPosts through the content API, but anonymous visitors cannot.
 - **Scope Bounds:**
