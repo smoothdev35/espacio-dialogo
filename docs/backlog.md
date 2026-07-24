@@ -51,6 +51,7 @@
 | **Epic1-chore-02** | `[chore]` | Seed bootstrap data — 4 categories, 10 tags, 2 authors, 8 updates (articles) with images from picsum.photos. Idempotent seed via bootstrap().                                                                                          | P0  | M    | `[MERGED]` | None                         |
 | **Epic1-chore-03** | `[chore]` | Rename Article → Update (schema, routes, UIDs, TS types, seed refs). Create BlogPost content type — schema, controller, services, routes, bootstrap permissions, TS types.                                                                     | P0  | M    | `[MERGED]` | None                         |
 | **Epic1-chore-04** | `[chore]` | Seed BlogPost bootstrap data — 3 sample blog posts in Spanish, reusing existing authors/tags, picsum images. Idempotent.                                                                                                       | P0  | S    | `[MERGED]` | 🔗 Related to Epic1-chore-03 |
+| **Epic1-chore-05** | `[chore]` | Seed Hero single type with default title/subtitle/image. Idempotent via findOne guard. Updated seed EXPECTED_COUNTS.                                                                                                            | P0  | S    | `[MERGED]` | 🔗 Related to US-01          |
 
 #### US-01: Hero Section Content Type
 
@@ -158,7 +159,7 @@
 | **Epic3-chore-01** | `[chore]` | Create Strapi 5 data adapter — fetchApi wrapper handling flattened REST responses (documentId extraction, unwrapped attributes). Adds src/lib/strapi.ts, src/types/strapi.ts, src/lib/index.ts. Generic fetchCollection<T> + typed helpers per content type. | P0  | M    | `[MERGED]` | None                |
 | **Epic3-chore-02** | `[chore]` | Align UpdateFilters pill styling with Figma                                                                                                                                                                                                                  | P2  | S    | `[MERGED]` | None                |
 | **Epic3-chore-03** | `[chore]` | Implement client-side update filtering by category                                                                                                                                                                                                           | P1  | M    | `[MERGED]` | None                |
-| **Epic3-chore-05** | `[chore]` | Create `BlogPostAction` single type in Strapi — heading (string), description (text), buttonLabel (string), buttonUrl (string). Public find permission. Seed with default CTA values. Companion to US-08-feat-03.                                              | P1  | S    | `[DRAFT]`  | 🔗 Related to US-08-feat-03 |
+| **Epic3-chore-05** | `[chore]` | Create `BlogPostAction` single type in Strapi — heading (string), description (text), buttonLabel (string), buttonUrl (string). Public find permission. Seed with default CTA values. Companion to US-08-feat-03.                                              | P1  | S    | `[MERGED]` | 🔗 Related to US-08-feat-03 |
 
 #### US-05: Home Page
 
