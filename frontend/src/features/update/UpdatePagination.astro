@@ -1,0 +1,188 @@
+---
+/**
+ * UpdatePagination
+ *
+ * Client-side pagination for the updates grid. 4 items per page.
+ * All state derived from DOM. No props required.
+ * Listens for 'filter-change' custom event on [data-update-grid].
+ *
+ * Props: class? (string) — spread onto root <nav> for consumer overrides
+ * Slots: none
+ * Tokens: --color-primary, --color-contrast-text, --color-page-text, --color-page, --color-muted, --radius-button
+ * Hardcoded literals: ← → for prev/next button text (decorative arrows, no semantic value)
+ *                     PAGE_SIZE = 4 (from plan — 2-col grid × 2 rows)
+ * Context variants: not needed
+ * Composed from: none
+ */
+
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+---
+
+<nav
+  aria-label="Update pagination"
+  data-update-pagination
+  class:list={[
+    "flex items-center justify-center gap-2",
+    className,
+  ]}
+>
+  <button
+    type="button"
+    data-page-prev
+    aria-label="Previous page"
+    class="px-3 py-1.5 rounded-(--radius-button) text-(--color-page-text) disabled:text-(--color-muted) disabled:cursor-not-allowed"
+  >
+    ←
+  </button>
+
+  <div data-page-buttons class="flex items-center gap-1"></div>
+
+  <button
+    type="button"
+    data-page-next
+    aria-label="Next page"
+    class="px-3 py-1.5 rounded-(--radius-button) text-(--color-page-text) disabled:text-(--color-muted) disabled:cursor-not-allowed"
+  >
+    →
+  </button>
+</nav>
+
+<style>
+  /* Page buttons — static classes for dynamically created buttons */
+  [data-page] {
+    padding: 0.375rem 0.75rem;
+    border-radius: var(--radius-button);
+    color: var(--color-page-text);
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  [data-page]:hover {
+    background-color: var(--color-page-text);
+    color: var(--color-page);
+  }
+
+  [data-page][aria-current='true'] {
+    background-color: var(--color-primary);
+    color: var(--color-contrast-text);
+  }
+
+  [data-page][aria-current='true']:hover {
+    background-color: var(--color-primary);
+    color: var(--color-contrast-text);
+  }
+</style>
+
+<script>
+  (function () {
+    var PAGE_SIZE = 4
+    var nav = document.querySelector('[data-update-pagination]')
+    var grid = document.querySelector('[data-update-grid]')
+    var empty = document.querySelector('[data-update-empty]')
+    var pageContainer = nav.querySelector('[data-page-buttons]')
+    var prevBtn = nav.querySelector('[data-page-prev]')
+    var nextBtn = nav.querySelector('[data-page-next]')
+
+    if (!nav || !grid) return
+
+    function getVisibleItems() {
+      var items = Array.from(grid.querySelectorAll(':scope > li'))
+      return items.filter(function (el) { return !el.hidden })
+    }
+
+    function showPage(page, items) {
+      if (!items) items = getVisibleItems()
+
+      for (var i = 0; i < items.length; i++) {
+        var idx = parseInt(items[i].getAttribute('data-page-index') || '0')
+        items[i].hidden = idx !== page
+      }
+
+      var buttons = pageContainer.querySelectorAll('[data-page]')
+      for (var j = 0; j < buttons.length; j++) {
+        var btn = buttons[j]
+        var isActive = parseInt(btn.getAttribute('data-page')) === page
+        if (isActive) {
+          btn.setAttribute('aria-current', 'true')
+        } else {
+          btn.removeAttribute('aria-current')
+        }
+      }
+
+      prevBtn.disabled = page === 0
+      nextBtn.disabled = page >= buttons.length - 1
+    }
+
+    function getCurrentPage() {
+      var active = pageContainer.querySelector('[aria-current="true"]')
+      return active ? parseInt(active.getAttribute('data-page')) : 0
+    }
+
+    function render() {
+      var items = getVisibleItems()
+      var totalPages = Math.ceil(items.length / PAGE_SIZE)
+
+      // Empty state — visible only when no grid items match
+      if (empty) {
+        empty.hidden = items.length > 0
+      }
+
+      // Hide pagination when 0 or 1 pages
+      if (totalPages <= 1) {
+        nav.hidden = true
+        pageContainer.innerHTML = ''
+        // Clear any stale page-index hiding from previous pagination
+        for (var i = 0; i < items.length; i++) {
+          items[i].hidden = false
+        }
+        return
+      }
+
+      nav.hidden = false
+
+      // Assign page indices
+      for (var j = 0; j < items.length; j++) {
+        items[j].setAttribute('data-page-index', Math.floor(j / PAGE_SIZE))
+      }
+
+      // Build page buttons
+      var html = ''
+      for (var p = 0; p < totalPages; p++) {
+        html += '<button type="button" data-page="' + p + '">' + (p + 1) + '</button>'
+      }
+      pageContainer.innerHTML = html
+
+      // Show first page
+      showPage(0, items)
+    }
+
+    // Delegated click on page buttons
+    pageContainer.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-page]')
+      if (!btn) return
+      showPage(parseInt(btn.getAttribute('data-page')))
+    })
+
+    prevBtn.addEventListener('click', function () {
+      var cur = getCurrentPage()
+      if (cur > 0) showPage(cur - 1)
+    })
+
+    nextBtn.addEventListener('click', function () {
+      var cur = getCurrentPage()
+      var total = pageContainer.querySelectorAll('[data-page]').length
+      if (cur < total - 1) showPage(cur + 1)
+    })
+
+    // Recalculate on filter change
+    grid.addEventListener('filter-change', function () {
+      render()
+    })
+
+    // Initial render
+    render()
+  })()
+</script>
