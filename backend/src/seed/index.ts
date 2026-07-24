@@ -5,18 +5,20 @@ import { createWriteStream } from 'fs'
 import { Transform } from 'stream'
 import { pipeline } from 'stream/promises'
 
-import { categories, tags, authors, updates, blogPosts, toSlug } from './data'
+import { categories, tags, authors, updates, blogPosts, blogPostAction, hero, toSlug } from './data'
 
 const ALLOWED_IMAGE_HOSTS = ['picsum.photos']
 const FETCH_TIMEOUT_MS = 10_000
 const MAX_RESPONSE_BYTES = 5 * 1024 * 1024
-const EXPECTED_COUNTS = { categories: 4, tags: 10, authors: 2, updates: 12, blogPosts: 8 } as const
+const EXPECTED_COUNTS = { categories: 4, tags: 10, authors: 2, updates: 12, blogPosts: 8, blogPostAction: 1, hero: 1 } as const
 const EXPECTED_TOTAL =
   EXPECTED_COUNTS.categories +
   EXPECTED_COUNTS.tags +
   EXPECTED_COUNTS.authors +
   EXPECTED_COUNTS.updates +
-  EXPECTED_COUNTS.blogPosts
+  EXPECTED_COUNTS.blogPosts +
+  EXPECTED_COUNTS.blogPostAction +
+  EXPECTED_COUNTS.hero
 
 export async function seed({ strapi }: { strapi: any }) {
   const catsExist = await strapi.db.query('api::category.category').findOne({})
@@ -34,6 +36,8 @@ export async function seed({ strapi }: { strapi: any }) {
   const authorMap = await createAuthors(strapi, imageMap)
   await createUpdates(strapi, imageMap, categoryMap, tagMap, authorMap)
   await createBlogPosts(strapi, imageMap, tagMap, authorMap)
+  await createBlogPostAction(strapi)
+  await createHero(strapi, imageMap)
 
   await verifySeedCount(strapi)
   strapi.log.info('Seed completed')
@@ -46,6 +50,7 @@ async function cleanDrafts(strapi: any) {
     'api::author.author',
     'api::category.category',
     'api::tag.tag',
+    'api::hero.hero',
   ] as const
 
   for (const uid of uids) {
@@ -183,6 +188,12 @@ async function uploadImages(strapi: any) {
       fileName: `${b.imageSeed}.jpg`,
       altText: b.title,
     })),
+    {
+      key: 'hero',
+      url: hero.heroImage,
+      fileName: 'hero.jpg',
+      altText: hero.title,
+    },
   ]
 
   const results = await Promise.allSettled(
@@ -376,23 +387,50 @@ async function createBlogPosts(
   }
 }
 
+async function createBlogPostAction(strapi: any) {
+  const existing = await strapi.db.query('api::blog-post-action.blog-post-action').findOne({})
+  if (existing) return
+
+  await strapi.documents('api::blog-post-action.blog-post-action').create({
+    data: blogPostAction,
+    status: 'published',
+  })
+}
+
+async function createHero(strapi: any, imageMap: Record<string, MediaEntry>) {
+  const existing = await strapi.db.query('api::hero.hero').findOne({})
+  if (existing) return
+
+  const heroImage = imageMap['hero']
+  await strapi.documents('api::hero.hero').create({
+    data: {
+      title: hero.title,
+      subtitle: hero.subtitle,
+      heroImage: heroImage ? heroImage.id : null,
+    },
+    status: 'published',
+  })
+}
+
 async function verifySeedCount(strapi: any) {
   const allCats = await strapi.db.query('api::category.category').findMany()
   const allTags = await strapi.db.query('api::tag.tag').findMany()
   const allAuthors = await strapi.db.query('api::author.author').findMany()
   const allUpdates = await strapi.db.query('api::update.update').findMany()
   const allBlogPosts = await strapi.db.query('api::blog-post.blog-post').findMany()
+  const allHeroes = await strapi.db.query('api::hero.hero').findMany()
 
   const categories = new Set(allCats.map((e: any) => e.documentId)).size
   const tags = new Set(allTags.map((e: any) => e.documentId)).size
   const authors = new Set(allAuthors.map((e: any) => e.documentId)).size
   const updates = new Set(allUpdates.map((e: any) => e.documentId)).size
   const blogPosts = new Set(allBlogPosts.map((e: any) => e.documentId)).size
+  const heroes = new Set(allHeroes.map((e: any) => e.documentId)).size
 
-  const total = categories + tags + authors + updates + blogPosts
+  const total = categories + tags + authors + updates + blogPosts + heroes
   if (total !== EXPECTED_TOTAL) {
     strapi.log.warn(
-      `Seed count mismatch: expected ${EXPECTED_TOTAL}, got ${total} (categories=${categories}, tags=${tags}, authors=${authors}, updates=${updates}, blogPosts=${blogPosts})`,
+      `Seed count mismatch: expected ${EXPECTED_TOTAL}, got ${total} (categories=${categories}, tags=${tags}, authors=${authors}, updates=${updates}, blogPosts=${blogPosts}, heroes=${heroes})`,
     )
   }
 }

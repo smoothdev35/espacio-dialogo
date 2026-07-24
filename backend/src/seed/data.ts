@@ -678,3 +678,16 @@ export const blogPosts: BlogPostSeed[] = [
     imageSeed: 'blog-exile',
   },
 ]
+
+export const hero = {
+  title: 'Espacio Diálogo',
+  subtitle: 'Periodismo independiente sobre la transición democrática en Nicaragua',
+  heroImage: 'https://picsum.photos/seed/hero/1200/600',
+}
+
+export const blogPostAction = {
+  heading: 'Apoya el periodismo independiente',
+  description: 'Tu contribución nos permite seguir investigando y contando las historias que importan.',
+  buttonLabel: 'Donar ahora',
+  buttonUrl: 'https://example.org/donate',
+}
