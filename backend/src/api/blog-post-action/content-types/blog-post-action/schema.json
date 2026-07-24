@@ -1,0 +1,32 @@
+{
+  "kind": "singleType",
+  "collectionName": "blog_post_actions",
+  "info": {
+    "singularName": "blog-post-action",
+    "pluralName": "blog-post-actions",
+    "displayName": "BlogPostAction",
+    "description": "CTA section for blog post detail pages"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "buttonLabel": {
+      "type": "string",
+      "required": true
+    },
+    "buttonUrl": {
+      "type": "string",
+      "required": true,
+      "regex": "^https?://.+"
+    }
+  }
+}

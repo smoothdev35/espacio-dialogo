@@ -138,6 +138,13 @@ export interface Hero extends StrapiDocument {
   heroImage: Media | null;
 }
 
+export interface BlogPostAction extends StrapiDocument {
+  heading: string;
+  description: string | null;
+  buttonLabel: string;
+  buttonUrl: string;
+}
+
 export interface Category extends StrapiDocument {
   name: string;
   slug: string;
