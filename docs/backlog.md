@@ -89,7 +89,7 @@
 | **Epic2-chore-10** | `[chore]` | Shared TableOfContents sidebar component — auto-generates from h2/h3 headings, sticky positioning, scroll-spy active state, smooth scroll to sections.                                       | P1  | M    | `[DRAFT]`  | 🔗 Related to US-08                                         |
 | **Epic2-chore-11** | `[chore]` | Shared RelatedPosts horizontal list component — renders 3–4 post cards in a horizontal scrollable row. Generic across Updates and BlogPosts.                                                  | P1  | S    | `[DRAFT]`  | 🔗 Related to US-06, US-08                                  |
 | **Epic2-chore-12** | `[chore]` | Shared PressCards horizontal scroll component — renders custom link cards (title, thumbnail, source, URL) in horizontal scroll. For third-party content embedding.                            | P1  | M    | `[DRAFT]`  | 🔗 Related to US-07                                         |
-| **Epic2-chore-13** | `[chore]` | NotFound / 404 page layout — error message + two CTA buttons (Home, Blog). Uses BaseLayout with nav + footer.                                                                               | P1  | S    | `[DRAFT]`  | 🔗 Related to US-12                                         |
+| **Epic2-chore-13** | `[chore]` | NotFound / 404 page layout — error message + two CTA buttons (Home, Blog). Uses BaseLayout with nav + footer.                                                                               | P1  | S    | `[MERGED]` | 🔗 Related to US-12                                         |
 | **Epic2-chore-14** | `[chore]` | Shared PrevNextNav component — previous/next navigation pair with slugs and titles. Used by update detail page for chronological navigation.                                                  | P1  | S    | `[DRAFT]`  | 🔗 Related to US-06                                         |
 | **Epic2-chore-15** | `[chore]` | Shared UpdatePagination component — client-side pagination controls for the updates grid on homepage (page indicators + prev/next). Featured update stays fixed above paginated grid.           | P1  | M    | `[MERGED]` | 🔗 Related to US-10                                         |
 
@@ -140,8 +140,8 @@
 
 | Task ID            | Type     | Target Technical Scope / Objective                                                                                                                            | Pri | Size | Status    | Relations / Lineage             |
 | :----------------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ | :-- | :--- | :-------- | :------------------------------ |
-| **US-12-feat-01**  | `[feat]` | Create 404 page with error message, illustration/icon, and two CTA buttons (Home, Blog). Uses BaseLayout.                                                     | P1  | S    | `[DRAFT]` | 🛑 Blocked by Epic2-chore-13    |
-| **US-12-chore-01** | `[chore]` | Configure Astro 404 handling — implement catch-all route or `src/pages/404.astro` depending on Astro 5 conventions.                                            | P1  | S    | `[DRAFT]` | 🔗 Related to US-12-feat-01     |
+| **US-12-feat-01**  | `[feat]` | Create 404 page with error message, illustration/icon, and two CTA buttons (Home, Blog). Uses BaseLayout.                                                     | P1  | S    | `[MERGED]` | 🛑 Blocked by Epic2-chore-13    |
+| **US-12-chore-01** | `[chore]` | Configure Astro 404 handling — implement catch-all route or `src/pages/404.astro` depending on Astro 5 conventions.                                            | P1  | S    | `[MERGED]` | 🔗 Related to US-12-feat-01     |
 
 ---
 
