@@ -2,152 +2,113 @@
 /**
  * Updates
  *
- * Props: featured (FeaturedUpdateResult | null) — featured update card data
- *        gridArticles (UpdateCardProps[]) — updates for the 2x2 grid
- *        categories ({ name: string; slug: string }[]) — filter categories
- *        class? (string) — spread onto root <section> for consumer overrides
+ * Self-fetches update data. No props required.
+ * Layout (Option B): heading → description → FilterPills → FeaturedUpdateCard → UpdatePagination → UpdateGrid
+ * Featured always visible. Filter only controls grid. Pagination resets on filter change.
+ *
+ * Props: class? (string) — spread onto root <section> for consumer overrides
  * Slots: none
  * Tokens: --spacing-section-pad, --spacing-component-gap, --font-headline, --font-body
  * Hardcoded literals: none — page bg shows through via body
  * Context variants: not needed
- * Composed from: Container, FeaturedUpdateCard, UpdateGrid, UpdateFilters
+ * Composed from: Container, FilterPills, FeaturedUpdateCard, UpdateGrid, UpdatePagination
  */
 
 import Container from '@/layouts/Container.astro'
 import FeaturedUpdateCard from '@/features/update/FeaturedUpdateCard.astro'
 import UpdateGrid from '@/features/update/UpdateGrid.astro'
-import UpdateFilters from '@/features/update/UpdateFilters.astro'
-import type { UpdateCardProps } from '@/features/update/update.types'
+import FilterPills from '@/components/ui/astro/FilterPills.astro'
+import UpdatePagination from '@/features/update/UpdatePagination.astro'
+import { fetchUpdates } from '@/features/update/update.api'
 
 interface Props {
-  featured: UpdateCardProps | null
-  gridArticles: UpdateCardProps[]
-  categories: { name: string; slug: string }[]
   class?: string
 }
 
-const { featured, gridArticles, categories, class: className } = Astro.props
+const { class: className } = Astro.props
+
+const updateData = await fetchUpdates().catch((err) => {
+  console.error('Failed to fetch updates:', err)
+  return { featured: null, grid: [], categories: [] }
+})
+
+const featured = updateData.featured
+const gridArticles = updateData.grid
+const categories = updateData.categories
 ---
 
 {/* Section bg is transparent — page background shows through via body */}
-<section
-  class:list={[
-    className,
-  ]}
-  style="padding-block: var(--spacing-section-pad-large)"
->
+<section class:list={[className]}>
   <Container>
     <div class="flex flex-col gap-component-gap">
       <!-- Tagline + heading + description -->
       <div class="flex flex-col">
-        <p class="text-tagline font-semibold uppercase tracking-widest text-surface-text opacity-60 mb-4">
+        <p class="text-tagline font-bold uppercase tracking-widest text-muted mb-4">
           Updates
         </p>
         <h1 class="mb-6">
           What's happening now
         </h1>
-        <p class="max-w-2xl opacity-80">
+        <p class="max-w-2xl font-medium">
           The latest developments in Nicaragua's ongoing transition.
         </p>
       </div>
 
       <!-- Filters — filtering handled client-side via script -->
-      <UpdateFilters categories={categories} />
+      <FilterPills
+        name="update-category"
+        options={categories.map((c) => ({ label: c.name, value: c.slug }))}
+        allLabel="All updates"
+        ariaLabel="Update category filters"
+      />
 
-      <!-- Featured update card — only filterable when there's data -->
+      <!-- Featured update card — always visible, never hidden by filter -->
       {
         featured ? (
-          <div data-update-featured data-card-category={featured.category?.slug ?? ''}>
+          <div>
             <FeaturedUpdateCard {...featured} />
           </div>
         ) : (
-          <p class="text-small opacity-60">No featured update available.</p>
+          <p class="text-small text-muted">No featured update available.</p>
         )
       }
 
-      <!-- Update grid (2x2) -->
+      <!-- Pagination — between featured and grid, controls grid pages -->
+      <UpdatePagination />
+
+      <!-- Update grid — paginated via client-side script -->
       <UpdateGrid articles={gridArticles} />
 
-      <!-- Empty state — shown when filter yields no results -->
-      <p data-update-empty hidden class="col-span-full text-center text-surface-text opacity-60 py-12">
+      <!-- Empty state — shown when filter + pagination yield no grid items -->
+      <p data-update-empty hidden class="col-span-full text-center text-muted py-12">
         No updates in this category
       </p>
 
-      <!-- View all link -->
-      <div class="flex justify-center">
-        <a
-          href="/blog"
-          class="inline-flex items-center gap-2 text-regular font-medium underline-offset-4 hover:underline"
-        >
-          View all updates
-          <svg
-            aria-hidden="true"
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M6 3l5 5-5 5" />
-          </svg>
-        </a>
-      </div>
     </div>
   </Container>
 </section>
 
 <script>
   (function () {
-    var nav = document.querySelector('[data-update-filters]')
+    var nav = document.querySelector('[data-filter-pills="update-category"]')
     var grid = document.querySelector('[data-update-grid]')
     if (!nav || !grid) return
 
-    var getItems = function () {
-      var items = Array.from(grid.querySelectorAll('[data-card-category]'))
-      var featured = document.querySelector('[data-update-featured]')
-      if (featured) items.push(featured)
-      return items
-    }
+    // FilterPills handles aria-current toggling and dispatches pill-change
+    nav.addEventListener('pill-change', function (e) {
+      var category = e.detail.value || ''
 
-    nav.addEventListener('click', function (e) {
-      var btn = e.target.closest('[data-filter-category]')
-      if (!btn) return
-
-      var category = btn.getAttribute('data-filter-category') || ''
-
-      // Update button active states
-      var buttons = nav.querySelectorAll('[data-filter-category]')
-      for (var i = 0; i < buttons.length; i++) {
-        var b = buttons[i]
-        var isActive = b.getAttribute('data-filter-category') === category
-        b.classList.toggle('bg-card-bg', isActive)
-        b.classList.toggle('bg-transparent', !isActive)
-        b.classList.toggle('font-normal', !isActive)
-        b.classList.toggle('hover:bg-card-bg', !isActive)
-        if (isActive) {
-          b.setAttribute('aria-current', 'true')
-        } else {
-          b.removeAttribute('aria-current')
-        }
-      }
-
-      // Show/hide cards by category
-      var items = getItems()
-      var anyVisible = false
+      // Show/hide grid items by category (featured is always visible)
+      var items = Array.from(grid.querySelectorAll(':scope > li'))
       for (var j = 0; j < items.length; j++) {
         var el = items[j]
         var itemCat = el.getAttribute('data-card-category') || ''
         var hide = category !== '' && itemCat !== category
         el.hidden = hide
-        if (!hide) anyVisible = true
       }
 
-      // Show empty state when nothing matches filter
-      var empty = document.querySelector('[data-update-empty]')
-      if (empty) empty.hidden = anyVisible || category === ''
+      // Dispatch filter-change so pagination recalculates
+      grid.dispatchEvent(new CustomEvent('filter-change'))
     })
   })()
 </script>

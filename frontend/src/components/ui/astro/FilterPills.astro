@@ -1,0 +1,160 @@
+---
+/**
+ * FilterPills
+ *
+ * Shared pill-style filter navigation with optional search input.
+ * No domain-specific data attributes — consumers query by name or listen for custom events.
+ *
+ * Events (on the root nav element):
+ *   'pill-change'   → { value: string, label: string } — fired when a pill is clicked
+ *   'search-change' → { query: string }                 — fired when search input changes (debounced 300ms)
+ *
+ * Props:
+ *   name              string                — unique id for this filter group (e.g. "update-category", "blog-tag")
+ *   options           { label: string; value: string }[]  — filter pill options
+ *   ariaLabel         string                — accessibility label for the <nav>
+ *   allLabel?         string                — label for the "All" pill (default "All")
+ *   showSearch?       boolean               — show search input (default false)
+ *   searchPlaceholder? string               — search input placeholder (default "Search...")
+ *   class?            string                — spread onto root <nav> for consumer overrides
+ * Slots: none
+ * Tokens: --color-nav-bg, --color-nav-btn-fg, --color-muted, --color-input, --color-input-text, --color-input-border, --color-input-focus-border
+ * Hardcoded literals: none
+ * Context variants: not needed
+ * Composed from: none
+ */
+
+interface FilterPill {
+  label: string
+  value: string
+}
+
+interface Props {
+  name: string
+  options: FilterPill[]
+  ariaLabel: string
+  allLabel?: string
+  showSearch?: boolean
+  searchPlaceholder?: string
+  class?: string
+}
+
+const {
+  name,
+  options,
+  ariaLabel,
+  allLabel = 'All',
+  showSearch = false,
+  searchPlaceholder = 'Search...',
+  class: className,
+} = Astro.props
+---
+
+<nav
+  aria-label={ariaLabel}
+  data-filter-pills={name}
+  class:list={[className]}
+>
+  <ul class="flex flex-wrap gap-2 items-center">
+    <li>
+      <button
+        type="button"
+        data-pill=""
+        aria-current="true"
+        class="text-muted px-4 py-2.5"
+      >
+        {allLabel}
+      </button>
+    </li>
+    {
+      options.map((opt) => (
+        <li>
+          <button
+            type="button"
+            data-pill={opt.value}
+            class="text-muted px-4 py-2.5"
+          >
+            {opt.label}
+          </button>
+        </li>
+      ))
+    }
+    {
+      showSearch && (
+        <li class="ml-auto">
+          <input
+            type="search"
+            data-pill-search
+            placeholder={searchPlaceholder}
+            class="px-4 py-2.5 bg-(--color-input) text-(--color-input-text) border border-(--color-input-border) rounded-md placeholder:text-(--color-input-placeholder)"
+          />
+        </li>
+      )
+    }
+  </ul>
+</nav>
+
+<style>
+  /* Active pill — nav-bg + nav-btn-fg tokens */
+  [data-pill][aria-current='true'] {
+    background-color: var(--color-nav-bg);
+    color: var(--color-nav-btn-fg);
+  }
+
+  /* Inactive pill — hover/focus-visible preview same as active */
+  [data-pill]:not([aria-current='true']):hover,
+  [data-pill]:not([aria-current='true']):focus-visible {
+    background-color: var(--color-nav-bg);
+    color: var(--color-nav-btn-fg);
+  }
+</style>
+
+<script>
+  ;(function () {
+    var navs = document.querySelectorAll('[data-filter-pills]')
+    if (!navs.length) return
+
+    navs.forEach(function (nav) {
+      // ── Pill click: toggle aria-current, dispatch event ──
+      nav.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-pill]')
+        if (!btn) return
+
+        var value = btn.getAttribute('data-pill') || ''
+        var label = btn.textContent || ''
+
+        // Toggle aria-current on all pills within this nav
+        var pills = nav.querySelectorAll('[data-pill]')
+        for (var i = 0; i < pills.length; i++) {
+          var p = pills[i]
+          var isActive = p.getAttribute('data-pill') === value
+          if (isActive) {
+            p.setAttribute('aria-current', 'true')
+          } else {
+            p.removeAttribute('aria-current')
+          }
+        }
+
+        nav.dispatchEvent(new CustomEvent('pill-change', {
+          detail: { value: value, label: label },
+          bubbles: true,
+        }))
+      })
+
+      // ── Search input: debounced dispatch ──
+      var searchInput = nav.querySelector('[data-pill-search]')
+      if (searchInput) {
+        var debounceTimer = null
+        searchInput.addEventListener('input', function () {
+          if (debounceTimer) clearTimeout(debounceTimer)
+          debounceTimer = setTimeout(function () {
+            nav.dispatchEvent(new CustomEvent('search-change', {
+              detail: { query: searchInput.value },
+              bubbles: true,
+            }))
+          }, 300)
+        })
+      }
+    })
+  })()
+</script>
