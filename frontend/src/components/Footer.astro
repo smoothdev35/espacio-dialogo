@@ -1,0 +1,147 @@
+---
+/**
+ * Footer
+ *
+ * Props: class? (string) — spread onto root <footer> for consumer overrides
+ * Slots: none
+ * Tokens: --spacing-page-gutters, --font-body, --text-sm, --text-xs
+ * Hardcoded literals: nav labels, social icons, legal link, copyright year
+ * Context variants: transparent (inherits body background)
+ * Composed from: LogoLink, FooterContact, IconFacebook, IconInstagram, IconX, IconLinkedIn, IconYoutube
+ */
+
+import LogoLink from './LogoLink.astro'
+import FooterContact from '../features/footer/FooterContact.tsx'
+import IconFacebook from './icons/IconFacebook.astro'
+import IconInstagram from './icons/IconInstagram.astro'
+import IconX from './icons/IconX.astro'
+import IconLinkedIn from './icons/IconLinkedIn.astro'
+import IconYoutube from './icons/IconYoutube.astro'
+
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+---
+
+<footer id="footer" class:list={['font-body antialiased border-t border-(--color-border)', className]}>
+  <div class="px-(--spacing-page-gutters) py-12 lg:py-16">
+    <!-- Main content grid -->
+    <div class="flex flex-col gap-12 sm:grid sm:grid-cols-2 sm:gap-8 md:gap-4">
+      <!-- Left column: Logo + Location + Contact + Social -->
+      <div class="flex flex-col gap-6">
+        <!-- Logo -->
+        <LogoLink />
+
+        <div class="-mt-4">
+          <FooterContact client:load />
+        </div>
+
+        <!-- Social icons -->
+        <div
+          class="mt-10 flex gap-4"
+          role="list"
+          aria-label="Follow us on social media"
+        >
+          <a
+            href="https://facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex h-6 w-6 items-center justify-center"
+            aria-label="Facebook"
+          >
+            <IconFacebook class="w-5 h-5" />
+          </a>
+          <a
+            href="https://instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex h-6 w-6 items-center justify-center"
+            aria-label="Instagram"
+          >
+            <IconInstagram class="w-5 h-5" />
+          </a>
+          <a
+            href="https://x.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex h-6 w-6 items-center justify-center"
+            aria-label="X"
+          >
+            <IconX class="w-5 h-5" />
+          </a>
+          <a
+            href="https://linkedin.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex h-6 w-6 items-center justify-center"
+            aria-label="LinkedIn"
+          >
+            <IconLinkedIn class="w-5 h-5" />
+          </a>
+          <a
+            href="https://youtube.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex h-6 w-6 items-center justify-center"
+            aria-label="YouTube"
+          >
+            <IconYoutube class="w-5 h-5" />
+          </a>
+        </div>
+      </div>
+
+      <!-- Right columns: Two link lists -->
+      <div class="flex flex-col gap-8 sm:gap-50 sm:flex-row sm:shrink-0">
+        <nav aria-label="Footer navigation - About">
+          <ul class="flex flex-col gap-3">
+            <li>
+              <a href="#" class="text-sm font-semibold">Our mission</a>
+            </li>
+            <li>
+              <a href="/blog" class="text-sm font-semibold">Blog</a>
+            </li>
+            <li>
+              <a href="#" class="text-sm font-semibold">Donate</a>
+            </li>
+            <li>
+              <a href="#" class="text-sm font-semibold">Statements</a>
+            </li>
+          </ul>
+        </nav>
+
+        <nav aria-label="Footer navigation - Content">
+          <ul class="flex flex-col gap-3">
+            <li>
+              <a href="#updates" class="text-sm font-semibold">Updates</a>
+            </li>
+            <li>
+              <a href="#" class="text-sm font-semibold">Analysis</a>
+            </li>
+            <li>
+              <a href="#" class="text-sm font-semibold">News</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Bottom credits -->
+    <div
+      class="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <a href="/legal" class="text-sm underline underline-offset-2"
+        >Legal notice</a
+      >
+      <small id="copyright-year" class="font-body text-sm"
+        >© 2025 Espacio Diálogo. All rights reserved.</small
+      >
+    </div>
+  </div>
+</footer>
+
+<script is:inline>
+  document.getElementById('copyright-year').textContent =
+    `© ${new Date().getFullYear()} Espacio Diálogo. All rights reserved.`
+</script>

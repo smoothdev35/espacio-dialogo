@@ -38,10 +38,10 @@ const categories = updateData.categories
 ---
 
 {/* Section bg is transparent — page background shows through via body */}
-<section class:list={[className]}>
+<section id="updates" class:list={[className]}>
   <Container>
     <div class="flex flex-col gap-component-gap">
-      <!-- Tagline + heading + description -->
+      <!-- Tagline + heading + description — always visible -->
       <div class="flex flex-col">
         <p class="text-tagline font-bold uppercase tracking-widest text-muted mb-4">
           Updates
@@ -54,35 +54,43 @@ const categories = updateData.categories
         </p>
       </div>
 
-      <!-- Filters — filtering handled client-side via script -->
-      <FilterPills
-        name="update-category"
-        options={categories.map((c) => ({ label: c.name, value: c.slug }))}
-        allLabel="All updates"
-        ariaLabel="Update category filters"
-      />
+      {featured || gridArticles.length > 0 || categories.length > 0 ? (
+        <>
+          <!-- Filters — only when categories exist -->
+          {categories.length > 0 && (
+            <FilterPills
+              name="update-category"
+              options={categories.map((c) => ({ label: c.name, value: c.slug }))}
+              allLabel="All updates"
+              ariaLabel="Update category filters"
+            />
+          )}
 
-      <!-- Featured update card — always visible, never hidden by filter -->
-      {
-        featured ? (
-          <div>
-            <FeaturedUpdateCard {...featured} />
-          </div>
-        ) : (
-          <p class="text-small text-muted">No featured update available.</p>
-        )
-      }
+          <!-- Featured update card — always visible when data exists -->
+          {
+            featured ? (
+              <div>
+                <FeaturedUpdateCard {...featured} />
+              </div>
+            ) : (
+              <p class="text-small text-muted">No featured update available.</p>
+            )
+          }
 
-      <!-- Pagination — between featured and grid, controls grid pages -->
-      <UpdatePagination />
+          <!-- Pagination — only when grid articles exist to paginate -->
+          {gridArticles.length > 0 && <UpdatePagination />}
 
-      <!-- Update grid — paginated via client-side script -->
-      <UpdateGrid articles={gridArticles} />
+          <!-- Update grid — paginated via client-side script -->
+          <UpdateGrid articles={gridArticles} />
 
-      <!-- Empty state — shown when filter + pagination yield no grid items -->
-      <p data-update-empty hidden class="col-span-full text-center text-muted py-12">
-        No updates in this category
-      </p>
+          <!-- Empty state — shown when filter + pagination yield no grid items -->
+          <p data-update-empty hidden class="col-span-full text-center text-muted py-12">
+            No updates in this category
+          </p>
+        </>
+      ) : (
+        <p class="text-center text-muted py-16">No updates published yet.</p>
+      )}
 
     </div>
   </Container>
