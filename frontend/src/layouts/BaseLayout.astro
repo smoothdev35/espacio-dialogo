@@ -6,7 +6,6 @@
  *        class? (string) — spread onto <body> for consumer overrides
  *        navLinks? — custom nav link array (defaults to site links)
  *        navActions? — custom nav action array (defaults to site CTAs)
- *        moreLinks? — custom dropdown links under "More" (defaults to suggested items)
  * Slots: default — page content inside <main>
  *        head — page-specific <head> injections (canonical, meta, etc.)
  * Tokens: --color-page, --color-page-text, --color-nav-bg, etc.
@@ -16,7 +15,8 @@
  */
 
 import '../styles/global.css'
-import Nav from '../components/ui/astro/Nav.astro'
+import Nav from '../components/Nav.astro'
+import Footer from '../components/Footer.astro'
 
 interface NavLink {
   label: string
@@ -35,7 +35,6 @@ interface Props {
   class?: string
   navLinks?: NavLink[]
   navActions?: NavAction[]
-  moreLinks?: NavLink[]
 }
 
 const {
@@ -50,7 +49,6 @@ const {
     { label: 'Subscribe', href: '#', variant: 'secondary' },
     { label: 'Donate', href: '#', variant: 'primary' },
   ],
-  moreLinks,
 } = Astro.props
 ---
 
@@ -60,7 +58,9 @@ const {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
     <slot name="head" />
     <script is:inline>
@@ -78,17 +78,15 @@ const {
     </script>
   </head>
   <!-- bg + text removed: global body selector sets --color-page and --color-page-text -->
-  <body class:list={[className]}>
+  <body class:list={['flex min-h-screen flex-col', className]}>
     <header>
-      <Nav
-        links={navLinks}
-        actions={navActions}
-        moreLinks={moreLinks}
-      />
+      <Nav links={navLinks} actions={navActions} />
     </header>
 
-    <main>
+    <main class="flex flex-1 flex-col">
       <slot />
     </main>
+
+    <Footer />
   </body>
 </html>
