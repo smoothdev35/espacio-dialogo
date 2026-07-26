@@ -1,0 +1,39 @@
+---
+/**
+ * LogoLink
+ *
+ * Theme-aware site logo linking to home. Shows dark logo in light mode,
+ * light logo in dark mode. Pure CSS toggle via .dark class.
+ *
+ * Props:
+ *   class? (string) — sizing or layout overrides on the root <a>
+ *
+ * Tokens: none
+ * Hardcoded literals: edd-logo.png, edd-logo-light.png (image file paths)
+ * Context variants: not needed (scoped CSS handles .dark toggle)
+ * Composed from: none
+ */
+
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+---
+
+<a
+  href="/"
+  class:list={['logo-link flex items-center w-[72px] h-[72px]', className]}
+  aria-label="Espacio Diálogo - Home"
+>
+  <img src="/edd-logo.png" class="logo-light-mode object-contain" alt="" aria-hidden="true" />
+  <img src="/edd-logo-light.png" class="logo-dark-mode object-contain" alt="" aria-hidden="true" />
+</a>
+
+<style>
+  .logo-light-mode { display: block; }
+  .logo-dark-mode  { display: none; }
+
+  :global(.dark) .logo-light-mode { display: none; }
+  :global(.dark) .logo-dark-mode  { display: block; }
+</style>
