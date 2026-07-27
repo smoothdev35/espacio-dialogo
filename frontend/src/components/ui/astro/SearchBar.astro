@@ -1,0 +1,68 @@
+---
+/**
+ * SearchBar
+ *
+ * Standalone search input with 300ms debounce.
+ * Dispatches 'search-change' event on the input element when the user types.
+ *
+ * Events (on the root input element):
+ *   'search-change' → { query: string } — fired after 300ms debounce
+ *
+ * Props:
+ *   name          string  — unique id for this search bar (e.g. "blog-search")
+ *   placeholder?  string  — input placeholder (default "Search...")
+ *   class?        string  — spread onto root <input> for consumer overrides
+ * Tokens: --color-input-text, --color-input-border, --color-input-placeholder, --color-nav-btn-fg
+ *         --brand-primary (color-mix for background tint)
+ */
+
+interface Props {
+  name: string
+  placeholder?: string
+  class?: string
+}
+
+const { name, placeholder = 'Search...', class: className } = Astro.props
+---
+
+<input
+  type="search"
+  data-search-bar={name}
+  placeholder={placeholder}
+  class:list={[
+    'px-4 py-2 text-(--color-input-text) border border-(--color-input-border) rounded-md placeholder:text-(--color-input-placeholder) text-sm md:text-base w-full md:w-[280px]',
+    className,
+  ]}
+/>
+
+<style>
+  [data-search-bar] {
+    background: color-mix(in srgb, var(--brand-primary) 8%, var(--color-input));
+    transition: border-color 0.15s ease;
+  }
+
+  [data-search-bar]:focus {
+    outline: none;
+    border-color: var(--color-nav-btn-fg);
+  }
+</style>
+
+<script>
+  ;(function () {
+    var inputs = document.querySelectorAll('[data-search-bar]')
+    inputs.forEach(function (input) {
+      var debounceTimer = null
+      input.addEventListener('input', function () {
+        if (debounceTimer) clearTimeout(debounceTimer)
+        debounceTimer = setTimeout(function () {
+          input.dispatchEvent(
+            new CustomEvent('search-change', {
+              detail: { query: input.value },
+              bubbles: true,
+            }),
+          )
+        }, 300)
+      })
+    })
+  })()
+</script>

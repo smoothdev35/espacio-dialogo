@@ -1,0 +1,62 @@
+---
+/**
+ * CtaRow
+ *
+ * Composes Button(s) into a centered, wrapable row with responsive gap.
+ * Use in any CTA section — with or without surrounding text.
+ *
+ * Props:
+ *   buttons — array of { label, href?, variant?, icon?, iconPosition? }
+ *   size    — 'sm' | 'md' | 'lg' (default 'md')
+ *   gap     — 'sm' (gap-4, inline groups) | 'md' (gap-4 md:gap-10, standalone CTAs) — default 'md'
+ *   class?  — consumer overrides
+ * Slots: none
+ * Tokens: none consumed directly
+ * Hardcoded literals: responsive gap values — no token equivalent; confirm if needed
+ * Context variants: not needed
+ * Composed from: Button (src/components/ui/astro/Button.astro)
+ */
+
+import Button from '@/components/ui/astro/Button.astro'
+
+interface CtaButton {
+  label: string
+  href?: string
+  variant?: 'primary' | 'secondary' | 'inverse' | 'inverse-outline'
+  icon?: string
+  iconPosition?: 'leading' | 'trailing' | 'only'
+}
+
+interface Props {
+  buttons: CtaButton[]
+  size?: 'sm' | 'md' | 'lg'
+  gap?: 'sm' | 'md'
+  class?: string
+}
+
+const { buttons, size = 'md', gap = 'md', class: className = '' } = Astro.props
+
+const gapClasses: Record<string, string> = {
+  sm: 'gap-4',
+  md: 'gap-4 md:gap-10',
+}
+---
+
+<div
+  class:list={[
+    'flex flex-wrap items-center',
+    gapClasses[gap],
+    className,
+  ]}
+>
+  {buttons.map((btn) => (
+    <Button
+      label={btn.label}
+      href={btn.href}
+      variant={btn.variant}
+      size={size}
+      icon={btn.icon}
+      iconPosition={btn.iconPosition}
+    />
+  ))}
+</div>

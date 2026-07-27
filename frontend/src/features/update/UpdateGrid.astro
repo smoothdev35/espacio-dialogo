@@ -5,7 +5,7 @@
  * Props: articles (UpdateCardProps[]) — list of updates to render in 2-column grid
  *        class? (string) — spread onto root <ul> for consumer overrides
  * Slots: none
- * Tokens: --spacing-component-gap
+ * Tokens: --spacing-row-gap
  * Hardcoded literals: none
  * Context variants: not needed
  * Composed from: UpdateCard
@@ -25,7 +25,7 @@ const { articles, class: className } = Astro.props
 <ul
   data-update-grid
   class:list={[
-    "grid gap-component-gap md:grid-cols-2",
+    "grid gap-row-gap md:grid-cols-2",
     className,
   ]}
 >

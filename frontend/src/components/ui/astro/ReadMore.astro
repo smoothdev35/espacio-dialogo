@@ -1,0 +1,75 @@
+---
+/**
+ * ReadMore
+ *
+ * A "Read more" label with chevron that slides right + underline sweep.
+ * Designed to sit inside an <a> with class "group". Hover/focus effects
+ * trigger from the parent anchor.
+ *
+ * Props: class? (string) — spread onto root for consumer layout overrides
+ *        (e.g. mt-auto to pin to bottom of a flex column)
+ * Slots: none
+ * Tokens: --color-link-text
+ * Hardcoded literals: "Read more" string, SVG chevron path
+ * Context variants: not needed
+ * Composed from: none
+ */
+
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+---
+
+<span class:list={[
+  'readmore inline-flex w-fit items-center gap-2 text-link-text',
+  className,
+]}>
+  Read more
+  <svg
+    class="relative top-px h-4 w-4 shrink-0 transition-transform! duration-200! ease-in-out"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="m9 18 6-6-6-6"></path>
+  </svg>
+</span>
+
+<style is:global>
+  /* Position relative for ::after underline */
+  .readmore {
+    position: relative;
+  }
+
+  /* Underline sweep */
+  .readmore::after {
+    content: '';
+    position: absolute;
+    bottom: -7px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition-duration: 0.3s;
+  }
+
+  a:hover .readmore::after,
+  a:focus-visible .readmore::after {
+    transform: scaleX(1);
+  }
+
+  /* Chevron push */
+  a:hover .readmore svg,
+  a:focus-visible .readmore svg {
+    transform: translateX(4px);
+  }
+</style>

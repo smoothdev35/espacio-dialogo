@@ -1,0 +1,128 @@
+---
+/**
+ * LoadMore
+ *
+ * Generic client-side "load more" pagination. Parent renders ALL items in slot;
+ * component hides excess and reveals incrementally on button click.
+ *
+ * Events (on the root data-load-more element):
+ *   'load-more-reset' → resets to first page (e.g. after filter/search change)
+ *
+ * Props:
+ *   name        string  — unique id for this instance (e.g. "blog-listing")
+ *   pageSize    number  — items to reveal per click (default 6)
+ *   buttonLabel string  — label for the load-more button (default "Load more")
+ *   class?      string  — spread onto root wrapper for consumer overrides
+ * Slots:
+ *   default — ALL items to paginate (component manages visibility)
+ * Tokens: none (delegated to Button)
+ * Hardcoded literals: none
+ * Context variants: not needed
+ * Composed from: Button
+ */
+
+import Button from '@/components/ui/astro/Button.astro'
+
+interface Props {
+  name: string
+  pageSize?: number
+  buttonLabel?: string
+  class?: string
+}
+
+const {
+  name,
+  pageSize = 6,
+  buttonLabel = 'Load more',
+  class: className,
+} = Astro.props
+---
+
+<div
+  data-load-more={name}
+  data-load-more-page-size={pageSize}
+  class:list={[className]}
+>
+  <div data-load-more-items aria-live="polite">
+    <slot />
+  </div>
+  <div class="flex justify-center mt-row-gap">
+    <Button
+      label={buttonLabel}
+      variant="secondary"
+      size="md"
+      type="button"
+      data-load-more-btn
+    />
+  </div>
+</div>
+
+<style>
+  [data-load-more-btn][hidden] {
+    display: none;
+  }
+</style>
+
+<script>
+  (function () {
+    const wrappers = document.querySelectorAll('[data-load-more]')
+    if (!wrappers.length) return
+
+    wrappers.forEach(function (wrapper) {
+      const container = wrapper.querySelector('[data-load-more-items]')
+      const btn = wrapper.querySelector('[data-load-more-btn]')
+      if (!container || !btn) return
+
+      // Get page size from data attribute or fall back to default
+      const pageSize = parseInt(
+        wrapper.getAttribute('data-load-more-page-size') || '6',
+        10
+      )
+
+      const items = Array.from(container.children)
+      let currentIndex = pageSize
+
+      function updateAriaLabel() {
+        if (!(btn instanceof HTMLElement)) return
+        const total = items.length
+        const remaining = Math.max(0, total - currentIndex)
+        const count = Math.min(pageSize, remaining)
+        const label = (btn.textContent || 'Load more').trim()
+        btn.setAttribute('aria-label', label + ' \u2014 ' + count + ' more')
+      }
+
+      function update() {
+        const total = items.length
+
+        // Show first pageSize items, hide the rest
+        for (let i = 0; i < total; i++) {
+          const el = items[i]
+          if (el instanceof HTMLElement) {
+            el.hidden = i >= currentIndex
+          }
+        }
+
+        // Hide button when all items visible
+        if (btn instanceof HTMLElement) {
+          btn.hidden = currentIndex >= total
+        }
+
+        updateAriaLabel()
+      }
+
+      btn.addEventListener('click', function () {
+        currentIndex += pageSize
+        update()
+      })
+
+      // Listen for reset event
+      wrapper.addEventListener('load-more-reset', function () {
+        currentIndex = pageSize
+        update()
+      })
+
+      // Initial render
+      update()
+    })
+  })()
+</script>

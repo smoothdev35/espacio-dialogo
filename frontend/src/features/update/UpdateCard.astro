@@ -5,7 +5,8 @@
  * Props: title, slug, excerpt, readTime, featuredImage, category — from UpdateCardProps
  *        class? (string) — spread onto root element for consumer overrides
  * Slots: none
- * Tokens: --color-surface-text, --color-border, --radius-lg, --font-headline, --font-body
+ * Tokens: --color-surface-text, --color-border, --radius-lg, --font-headline, --font-body,
+ *         --spacing-card-gap-tight, --spacing-card-gap-base, --spacing-card-gap-loose
  * Hardcoded literals: none
  *                     image aspect-video (16:9) — from Figma grid card ratio
  * Context variants: not needed
@@ -15,6 +16,7 @@
  * Read-more is a <span> — underline animation triggers on card hover/focus.
  */
 
+import ReadMore from '@/components/ui/astro/ReadMore.astro'
 import Tag from '@components/ui/astro/Tag.astro'
 import type { UpdateCardProps } from './update.types'
 
@@ -56,9 +58,9 @@ const {
   }
 
   <!-- Content: 24px padding, read-more pinned to bottom -->
-  <div class="flex flex-col justify-between gap-4 p-6">
+  <div class="flex flex-col justify-between gap-card-gap-loose p-6">
     <!-- Top group: info row + heading + excerpt -->
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col">
       <!-- Info row: category tag + readTime (no date) -->
       <div class="flex items-center gap-2">
         {category && <Tag label={category.name} />}
@@ -68,31 +70,16 @@ const {
       </div>
 
       <!-- Title: h4 for card-level heading (sits under h1/h2 section titles) -->
-      <h4>{title}</h4>
+      <h4 class="mt-card-gap-tight">{title}</h4>
 
       <!-- Excerpt: card body 16px (section-level body is 18px); clamp from design -->
-      <p class="line-clamp-3">
+      <p class="mt-card-gap-base line-clamp-3">
         {excerpt}
       </p>
     </div>
 
     <!-- Read more (span — animation triggers on card hover/focus) -->
-    <span class="readmore inline-flex w-fit items-center gap-2 text-link-text">
-      Read more
-      <svg
-        class="relative top-px h-4 w-4 shrink-0 transition-transform! duration-200! ease-in-out"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
-        <path d="m9 18 6-6-6-6"></path>
-      </svg>
-    </span>
+    <ReadMore />
   </div>
 </a>
 
@@ -109,32 +96,4 @@ const {
     text-decoration-line: none;
   }
 
-  /* Read-more underline sweep */
-  .readmore {
-    position: relative;
-  }
-
-  .readmore::after {
-    content: '';
-    position: absolute;
-    bottom: -7px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: currentColor;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition-duration: 0.3s;
-  }
-
-  a:hover .readmore::after,
-  a:focus-visible .readmore::after {
-    transform: scaleX(1);
-  }
-
-  /* Chevron push on card hover/focus */
-  a:hover .readmore svg,
-  a:focus-visible .readmore svg {
-    transform: translateX(4px);
-  }
 </style>

@@ -12,31 +12,13 @@
     /* ════════════════════════════════════════════════════════ */
 
     /* Bay of Many — primary action palette */
-    --brand-bay-of-many-lightest: #e8ebf1;
-    --brand-bay-of-many-lighter:  #d2d7e4;
-    --brand-bay-of-many-light:    #6375a0;
-    --brand-bay-of-many:          #213a78;
-    --brand-bay-of-many-dark:     #1a2e60;
-    --brand-bay-of-many-darker:   #0d1730;
-    --brand-bay-of-many-darkest:  #091124;
-
-    /* Ebony Clay — secondary/support palette */
-    --brand-ebony-clay-lightest: #e9e9eb;
-    --brand-ebony-clay-lighter:  #d3d4d8;
-    --brand-ebony-clay-light:    #656a77;
-    --brand-ebony-clay:          #232b3d;
-    --brand-ebony-clay-dark:     #1c2230;
-    --brand-ebony-clay-darker:   #0e1118;
-    --brand-ebony-clay-darkest:  #0a0c12;
+    --brand-bay-of-many-lighter: #d2d7e4;
+    --brand-bay-of-many:         #213a78;
+    --brand-bay-of-many-dark:    #1a2e60;
+    --brand-bay-of-many-darker:  #0d1730;
 
     /* Buttercup — accent/highlight palette */
-    --brand-buttercup-lightest: #fdf6e7;
-    --brand-buttercup-lighter:  #fbeecf;
-    --brand-buttercup-light:    #f1c659;
-    --brand-buttercup:          #ecae13;
-    --brand-buttercup-dark:     #bc8b0f;
-    --brand-buttercup-darker:   #5e4507;
-    --brand-buttercup-darkest:  #463405;
+    --brand-buttercup: #ecae13;
 
     /* Neutral — gray/default palette */
     --brand-neutral-lightest: #f2f2f2;
@@ -51,10 +33,8 @@
     --brand-white: #ffffff;
 
     /* Brand role bridge */
-    --brand-primary:   var(--brand-bay-of-many);
-    --brand-secondary: var(--brand-ebony-clay);
-    --brand-accent:    var(--brand-buttercup);
-    --brand-neutral:   var(--brand-neutral);
+    --brand-primary: var(--brand-bay-of-many);
+    --brand-accent:  var(--brand-buttercup);
 
     /* Font families */
     --font-headline: "Lora", serif;
@@ -68,66 +48,54 @@
 
     /* Page surface */
     --page:       var(--brand-neutral-lightest);
-    --page-text:  var(--brand-neutral-darkest);
+    --page-text:  var(--brand-neutral-darker);
+    --muted: var(--brand-neutral);
+    --dot-inactive: var(--brand-neutral-lighter);
 
     /* Component surface */
     --surface:      var(--brand-neutral-lightest);
-    --surface-text: var(--brand-neutral-darkest);
+    --surface-text: var(--brand-neutral-darker);
 
     /* Card surface */
     --card-bg: var(--brand-white);
+
+    /* Alternative surface — brand-tinted, for sections differentiating from page bg */
+    --surface-alt: var(--brand-bay-of-many-lighter);
 
     /* Contrast text — readable on both light and dark surfaces */
     --contrast-text: var(--brand-white);
 
     /* Border */
-    --border: color-mix(in srgb, var(--brand-neutral-darkest) 15%, transparent);
+    --border: var(--brand-neutral-lighter);
 
-    /* Focus — always accent, never overridden in dark mode */
-    --border-focus: var(--brand-bay-of-many);
+    /* Focus — dark surface contrast use accent; overridden in @variant dark */
+    --border-focus: var(--brand-primary);
 
     /* Link */
-    --link-text:   var(--brand-neutral-darkest);
-    --link-hover:  var(--brand-neutral-darkest);
-    --link-active: var(--brand-neutral-darkest);
+    --link-text:   var(--brand-neutral-darker);
+    --link-hover:  var(--brand-primary);
+    --link-active: var(--brand-neutral-darker);
 
     /* ─── Button tokens ────────────────────────────────── */
 
     /* Primary button */
-    --btn-primary:          var(--brand-bay-of-many);
+    --btn-primary:          var(--brand-primary);
     --btn-primary-text:     var(--brand-white);
-    --btn-primary-border:   var(--brand-bay-of-many-dark);
-    --btn-primary-hover:    var(--brand-bay-of-many-dark);
-    --btn-primary-active:   var(--brand-bay-of-many-darker);
-    --btn-primary-disabled: var(--brand-neutral-lighter);
-    --btn-primary-disabled-text: var(--brand-neutral-light);
+    --btn-primary-border:   var(--brand-bay-of-many-darker);
+  --btn-primary-disabled: var(--brand-neutral-lighter);
+  --btn-primary-disabled-text: var(--brand-neutral-light);
+  --btn-primary-hover:   color-mix(in srgb, var(--brand-primary) 90%, var(--brand-white));
 
-    /* Secondary button */
-    --btn-secondary:          transparent;
-    --btn-secondary-text:     var(--brand-neutral-darkest);
-    --btn-secondary-border:   var(--border);
-    --btn-secondary-hover:    var(--brand-neutral-lightest);
-    --btn-secondary-active:   var(--brand-neutral-lighter);
-    --btn-secondary-disabled: transparent;
-    --btn-secondary-disabled-text: var(--brand-neutral-light);
+  /* Secondary button */
+  --btn-secondary:          transparent;
+  --btn-secondary-border:   var(--brand-neutral-light);
+  --btn-secondary-disabled: transparent;
+  --btn-secondary-disabled-text: var(--brand-neutral-light);
+  --btn-secondary-hover: color-mix(in srgb, var(--brand-primary) 8%, transparent);
 
-    /* Tertiary button */
-    --btn-tertiary:          transparent;
-    --btn-tertiary-text:     var(--brand-neutral-darkest);
-    --btn-tertiary-border:   transparent;
-    --btn-tertiary-hover:    var(--brand-neutral-lightest);
-    --btn-tertiary-active:   var(--brand-neutral-lighter);
-    --btn-tertiary-disabled: transparent;
-    --btn-tertiary-disabled-text: var(--brand-neutral-light);
-
-    /* Link button */
-    --btn-link:          transparent;
-    --btn-link-text:     var(--brand-neutral-darkest);
-    --btn-link-border:   transparent;
-    --btn-link-hover:    var(--link-hover);
-    --btn-link-active:   var(--link-active);
-    --btn-link-disabled: transparent;
-    --btn-link-disabled-text: var(--brand-neutral-light);
+  /* Inverse button — always-light, no dark override */
+  --btn-inverse-hover:          color-mix(in srgb, var(--brand-neutral-lightest) 90%, var(--brand-neutral-darker));
+  --btn-inverse-outline-hover:  color-mix(in srgb, var(--brand-white) 20%, transparent);
 
     /* ─── Button size geometry tokens ──────────────────── */
     --btn-padding-x-sm: 1.25rem;
@@ -140,60 +108,56 @@
     --btn-padding-icon-md: 0.625rem;
     --btn-padding-icon-lg: 0.75rem;
 
-    /* ─── Error tokens ─────────────────────────────────── */
-    --color-error: #dc2626;
-
     /* ─── Nav tokens — light mode defaults; overridden in @variant dark ── */
     --nav-bg:     var(--brand-white);
-    --nav-text:   var(--brand-neutral-darkest);
     --nav-border: var(--border);
+    --nav-btn-fg: var(--brand-bay-of-many);
+    --nav-hover:  var(--brand-neutral-lighter);
+    --nav-arrow-hover: var(--brand-neutral-lighter);
 
     /* ─── Input tokens ─────────────────────────────────── */
     --input:              var(--brand-neutral-lightest);
-    --input-text:         var(--brand-neutral-darkest);
-    --input-placeholder:  color-mix(in srgb, var(--brand-neutral-darkest) 60%, transparent);
+    --input-text:         var(--brand-neutral-darker);
+    --input-placeholder:  color-mix(in srgb, var(--brand-neutral-darker) 60%, transparent);
     --input-border:       var(--border);
     --input-focus:        var(--brand-white);
-    --input-focus-border: var(--brand-bay-of-many);
+    --input-focus-border: var(--brand-primary);
     --input-disabled:     var(--brand-neutral-lighter);
 
     /* ─── Select tokens ────────────────────────────────── */
     --select-menu:            var(--brand-white);
     --select-menu-border:     var(--border);
-    --select-option-hover:    color-mix(in srgb, var(--brand-bay-of-many) 10%, transparent);
-    --select-option-selected: var(--brand-bay-of-many);
+    --select-option-hover:    color-mix(in srgb, var(--brand-primary) 10%, transparent);
+    --select-option-selected: var(--brand-primary);
     --select-option-selected-text: var(--brand-white);
 
     /* ─── Checkbox tokens ──────────────────────────────── */
     --checkbox-bg:           var(--brand-neutral-lightest);
-    --checkbox-bg-checked:   var(--brand-bay-of-many);
+    --checkbox-bg-checked:   var(--brand-primary);
     --checkbox-border:       var(--border);
     --checkbox-check:        var(--brand-white);
 
     /* ─── Radio tokens ─────────────────────────────────── */
     --radio-bg:         var(--brand-neutral-lightest);
-    --radio-bg-checked: var(--brand-bay-of-many);
+    --radio-bg-checked: var(--brand-primary);
     --radio-border:     var(--border);
     --radio-dot:        var(--brand-white);
 
     /* ─── Toggle tokens ────────────────────────────────── */
-    --toggle-track:       color-mix(in srgb, var(--brand-neutral-darkest) 15%, transparent);
+    --toggle-track: var(--brand-neutral-lighter);
     --toggle-track-border: var(--border);
     --toggle-thumb:       var(--brand-white);
-    --toggle-track-on:    var(--brand-bay-of-many);
+    --toggle-track-on:    var(--brand-primary);
     --toggle-thumb-on:    var(--brand-white);
 
     /* ─── Tag tokens ───────────────────────────────────── */
     --tag:          var(--brand-neutral-lightest);
-    --tag-text:     var(--brand-neutral-darkest);
+    --tag-text:     var(--brand-neutral-darker);
     --tag-border:   var(--border);
-    --tag-hover:    var(--brand-neutral-lighter);
 
     /* ─── Tabs tokens ──────────────────────────────────── */
     --tab-active-bg:   var(--brand-white);
-    --tab-active-text: var(--brand-neutral-darkest);
     --tab-inactive-bg: transparent;
-    --tab-inactive-text: var(--brand-neutral-darkest);
     --tab-border:      var(--border);
 
     /* ═══ Dark mode overrides ═══════════════════════════════ */
@@ -202,70 +166,63 @@
     @variant dark {
       /* Page surface — dark */
       --page:      var(--brand-neutral-darker);
-      --page-text: var(--brand-white);
+      --page-text: var(--brand-neutral-lightest);
 
       /* Component surface */
       --surface:      var(--brand-bay-of-many-darker);
-      --surface-text: var(--brand-white);
+      --surface-text: var(--brand-neutral-lightest);
 
       /* Card surface */
       --card-bg: var(--brand-neutral-darkest);
 
+      /* Alternative surface — deeper navy in dark mode */
+      --surface-alt: var(--brand-bay-of-many-darker);
+
       /* Contrast text unchanged in dark */
 
       /* Border */
-      --border: color-mix(in srgb, var(--brand-white) 20%, transparent);
+      --border: var(--brand-neutral-dark);
+
+      /* Muted text — lighter than page text for secondary content */
+      --muted: var(--brand-neutral-light);
+      --dot-inactive: var(--brand-neutral-dark);
+
+      /* Focus — accent for high contrast on dark surfaces */
+      --border-focus: var(--brand-accent);
 
       /* Nav — dark mode swaps bg/text */
       --nav-bg:     var(--brand-neutral-darkest);
-      --nav-text:   var(--brand-white);
       --nav-border: var(--border);
+      --nav-btn-fg: var(--brand-accent);
+      --nav-hover:  var(--brand-neutral-dark);
+      --nav-arrow-hover: var(--brand-neutral-dark);
 
       /* Link */
-      --link-text:   var(--brand-white);
-      --link-hover:  var(--brand-white);
-      --link-active: var(--brand-white);
+      --link-text:   var(--brand-neutral-lightest);
+      --link-hover:  var(--brand-accent);
+      --link-active: var(--brand-neutral-lightest);
 
       /* Primary button — dark mode inverts */
       --btn-primary:          var(--brand-white);
       --btn-primary-text:     var(--brand-neutral-darkest);
-      --btn-primary-border:   var(--brand-neutral-lighter);
-      --btn-primary-hover:    var(--brand-neutral-lighter);
-      --btn-primary-active:   var(--brand-neutral-lighter);
+      --btn-primary-border:   var(--brand-neutral-light);
       --btn-primary-disabled: var(--brand-neutral-dark);
       --btn-primary-disabled-text: var(--brand-neutral);
 
       /* Secondary button — dark mode */
       --btn-secondary:          transparent;
-      --btn-secondary-text:     var(--brand-white);
-      --btn-secondary-border:   var(--border);
-      --btn-secondary-hover:    var(--brand-bay-of-many-darker);
-      --btn-secondary-active:   var(--brand-bay-of-many-darker);
+      --btn-secondary-border:   var(--brand-neutral-dark);
       --btn-secondary-disabled: transparent;
       --btn-secondary-disabled-text: var(--brand-neutral);
 
-      /* Tertiary button — dark mode */
-      --btn-tertiary:          transparent;
-      --btn-tertiary-text:     var(--brand-white);
-      --btn-tertiary-border:   transparent;
-      --btn-tertiary-hover:    var(--brand-bay-of-many-darker);
-      --btn-tertiary-active:   var(--brand-bay-of-many-darker);
-      --btn-tertiary-disabled: transparent;
-      --btn-tertiary-disabled-text: var(--brand-neutral);
-
-      /* Link button — dark mode */
-      --btn-link:          transparent;
-      --btn-link-text:     var(--brand-white);
-      --btn-link-border:   transparent;
-      --btn-link-hover:    var(--brand-white);
-      --btn-link-active:   var(--brand-white);
-      --btn-link-disabled: transparent;
-      --btn-link-disabled-text: var(--brand-neutral);
+      /* Button hover — dark mode overrides */
+      --btn-primary-hover:   var(--brand-neutral-lighter);
+      --btn-secondary-hover: color-mix(in srgb, var(--brand-neutral-lightest) 15%, transparent);
 
       /* Input — dark mode */
-      --input:              color-mix(in srgb, var(--brand-white) 15%, transparent);
-      --input-text:         var(--brand-white);
-      --input-placeholder:  color-mix(in srgb, var(--brand-white) 60%, transparent);
+      --input:              var(--brand-neutral-darker);
+      --input-text:         var(--brand-neutral-lightest);
+      --input-placeholder:  color-mix(in srgb, var(--brand-neutral-lightest) 60%, transparent);
       --input-border:       var(--border);
       --input-focus:        var(--brand-bay-of-many-darker);
       --input-focus-border: var(--brand-white);
@@ -274,40 +231,37 @@
       /* Select — dark mode */
       --select-menu:        var(--brand-bay-of-many-darker);
       --select-menu-border: var(--border);
-      --select-option-hover:    color-mix(in srgb, var(--brand-white) 10%, transparent);
-      --select-option-selected: var(--brand-bay-of-many);
+      --select-option-hover:    color-mix(in srgb, var(--brand-neutral-lightest) 10%, transparent);
+      --select-option-selected: var(--brand-primary);
       --select-option-selected-text: var(--brand-white);
 
       /* Checkbox — dark mode */
-      --checkbox-bg:         color-mix(in srgb, var(--brand-white) 15%, transparent);
+      --checkbox-bg:         var(--brand-neutral-darker);
       --checkbox-bg-checked: var(--brand-white);
       --checkbox-border:     var(--border);
       --checkbox-check:      var(--brand-neutral-darkest);
 
       /* Radio — dark mode */
-      --radio-bg:         color-mix(in srgb, var(--brand-white) 15%, transparent);
+      --radio-bg:         var(--brand-neutral-darker);
       --radio-bg-checked: var(--brand-white);
       --radio-border:     var(--border);
       --radio-dot:        var(--brand-neutral-darkest);
 
       /* Toggle — dark mode */
-      --toggle-track:       color-mix(in srgb, var(--brand-white) 15%, transparent);
+      --toggle-track:       var(--brand-neutral-darker);
       --toggle-track-border: var(--border);
       --toggle-thumb:       var(--brand-white);
       --toggle-track-on:    var(--brand-white);
       --toggle-thumb-on:    var(--brand-neutral-darkest);
 
       /* Tag — dark mode */
-      --tag:          color-mix(in srgb, var(--brand-white) 15%, transparent);
-      --tag-text:     var(--brand-white);
+      --tag:          var(--brand-neutral-darker);
+      --tag-text:     var(--brand-neutral-lightest);
       --tag-border:   var(--border);
-      --tag-hover:    var(--brand-bay-of-many-darker);
 
       /* Tabs — dark mode */
       --tab-active-bg:   var(--brand-bay-of-many-darker);
-      --tab-active-text: var(--brand-white);
       --tab-inactive-bg: transparent;
-      --tab-inactive-text: var(--brand-white);
       --tab-border:      var(--border);
     }
   }
@@ -317,20 +271,25 @@
   /* ═══ Spacing tokens ════════════════════════════════════ */
   /* Page gutters: 20px → 64px */
   --spacing-page-gutters: clamp(1.25rem, 0.104rem + 4.792vw, 4rem);
-  /* Section padding - medium: 48px → 80px */
-  --spacing-section-pad: clamp(3rem, 1.833rem + 4.875vw, 5rem);
-  /* Section padding - large: 64px → 112px */
-  --spacing-section-pad-large: clamp(4rem, 2.167rem + 7.667vw, 7rem);
-  /* Section padding - small: 32px → 48px */
-  --spacing-section-pad-small: clamp(2rem, 1.333rem + 2.792vw, 3rem);
+  /* Section padding - medium: 32px → 80px */
+  --spacing-section-pad: clamp(2rem, 1rem + 5vw, 5rem);
+  /* Section padding - large: 48px → 112px */
+  --spacing-section-pad-lg: clamp(3rem, 1.667rem + 6.667vw, 7rem);
   /* Component gap — default range */
   --spacing-component-gap: clamp(1rem, 0.648rem + 1.502vw, 2rem);
+  /* Row gap: 32px → 40px — vertical space between major rows/blocks */
+  --spacing-row-gap: clamp(2rem, 1.6rem + 1vw, 2.5rem);
+  /* Card gap — tight: tag → title (16px) */
+  --spacing-card-gap-tight: 1rem;
+  /* Card gap — base: title → excerpt (24px) */
+  --spacing-card-gap-base: 1.5rem;
+  /* Card gap — loose: excerpt → ReadMore / author row (32px) */
+  --spacing-card-gap-loose: 2rem;
   /* Navbar height — matches <header> rendered height */
   --nav-height: 73px;
 
   /* ─── Container widths ───────────────────────────────── */
   --container-large: 1280px;
-  --container-medium: 1024px;
   --container-small: 768px;
   --max-width: var(--container-large);
 
@@ -346,16 +305,26 @@
   --spacing-btn-icon-lg: var(--btn-padding-icon-lg);
 
   /* ═══ Radius tokens ═════════════════════════════════════ */
-  --radius-button: 0.375rem;
-  --radius-input: 0.375rem;
-  --radius-checkbox: 0.125rem;
-  --radius-tag: 0.25rem;
-  --radius-tabs: 0.25rem;
-  --radius-toggle: 9999px;
-  --radius-radio: 9999px;
-  --radius-small: 0.375rem;
-  --radius-medium: 0.375rem;
-  --radius-large: 0.375rem;
+  /* Using Tailwind built-in --radius-md (0.375rem) via rounded-md utility */
+
+  /* ═══ Button shadow tokens ═════════════════════════════ */
+  /* 3D raised effect: shadow visible when resting, disappears on hover (lowered), stays flat on active (pressed) */
+  /* Shadow color = border color, so at 0px offset it merges with border and becomes invisible */
+  --shadow-btn-primary: 0 4px 0 0 var(--btn-primary-border);
+  --shadow-btn-primary-hover: 0 0px 0 0 var(--btn-primary-border);
+  --shadow-btn-primary-active: 0 0px 0 0 var(--btn-primary-border);
+
+  --shadow-btn-secondary: 0 4px 0 0 var(--btn-secondary-border);
+  --shadow-btn-secondary-hover: 0 0px 0 0 var(--btn-secondary-border);
+  --shadow-btn-secondary-active: 0 0px 0 0 var(--btn-secondary-border);
+
+  --shadow-btn-inverse: 0 4px 0 0 #d9d9d9;
+  --shadow-btn-inverse-hover: 0 0px 0 0 #d9d9d9;
+  --shadow-btn-inverse-active: 0 0px 0 0 #d9d9d9;
+
+  --shadow-btn-inverse-outline: 0 4px 0 0 rgba(255, 255, 255, 0.3);
+  --shadow-btn-inverse-outline-hover: 0 0px 0 0 rgba(255, 255, 255, 0.3);
+  --shadow-btn-inverse-outline-active: 0 0px 0 0 rgba(255, 255, 255, 0.3);
 
   /* ═══ Font families ═════════════════════════════════════ */
   --font-headline: var(--font-headline);
@@ -365,29 +334,13 @@
   /* Viewport bounds: 320px → 1280px */
 
   --text-h1: clamp(2.5rem, 0.833rem + 6.944vw, 4.5rem);
-  --text-h2: clamp(2.25rem, 0.917rem + 5.556vw, 3.25rem);
-  --text-h3: clamp(2rem, 0.833rem + 4.861vw, 2.75rem);
-  --text-h4: clamp(1.5rem, 0.583rem + 3.819vw, 2.25rem);
-  --text-h5: clamp(1.25rem, 0.583rem + 2.778vw, 1.75rem);
-  --text-h6: clamp(1.125rem, 0.542rem + 2.431vw, 1.375rem);
-  --text-tagline: 1rem;
+  --text-h2: clamp(2rem, 1.583rem + 2.083vw, 3.25rem);
+  --text-h3: clamp(1.75rem, 1.417rem + 1.667vw, 2.75rem);
+  --text-h4: clamp(1.375rem, 1.083rem + 1.458vw, 2.25rem);
+  --text-h5: clamp(1.1875rem, 1rem + 0.938vw, 1.75rem);
+  --text-h6: clamp(1.0625rem, 0.958rem + 0.521vw, 1.375rem);
   --text-body: clamp(1rem, 0.917rem + 0.347vw, 1.125rem); /* Text Medium: 16→18 */
   --text-large: clamp(1.125rem, 0.542rem + 2.431vw, 1.375rem);
-  --text-regular: 1rem;
-  --text-small: 0.875rem;
-  --text-tiny: 0.75rem;
-  --text-button: 1rem;
-  --text-input: 1rem;
-  --text-select: 1rem;
-
-  /* ═══ Font weights ══════════════════════════════════════ */
-  --font-weight-light: 300;
-  --font-weight-regular: 400;
-  --font-weight-medium: 500;
-  --font-weight-semi-bold: 600;
-  --font-weight-bold: 700;
-  --font-weight-extra-bold: 800;
-
   /* ═══ Line heights ══════════════════════════════════════ */
   --leading-h1: 1.2;
   --leading-h2: 1.2;
@@ -395,7 +348,6 @@
   --leading-h4: 1.3;
   --leading-h5: 1.4;
   --leading-h6: 1.4;
-  --leading-body: 1.5;
 
   /* ═══ Letter spacing ════════════════════════════════════ */
   --tracking-heading: -0.01em;
@@ -403,52 +355,46 @@
   /* ═══ Color utilities — map to semantic tokens ═════════ */
   --color-page: var(--page);
   --color-page-text: var(--page-text);
+  --color-muted: var(--muted);
+  --color-dot-inactive: var(--dot-inactive);
   --color-surface: var(--surface);
   --color-surface-text: var(--surface-text);
   --color-card-bg: var(--card-bg);
+  --color-surface-alt: var(--surface-alt);
   --color-contrast-text: var(--contrast-text);
   --color-border: var(--border);
   --color-border-focus: var(--border-focus);
-  --color-accent: var(--brand-bay-of-many);
+  --color-accent: var(--brand-accent);
+  --color-primary: var(--brand-primary);
   --color-link-text: var(--link-text);
   --color-link-hover: var(--link-hover);
   --color-link-active: var(--link-active);
+
+  /* ─── Error tokens ─────────────────────────────────── */
+  --color-error: #dc2626;
 
   /* Button colors */
   --color-btn-primary: var(--btn-primary);
   --color-btn-primary-text: var(--btn-primary-text);
   --color-btn-primary-border: var(--btn-primary-border);
-  --color-btn-primary-hover: var(--btn-primary-hover);
-  --color-btn-primary-active: var(--btn-primary-active);
   --color-btn-primary-disabled: var(--btn-primary-disabled);
   --color-btn-primary-disabled-text: var(--btn-primary-disabled-text);
+  --color-btn-primary-hover:   var(--btn-primary-hover);
 
   --color-btn-secondary: var(--btn-secondary);
-  --color-btn-secondary-text: var(--btn-secondary-text);
   --color-btn-secondary-border: var(--btn-secondary-border);
-  --color-btn-secondary-hover: var(--btn-secondary-hover);
-  --color-btn-secondary-active: var(--btn-secondary-active);
   --color-btn-secondary-disabled: var(--btn-secondary-disabled);
   --color-btn-secondary-disabled-text: var(--btn-secondary-disabled-text);
-
-  --color-btn-tertiary: var(--btn-tertiary);
-  --color-btn-tertiary-text: var(--btn-tertiary-text);
-  --color-btn-tertiary-hover: var(--btn-tertiary-hover);
-  --color-btn-tertiary-active: var(--btn-tertiary-active);
-  --color-btn-tertiary-disabled: var(--btn-tertiary-disabled);
-  --color-btn-tertiary-disabled-text: var(--btn-tertiary-disabled-text);
-
-  --color-btn-link: var(--btn-link);
-  --color-btn-link-text: var(--btn-link-text);
-  --color-btn-link-hover: var(--btn-link-hover);
-  --color-btn-link-active: var(--btn-link-active);
-  --color-btn-link-disabled: var(--btn-link-disabled);
-  --color-btn-link-disabled-text: var(--btn-link-disabled-text);
+  --color-btn-secondary-hover:   var(--btn-secondary-hover);
+  --color-btn-inverse-hover:          var(--btn-inverse-hover);
+  --color-btn-inverse-outline-hover:  var(--btn-inverse-outline-hover);
 
   /* Nav colors */
   --color-nav-bg:     var(--nav-bg);
-  --color-nav-text:   var(--nav-text);
   --color-nav-border: var(--nav-border);
+  --color-nav-hover:  var(--nav-hover);
+  --color-nav-arrow-hover: var(--nav-arrow-hover);
+  --color-nav-btn-fg: var(--nav-btn-fg);
 
   /* Input colors */
   --color-input: var(--input);
@@ -492,9 +438,7 @@
 
   /* Tabs colors */
   --color-tab-active-bg: var(--tab-active-bg);
-  --color-tab-active-text: var(--tab-active-text);
   --color-tab-inactive-bg: var(--tab-inactive-bg);
-  --color-tab-inactive-text: var(--tab-inactive-text);
   --color-tab-border: var(--tab-border);
 }
 
@@ -502,7 +446,9 @@
   /* ═══ Global transitions ═════════════════════════════════ */
   html,
   body {
-    @apply !transition-colors !duration-300 !ease-in-out;
+    scroll-behavior: smooth;
+    @apply duration-300 ease-in-out;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, transform, translate, box-shadow;
   }
 
   :root,
@@ -510,7 +456,8 @@
     & *,
     & *::before,
     & *::after {
-      @apply !transition-colors !duration-300 !ease-in-out;
+      @apply duration-300 ease-in-out;
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, transform, translate, box-shadow;
     }
   }
 
@@ -520,8 +467,8 @@
     color: var(--color-page-text);
     font-family: var(--font-body);
     font-size: var(--text-body);
-    font-weight: var(--font-weight-regular);
-    line-height: var(--leading-body);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--leading-normal);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -587,14 +534,21 @@
 
   /* ═══ Small ══════════════════════════════════════════════ */
   small {
-    font-size: var(--text-small);
+    font-size: var(--text-sm);
+  }
+
+  /* ═══ Spans ══════════════════════════════════════════════ */
+  span {
+    font-size: var(--text-sm);
   }
 
   /* ═══ Links ══════════════════════════════════════════════ */
   a {
     color: var(--color-link-text);
     text-decoration: none;
-    transition: color 0.15s ease;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
   }
 
   a:hover {
@@ -607,10 +561,10 @@
 
   /* ═══ Buttons ════════════════════════════════════════════ */
   button {
-    font-family: var(--font-body);
-    font-size: var(--text-button);
+    color: inherit;
+    font-size: var(--text-base);
     font-weight: var(--font-weight-medium);
-    border-radius: var(--radius-button);
+    border-radius: var(--radius-md);
     cursor: pointer;
   }
 
@@ -619,14 +573,49 @@
   textarea,
   select {
     font-family: var(--font-body);
-    font-size: var(--text-input);
-    border-radius: var(--radius-input);
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    border-radius: var(--radius-md);
+  }
+
+  /* ═══ UI Elements — font-weight medium ══════════════════ */
+  span,
+  time,
+  legend,
+  summary {
+    font-weight: var(--font-weight-medium);
+  }
+
+  /* ═══ Label ═════════════════════════════════════════════ */
+  label {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
   }
 
   /* ═══ Focus visible ══════════════════════════════════════ */
-  :is(a, button, input, textarea, select, [tabindex]):focus-visible {
-    outline: 1px solid var(--color-border-focus);
-    outline-offset: 8px;
+  a:focus-visible {
+    color: var(--color-link-hover);
+  }
+
+  /* Single rule — consistent across all focusable elements */
+  :is(a, button, input, textarea, select, [role='tab'], [role='tabpanel'], summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 4px;
+  }
+
+  /* Checkbox/Radio — outline on visible indicator when peer input is focused */
+  .peer:focus-visible ~ span {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
+
+  /* ═══ Scrollbar hide ══════════════════════════════════════ */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 
   /* ═══ Placeholder ════════════════════════════════════════ */
@@ -634,3 +623,4 @@
     color: var(--color-input-placeholder);
   }
 }
+

@@ -1,0 +1,251 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Container from '@/layouts/Container.astro'
+import LoadMore from '@/components/LoadMore.astro'
+import FilterPills from '@/components/ui/astro/FilterPills.astro'
+import Tag from '@/components/ui/astro/Tag.astro'
+import SearchBar from '@/components/ui/astro/SearchBar.astro'
+import ReadMore from '@/components/ui/astro/ReadMore.astro'
+import { fetchBlogPostsForListing } from '@/features/blogpost/blogpost.api'
+import type { BlogPostCardProps } from '@/features/blogpost/blogpost.types'
+
+const title = 'Blog — EDD'
+const posts: BlogPostCardProps[] = await fetchBlogPostsForListing()
+
+const allTags = [
+  ...new Map(
+    posts.flatMap((p) => p.tags ?? []).map((t) => [t.slug, t]),
+  ).values(),
+]
+const tagOptions = allTags.map((t) => ({ label: t.name, value: t.slug }))
+---
+
+<BaseLayout title={title}>
+  <section class="py-section-pad">
+    <Container>
+      <div class="flex flex-col gap-4">
+        <p class="font-body text-tagline text-muted font-bold tracking-widest">
+          Blog
+        </p>
+        <h2>Blog</h2>
+      </div>
+
+      {
+        posts.length > 0 ? (
+          <>
+            <div class="gap-component-gap mt-8 flex w-full flex-col py-2 lg:flex-row lg:items-start lg:justify-between">
+              <FilterPills
+                name="blog-tag"
+                options={tagOptions}
+                allLabel="All posts"
+                ariaLabel="Filter blog posts by tag"
+              />
+              <SearchBar
+                name="blog-search"
+                placeholder="Search posts..."
+                class="shrink-0"
+              />
+            </div>
+
+            <LoadMore name="blog-listing" pageSize={6} class="mt-row-gap">
+              {posts.map((post) => (
+                <a
+                  href={`/blog/${post.slug}`}
+                  data-tags={(post.tags ?? []).map((t) => t.slug).join(',')}
+                  data-searchable={`${post.title} ${post.excerpt ?? ''} ${(post.tags ?? []).map((t) => t.name).join(' ')} ${post.author?.name ?? ''}`}
+                  class="text-(--color-page-text) group flex flex-col"
+                >
+                  {post.featuredImage ? (
+                    <img
+                      src={post.featuredImage.url}
+                      alt={post.featuredImage.alternativeText ?? ''}
+                      class="rounded-(--radius-md) aspect-[3/2] w-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div
+                      class="rounded-(--radius-md) bg-(--color-muted) aspect-[3/2] w-full"
+                      aria-hidden="true"
+                    />
+                  )}
+
+                  <div class="flex flex-1 flex-col justify-between pb-3">
+                    <div class="flex flex-col pt-4">
+                      <div class="flex flex-wrap items-center gap-2">
+                        {post.tags &&
+                          post.tags.length > 0 &&
+                          post.tags.map((tag) => <Tag label={tag.name} />)}
+                        <span class="text-(--color-muted) text-sm font-semibold">
+                          {post.readTime}
+                        </span>
+                      </div>
+
+                      <h3 class="mt-card-gap-tight text-h5 font-headline">{post.title}</h3>
+
+                      {post.excerpt && (
+                        <p class="mt-card-gap-base line-clamp-2">{post.excerpt}</p>
+                      )}
+                    </div>
+
+                    <ReadMore class="mt-card-gap-loose" />
+                  </div>
+                </a>
+              ))}
+            </LoadMore>
+          </>
+        ) : (
+          <p class="text-muted py-16 text-center">
+            No blog posts published yet.
+          </p>
+        )
+      }
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  [data-blog-filter-hidden] {
+    display: none !important;
+  }
+
+  :global([data-load-more-items]) {
+    display: grid;
+    gap: var(--spacing-row-gap) 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    :global([data-load-more-items]) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    :global([data-load-more-items]) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* Focus ring on the card */
+  a:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
+
+  /* Prevent hover/focus from changing card text colors */
+  a:hover,
+  a:focus-visible {
+    color: var(--color-page-text);
+  }
+
+  /* Prevent global a:hover underline on children */
+  a:hover *,
+  a:focus-visible * {
+    text-decoration-line: none;
+  }
+</style>
+
+<script>
+  ;(function () {
+    var nav = document.querySelector('[data-filter-pills="blog-tag"]')
+    var searchInput = document.querySelector('[data-search-bar="blog-search"]')
+    var wrapper = document.querySelector('[data-load-more="blog-listing"]')
+    if (!wrapper) return
+
+    var container = wrapper.querySelector('[data-load-more-items]')
+    var btn = wrapper.querySelector('[data-load-more-btn]')
+    if (!container || !btn) return
+
+    /* Clone btn to drop LoadMore's built-in click handler — we manage paging */
+    var newBtn = btn.cloneNode(true)
+    btn.parentNode.replaceChild(newBtn, btn)
+    btn = newBtn
+
+    var items = Array.from(container.children)
+    var currentTag = ''
+    var currentQuery = ''
+    var matches = [] /* matching items from current filter */
+    var currentPage = 0
+    var pageSize = parseInt(
+      wrapper.getAttribute('data-load-more-page-size') || '6',
+      10,
+    )
+
+    function normalize(str) {
+      return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    }
+
+    function applyFilters() {
+      var query = normalize(currentQuery.toLowerCase())
+
+      matches = []
+      for (var i = 0; i < items.length; i++) {
+        var el = items[i]
+        var elTags = (el.getAttribute('data-tags') || '')
+          .split(',')
+          .filter(Boolean)
+        var elSearch = normalize(
+          (el.getAttribute('data-searchable') || '').toLowerCase(),
+        )
+
+        var tagPass = currentTag === '' || elTags.indexOf(currentTag) !== -1
+        var searchPass = query === '' || elSearch.indexOf(query) !== -1
+
+        if (tagPass && searchPass) {
+          matches.push(el)
+        }
+      }
+
+      showPage(1)
+    }
+
+    function showPage(page) {
+      currentPage = page
+      var limit = currentPage * pageSize
+      if (limit > matches.length) limit = matches.length
+
+      /* Hide all items first */
+      for (var i = 0; i < items.length; i++) {
+        items[i].setAttribute('data-blog-filter-hidden', '')
+        items[i].hidden = true
+      }
+
+      /* Show up to `limit` items from the matching set */
+      for (var i = 0; i < limit; i++) {
+        matches[i].removeAttribute('data-blog-filter-hidden')
+        matches[i].hidden = false
+      }
+
+      /* Hide button when all matches are visible */
+      btn.hidden = limit >= matches.length
+      btn.setAttribute(
+        'aria-label',
+        (btn.textContent || 'Load more').trim() +
+          ' — ' +
+          Math.max(0, matches.length - limit) +
+          ' more',
+      )
+    }
+
+    /* Override LoadMore button click */
+    btn.addEventListener('click', function () {
+      showPage(currentPage + 1)
+    })
+
+    if (nav) {
+      nav.addEventListener('pill-change', function (e) {
+        currentTag = e.detail.value || ''
+        applyFilters()
+      })
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('search-change', function (e) {
+        currentQuery = e.detail.query || ''
+        applyFilters()
+      })
+    }
+
+    /* Initial render — show first page of all items */
+    applyFilters()
+  })()
+</script>

@@ -1,0 +1,291 @@
+---
+/**
+ * BlogPostSlider
+ *
+ * Self-fetches blog posts and renders a horizontal scrolling slider.
+ * Matches Figma "Blog / 65 /" design.
+ *
+ * Props: class? (string) — spread onto root <section> for consumer overrides
+ * Slots: none
+ * Tokens: --spacing-section-pad-large, --spacing-component-gap,
+ *         --color-surface, --color-surface-text, --color-contrast-text,
+ *         --color-tag, --color-tag-text, --font-headline, --font-body,
+ *         --text-h5, --text-small, --text-regular, --text-tagline, --text-body,
+ *         --radius-medium, --radius-tag, --leading-h5, --tracking-heading,
+ *         --color-nav-bg (arrow bg), --color-nav-btn-fg (arrow icons + active dot fill)
+ * Hardcoded literals:
+ *   - Inactive dots use bg-(--color-muted) opacity-25 (theme-aware — always contrasts against any surface)
+ *   - scroll-snap / overflow-x — layout-specific, no token equivalent
+ *   - Card width 394px — from Figma spec — confirm
+ *   - Arrow buttons 48×48, gap-4 dots — layout-specific
+ *   - Arrow bg uses --color-nav-bg token (semantic, theme-aware)
+ *   - Arrow SVG paths — standard chevron icons
+ *   - flex-1 on content area — equalizes card height regardless of content length
+ *   - transform: scale(1.08) + transition: transform in <style> block — bypasses global !important transition-colors on *
+ *   - Client JS: dots navigate cards, arrows prev/next, active dot on scroll — no framework for interactivity
+ * Context variants: section uses --color-surface (theme-aware)
+ * Composed from: Container
+ */
+
+import Container from '@/layouts/Container.astro'
+import { fetchBlogPosts } from './blogpost.api'
+import type { BlogPostCardProps } from './blogpost.types'
+import Button from '@/components/ui/astro/Button.astro'
+
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+
+const posts: BlogPostCardProps[] = await fetchBlogPosts().catch((err) => {
+  console.error('Failed to fetch blog posts:', err)
+  return []
+})
+---
+
+<section class:list={[className]}>
+  <Container>
+    <div class="flex flex-col gap-row-gap">
+      <!-- ═══ Title row ═══ -->
+      <div
+        class="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end"
+      >
+        <div class="flex flex-col gap-4">
+          <p
+            class="font-body text-tagline font-bold tracking-widest text-muted"
+          >
+            Blog
+          </p>
+          <h2>Short heading goes here</h2>
+            <p class="max-w-2xl font-medium">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </p>
+        </div>
+
+        <Button variant="secondary" label="View all" href="/blog" class="self-start md:self-auto" />
+      </div>
+
+      <!-- ═══ Slider row ═══ -->
+      <div class="flex flex-col gap-10">
+        {posts.length > 0 ? (
+          <>
+            <!-- Cards -->
+            <div
+              id="blog-slider-track"
+              class="flex gap-6 overflow-x-auto px-2 pt-2 pb-4 snap-x snap-mandatory scrollbar-hide"
+              style="scrollbar-width: none; -ms-overflow-style: none; scroll-padding-left: 8px;"
+            >
+              {
+                posts.map((post, i) => (
+                  <a
+                    href={`/blog/${post.slug}`}
+                    data-index={i}
+                    class="blog-card group flex w-[85vw] shrink-0 flex-col snap-start sm:w-[380px] lg:w-[394px] text-page-text hover:underline-0!"
+                  >
+                    <!-- Image: 3:2 ratio, rounded top corners only -->
+                    <div class="aspect-[3/2] overflow-hidden rounded-t-radius-medium">
+                      {post.featuredImage ? (
+                        <img
+                          src={post.featuredImage.url}
+                          alt={post.featuredImage.alternativeText ?? ''}
+                          class="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div class="h-full w-full bg-surface-text/10" aria-hidden="true" />
+                      )}
+                    </div>
+
+                    <!-- Content area: heading → excerpt -->
+                    <div class="flex flex-1 flex-col pt-6">
+                      <h5>
+                        {post.title}
+                      </h5>
+
+                      <p class="mt-card-gap-base line-clamp-2">
+                        {post.excerpt}
+                      </p>
+                    </div>
+
+                    <!-- Author row: avatar + name (top) + date·read (bottom) -->
+                    {post.author ? (
+                      <div class="mt-card-gap-loose flex items-center gap-4">
+                        {post.author.avatar ? (
+                          <img
+                            src={post.author.avatar}
+                            alt={post.author.name}
+                            class="h-12 w-12 rounded-full object-cover"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div
+                            class="h-12 w-12 rounded-full bg-surface-text/10"
+                            aria-hidden="true"
+                          />
+                        )}
+
+                        <div class="flex flex-col gap-0.5">
+                          <span class="font-semibold">
+                            {post.author.name}
+                          </span>
+                          <div
+                            class="flex items-center gap-2 text-small text-muted"
+                          >
+                            <time datetime={post.publishedAt}>{post.publishedAt}</time>
+                            <span aria-hidden="true">·</span>
+                            <span>{post.readTime}</span>
+                          </div>
+                        </div>
+                      </div>
+        ) : null}
+                  </a>
+                ))
+              }
+            </div>
+
+            <!-- Controls: dots + arrows -->
+            <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+              <!-- Dot breadcrumbs — 6 dots, Figma spec -->
+              <div class="flex gap-4">
+                {
+                  posts.map((_, i) => (
+                    <button
+                      type="button"
+                      data-index={i}
+                        class="blog-slider-dot h-2 w-2 rounded-full bg-dot-inactive hover:bg-nav-btn-fg focus-visible:bg-nav-btn-fg"
+                      aria-label={`Go to post ${i + 1}`}
+                    />
+                  ))
+                }
+              </div>
+
+              <!-- Arrow buttons — nav variant (48×48, token-driven bg/icon/hover) -->
+              <div class="flex gap-2">
+                <Button
+                  id="blog-slider-prev"
+                  variant="nav"
+                  size="md"
+                  iconPosition="only"
+                  label="Previous posts"
+                  icon='<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>'
+                />
+                <Button
+                  id="blog-slider-next"
+                  variant="nav"
+                  size="md"
+                  iconPosition="only"
+                  label="Next posts"
+                  icon='<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>'
+                />
+              </div>
+            </div>
+          </>
+        ) : (
+          <p class="text-center text-muted py-16">No blog posts published yet.</p>
+        )}
+      </div>
+    </div>
+  </Container>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const track = document.getElementById('blog-slider-track')
+    if (!track || !track.children.length) return
+
+    const cards = Array.from(track.querySelectorAll('.blog-card'))
+    const dots = Array.from(document.querySelectorAll('.blog-slider-dot'))
+    const prevBtn = document.getElementById('blog-slider-prev')
+    const nextBtn = document.getElementById('blog-slider-next')
+
+    const gap = 24 // gap-6 = 24px
+
+    function getCardWidth() {
+      return cards[0]?.offsetWidth ?? 0
+    }
+
+    function getCurrentIndex() {
+      const w = getCardWidth() + gap
+      if (w <= 0) return 0
+      return Math.round(track.scrollLeft / w)
+    }
+
+    function scrollToIndex(index) {
+      const w = getCardWidth() + gap
+      if (w <= 0) return
+      track.scrollTo({ left: index * w, behavior: 'smooth' })
+    }
+
+    function updateUI() {
+      const i = getCurrentIndex()
+      dots.forEach((dot, idx) => {
+        const isActive = idx === i
+        dot.disabled = isActive
+      })
+      if (prevBtn) prevBtn.disabled = i <= 0
+      if (nextBtn) nextBtn.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 1
+    }
+
+    // Dot clicks
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt(dot.getAttribute('data-index') ?? '0', 10)
+        scrollToIndex(idx)
+      })
+    })
+
+    // Arrow clicks
+    prevBtn?.addEventListener('click', () => scrollToIndex(getCurrentIndex() - 1))
+    nextBtn?.addEventListener('click', () => scrollToIndex(getCurrentIndex() + 1))
+
+    // Update active dot on scroll (throttled via requestAnimationFrame)
+    let ticking = false
+    track.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateUI()
+          ticking = false
+        })
+        ticking = true
+      }
+    })
+
+    // Initial state
+    updateUI()
+
+    // Recalculate on resize
+    let resizeTimer
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer)
+      resizeTimer = setTimeout(updateUI, 100)
+    })
+  })
+</script>
+
+<style is:global>
+  .blog-slider-dot:disabled {
+    cursor: default;
+    background-color: var(--color-nav-btn-fg);
+  }
+
+
+</style>
+
+<style is:global>
+  /* Override global @layer base .dark * !important transition-colors.
+     Must be in @layer base AND higher specificity than .dark * (0,2,0).
+     .blog-card .blog-post-slider-image = (0,2,0) — ties .dark * in specificity,
+     declared later in same layer → wins. */
+  @layer base {
+    .blog-card img {
+      transition: transform 400ms cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+      transform: scale(1);
+    }
+
+    .blog-card:hover img,
+    .blog-card:focus-visible img {
+      transform: scale(1.08);
+    }
+  }
+</style>
