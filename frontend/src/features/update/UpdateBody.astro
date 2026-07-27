@@ -1,0 +1,47 @@
+---
+/**
+ * UpdateBody
+ *
+ * Update-specific rich text body wrapper. Passes spacing classes to
+ * BlocksRenderer — per-element margins match Figma "Update • Desktop"
+ * rich text spacing.
+ *
+ * If per-content-type styling differences emerge vs BlogPost body,
+ * scoped classes here isolate Update typography.
+ *
+ * Props:
+ *   body: Block[] — Strapi rich text blocks
+ * Slots: none
+ * Tokens: none
+ * Hardcoded literals:
+ *   - Tailwind arbitrary selector classes for per-element margins
+ *     (no token equivalents for spacing per block type)
+ * Context variants: not needed
+ * Composed from: BlocksRenderer
+ */
+import BlocksRenderer from '@/components/BlocksRenderer.astro'
+import type { Block } from '@shared/strapi'
+
+export interface Props {
+  body: Block[]
+}
+
+const { body } = Astro.props
+---
+
+<!--
+  Global CSS styles h1-h6 (Lora Bold, fluid sizes, line-heights, tracking).
+  Body text inherits from body (Inter, text-body).
+  Per-element spacing:
+    paragraph     → 16px bottom
+    heading h2-h4 → 24px top (:not(:first-child)), 20px bottom
+    heading h5-h6 → 20px top (:not(:first-child)), 16px bottom
+    image/figure  → 24-48px fluid vertical
+    blockquote    → 20-36px fluid vertical
+    pre/code      → 20-36px fluid vertical
+    ul/ol         → 16px bottom
+-->
+<BlocksRenderer
+  blocks={body}
+  class="[&>blockquote]:my-[clamp(1.25rem,0.917rem+1.667vw,2.25rem)] [&>h2]:mb-5 [&>h2:not(:first-child)]:mt-6 [&>h3]:mb-5 [&>h3:not(:first-child)]:mt-6 [&>h4]:mb-5 [&>h4:not(:first-child)]:mt-6 [&>h5]:mb-4 [&>h5:not(:first-child)]:mt-5 [&>h6]:mb-4 [&>h6:not(:first-child)]:mt-5 [&>img]:my-[clamp(1.5rem,1rem+2.5vw,3rem)] [&>ol]:mb-4 [&>p]:mb-4 [&>pre]:my-[clamp(1.25rem,0.917rem+1.667vw,2.25rem)] [&>ul]:mb-4"
+/>

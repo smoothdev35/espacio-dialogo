@@ -1,0 +1,31 @@
+---
+/**
+ * BlocksRenderer
+ *
+ * Generic Strapi blocks → HTML renderer. Thin Astro wrapper over
+ * renderBlocks() from blocks-renderer. Applies consumer class for
+ * spacing/typography via the container page or section.
+ *
+ * Props:
+ *   blocks: Block[] — Strapi rich text blocks array
+ *   class?: string — spread onto root <article>, used by consumer
+ *     (e.g. UpdateBody) to apply per-element spacing
+ * Slots: none
+ * Tokens: none
+ * Hardcoded literals: none
+ * Context variants: not needed
+ * Composed from: renderBlocks (blocks-renderer.ts)
+ */
+import { renderBlocks } from '@/lib/blocks-renderer'
+import type { Block } from '@shared/strapi'
+
+export interface Props {
+  blocks: Block[]
+  class?: string
+}
+
+const { blocks, class: className } = Astro.props
+const html = renderBlocks(blocks)
+---
+
+<article set:html={html} class:list={[className]} />

@@ -48,12 +48,12 @@ const breadcrumbTitle = update.title.split(/\s+/).slice(0, 2).join(' ')
     <div class="flex flex-col">
       <!-- Breadcrumb -->
       <nav class="mb-5" aria-label="Breadcrumb">
-        <ol class="flex items-center gap-2 text-sm text-muted">
-          <li><a href="/" class="text-sm">Home</a></li>
+        <ol class="flex flex-wrap items-center gap-2 text-base text-muted">
+          <li><a href="/" class="text-base">Home</a></li>
           <li aria-hidden="true">/</li>
-          <li><a href="/#updates" class="text-sm">Updates</a></li>
+          <li><a href="/#updates" class="text-base">Updates</a></li>
           <li aria-hidden="true">/</li>
-          <li aria-current="page" class="font-medium text-page-text text-sm" title={update.title}>{breadcrumbTitle}</li>
+          <li aria-current="page" class="font-medium text-page-text text-base" title={update.title}>{breadcrumbTitle}</li>
         </ol>
       </nav>
 

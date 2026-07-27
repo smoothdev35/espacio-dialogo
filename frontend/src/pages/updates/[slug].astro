@@ -5,15 +5,21 @@
  * Dynamic route: /updates/[slug]
  * Props: none — reads slug from Astro.params
  * Slots: none
- * Tokens: --color-page, --color-page-text, --color-muted, --spacing-section-pad (via global section rule)
- * Hardcoded literals: none
+ * Tokens: --color-page, --color-page-text, --color-muted, --spacing-section-pad-lg (article padding)
+ * Hardcoded literals:
+ *   - mt-[calc(var(--spacing-section-pad-lg)*1.5)] — 1.5× section-pad-lg between header and body
+ *   - max-w-(--container-small) — 768px reading width via token
  * Context variants: not needed
- * Composed from: BaseLayout, Container, UpdateHeader
+ * Composed from: BaseLayout, Container, UpdateHeader, UpdateBody
+ *
+ * Semantic structure: <article> = self-contained composition, <header> = post metadata.
+ * Single py-section-pad-lg on article instead of two stacked sections.
  */
 
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import Container from '@/layouts/Container.astro'
 import UpdateHeader from '@/features/update/UpdateHeader.astro'
+import UpdateBody from '@/features/update/UpdateBody.astro'
 import { fetchUpdateBySlug, fetchUpdateSlugs } from '@/features/update/update.api'
 
 export async function getStaticPaths() {
@@ -39,9 +45,16 @@ const title = `${update.title} — EDD`
 ---
 
 <BaseLayout title={title}>
-  <section>
+  <article class="py-section-pad-lg">
     <Container>
-      <UpdateHeader update={update} />
+      <header>
+        <UpdateHeader update={update} />
+      </header>
+
+      <!-- Internal gap: 1.5× section-pad-lg between header bottom and body content -->
+      <div class="mx-auto mt-[calc(var(--spacing-section-pad-lg)*1.5)] max-w-(--container-small)">
+        <UpdateBody body={update.body} />
+      </div>
     </Container>
-  </section>
+  </article>
 </BaseLayout>
