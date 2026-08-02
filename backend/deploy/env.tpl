@@ -1,6 +1,6 @@
-# Strapi — Espacio Diálogo
+# Strapi — Espacio Dialogo
 # Copy to .env and fill in real values:
-#   cp .env.tpl .env && chmod 600 .env && nano .env
+#   cp env.tpl .env && chmod 600 .env && nano .env
 
 HOST=0.0.0.0
 PORT=1337
@@ -21,8 +21,12 @@ DATABASE_NAME=strapi
 DATABASE_USERNAME=strapi
 DATABASE_PASSWORD=CHANGEME_DB_PASSWORD
 
-# Media — local for now (backup /opt/strapi/public/uploads/)
+# Media — local for now (backup /opt/strapi/backend/public/uploads/)
 PUBLIC_STRAPI_URL=https://api.espaciodialogo.com
 
 # Seed (one-time, disable after bootstrap)
 SEED_ON_BOOT=false
+
+# Netlify build hook — triggers frontend SSG rebuild on content publish
+# Get this URL from Netlify: Site settings > Build & deploy > Build hooks
+NETLIFY_BUILD_HOOK=

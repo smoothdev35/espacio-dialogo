@@ -8,6 +8,7 @@ export default factories.createCoreController('api::update.update', ({ strapi })
         featuredImage: { populate: '*' },
         author: { populate: { avatar: { populate: '*' } } },
         category: { populate: '*' },
+        tags: { populate: '*' },
       },
     }
 

@@ -28,13 +28,14 @@ jobs:
             git pull origin main
 
             echo "[deploy] Installing production dependencies"
+            cd backend
             pnpm install --prod
 
             echo "[deploy] Building admin panel"
             pnpm run build
 
             echo "[deploy] Updating systemd service"
-            cp deploy/strapi.service /etc/systemd/system/strapi.service
+            cp /opt/strapi/backend/deploy/strapi.service /etc/systemd/system/strapi.service
             systemctl daemon-reload
 
             echo "[deploy] Restarting Strapi"

@@ -7,12 +7,15 @@ set -euo pipefail
 #
 # Usage:
 #   scp deploy/* root@<droplet-ip>:~
-#   ssh root@<droplet-ip> ./bootstrap.sh
+#   ssh root@<droplet-ip> \
+#     REPO=https://github.com/org/repo.git \
+#     bash /root/bootstrap.sh
 # ============================================================
 
 STACK_USER="${STACK_USER:-strapi}"
 APP_DIR="/opt/${STACK_USER}"
 DOMAIN="${DOMAIN:-api.espaciodialogo.com}"
+REPO="${REPO:-}"
 
 echo "==> Updating system packages"
 apt-get update && apt-get upgrade -y
@@ -49,8 +52,19 @@ mkdir -p "${APP_DIR}"
 chown "${STACK_USER}:${STACK_USER}" "${APP_DIR}"
 
 echo "==> Creating uploads directory"
-mkdir -p "${APP_DIR}/public/uploads"
-chown -R "${STACK_USER}:${STACK_USER}" "${APP_DIR}/public"
+mkdir -p "${APP_DIR}/backend/public/uploads"
+chown -R "${STACK_USER}:${STACK_USER}" "${APP_DIR}/backend/public"
+
+if [ -n "${REPO}" ]; then
+    echo "==> Cloning repository (sparse — backend + types only)"
+    sudo -u "${STACK_USER}" git clone --filter=blob:none --sparse "${REPO}" "${APP_DIR}"
+    cd "${APP_DIR}"
+    sudo -u "${STACK_USER}" git sparse-checkout set backend types
+    echo "==> Repository cloned. Skipping build — .env required first."
+else
+    echo "==> Skipping repo clone (REPO not set). Clone manually:"
+    echo "    ssh ${STACK_USER}@<host> 'cd ${APP_DIR} && git clone --filter=blob:none --sparse <repo> . && git sparse-checkout set backend types'"
+fi
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
@@ -72,17 +86,19 @@ echo "============================================================"
 echo "  Bootstrap complete!"
 echo ""
 echo "  Next steps:"
-echo "    1. scp your .env file to ${APP_DIR}/.env"
-echo "       chmod 600 ${APP_DIR}/.env"
-echo "       chown ${STACK_USER}:${STACK_USER} ${APP_DIR}/.env"
+echo "    1. Create .env from deploy/env.tpl"
+echo "       scp backend/deploy/env.tpl root@<host>:${APP_DIR}/backend/.env"
+echo "       ssh root@<host> 'chmod 600 ${APP_DIR}/backend/.env && chown ${STACK_USER}:${STACK_USER} ${APP_DIR}/backend/.env'"
+echo "       ssh root@<host> 'nano ${APP_DIR}/backend/.env'  # fill secrets"
 echo ""
-echo "    2. Deploy the app:"
-echo "       git clone <repo> ${APP_DIR}/tmp && mv ${APP_DIR}/tmp/backend/* ${APP_DIR}"
-echo "       cd ${APP_DIR} && pnpm install && pnpm build"
+echo "    2. Build and start:"
+echo "       ssh root@<host> 'cd ${APP_DIR}/backend && pnpm install --prod && pnpm run build'"
+echo "       ssh root@<host> 'systemctl enable --now strapi'"
 echo ""
-echo "    3. Start Strapi:"
-echo "       systemctl enable --now strapi"
-echo "       journalctl -u strapi -f"
+echo "    3. Watch logs:"
+echo "       ssh root@<host> 'journalctl -u strapi -f'"
 echo ""
-echo "    4. Set SEED_ON_BOOT=true, restart once to seed, then set back to false"
+echo "    4. Set SEED_ON_BOOT=true, restart once to seed, set back to false"
+echo ""
+echo "    5. Add GitHub secrets: DEPLOY_HOST, DEPLOY_USER, DEPLOY_SSH_KEY"
 echo "============================================================"

@@ -1,4 +1,4 @@
-# deploy/Makefile — Deploy automation for Espacio Diálogo Strapi backend
+# deploy/Makefile — Deploy automation for Espacio Dialogo Strapi backend
 #
 # Usage:
 #   make setup        — first-time: copy files to droplet, run bootstrap
@@ -9,7 +9,10 @@
 #   make backup       — snapshot uploads + db
 
 HOST ?= root@api.espaciodialogo.com
-APP_DIR ?= /opt/strapi
+REPO_DIR ?= /opt/strapi
+APP_DIR ?= $(REPO_DIR)/backend
+DOMAIN ?= api.espaciodialogo.com
+REPO ?=
 SSH ?= ssh -o StrictHostKeyChecking=accept-new
 
 .PHONY: setup deploy logs status rollback backup
@@ -18,18 +21,20 @@ setup:
 	@echo "==> Copying deploy files to droplet (root home)"
 	scp deploy/* $(HOST):~/
 	@echo "==> Running bootstrap (first-time only)"
-	$(SSH) $(HOST) 'bash /root/bootstrap.sh'
-	@echo "==> Copy .env manually:  scp .env $(HOST):$(APP_DIR)/.env"
+	$(SSH) $(HOST) 'REPO=$(REPO) DOMAIN=$(DOMAIN) bash /root/bootstrap.sh'
+	@echo "==> Copy .env manually:  scp ../.env $(HOST):$(APP_DIR)/.env"
 
 deploy:
 	@echo "==> Pulling latest code"
-	$(SSH) $(HOST) 'cd $(APP_DIR) && git pull origin main'
+	$(SSH) $(HOST) 'cd $(REPO_DIR) && git pull origin main'
 	@echo "==> Installing dependencies"
 	$(SSH) $(HOST) 'cd $(APP_DIR) && pnpm install --prod'
 	@echo "==> Building admin panel"
 	$(SSH) $(HOST) 'cd $(APP_DIR) && pnpm run build'
+	@echo "==> Updating systemd service"
+	$(SSH) $(HOST) 'cp $(REPO_DIR)/backend/deploy/strapi.service /etc/systemd/system/strapi.service && systemctl daemon-reload'
 	@echo "==> Restarting Strapi"
-	$(SSH) $(HOST) 'systemctl daemon-reload && systemctl restart strapi'
+	$(SSH) $(HOST) 'systemctl restart strapi'
 	@echo "==> Healthcheck"
 	sleep 5
 	curl -sSfI https://$(subst root@,,$(HOST))/admin 2>/dev/null && echo "OK" || echo "WARN: healthcheck failed"
@@ -43,9 +48,9 @@ status:
 # Emergency escape hatch — resets VPS to old commit.
 # For CD workflow, prefer: git revert <sha> on repo → Actions deploys automatically.
 rollback:
-	$(SSH) $(HOST) 'cd $(APP_DIR) && git log --oneline -5'
+	$(SSH) $(HOST) 'cd $(REPO_DIR) && git log --oneline -5'
 	@read -p "Enter commit SHA to revert to: " sha; \
-	$(SSH) $(HOST) 'cd $(APP_DIR) && git reset --hard $$sha && pnpm install --prod && pnpm run build && systemctl restart strapi'
+	$(SSH) $(HOST) 'cd $(REPO_DIR) && git reset --hard $$sha && cd $(APP_DIR) && pnpm install --prod && pnpm run build && systemctl restart strapi'
 
 backup:
 	@echo "==> Dumping database"
