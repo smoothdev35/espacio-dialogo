@@ -1,38 +1,14 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import HomeLayout from '@/features/home/HomeLayout.astro'
-import { fetchUpdates } from '@/features/update/update.api'
-import { getHero } from '@/features/home/hero.api'
 
 export interface Props {
   title?: string
 }
 
 const { title = 'Home — EDD' } = Astro.props
-
-// Fetch hero data with error fallback
-const heroData = await getHero().catch((err) => {
-  console.error('Failed to fetch hero:', err)
-  return null
-})
-
-// Fetch updates with error fallback
-const updateData = await fetchUpdates().catch((err) => {
-  console.error('Failed to fetch updates:', err)
-  return {
-    featured: null,
-    grid: [],
-    slider: [],
-    categories: [],
-  }
-})
 ---
 
 <BaseLayout title={title}>
-  <HomeLayout
-    hero={heroData}
-    featured={updateData.featured}
-    gridArticles={updateData.grid}
-    categories={updateData.categories}
-  />
+  <HomeLayout />
 </BaseLayout>

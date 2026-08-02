@@ -3,10 +3,11 @@ import type { Update } from '@shared/strapi'
 import {
   toUpdateCardProps,
 } from './update.mapper'
+import type { TimelineEntry } from './timeline.types'
 import type { UpdateCardProps, UpdateDetailProps } from './update.types'
 import { resolveMediaUrl } from '@/lib/media'
 import { calculateReadTime } from '@/lib/read-time'
-import { formatDate } from '@/lib/date'
+import { formatDate, formatMonthYear } from '@/lib/date'
 
 export interface FetchUpdatesResult {
   featured: FeaturedUpdateResult | null
@@ -85,11 +86,14 @@ export async function fetchUpdateBySlug(
   const update = response.data[0]
   if (!update) return null
 
+  const rawDate = update.publishedAt ?? update.createdAt
+
   return {
     title: update.title,
     slug: update.slug,
     excerpt: update.excerpt,
-    publishedAt: formatDate(update.publishedAt ?? update.createdAt),
+    publishedAt: formatDate(rawDate),
+    dateIso: rawDate,
     readTime: calculateReadTime(update.body),
     featuredImage: update.featuredImage
       ? {
@@ -116,4 +120,26 @@ export async function fetchUpdateBySlug(
       : null,
     body: update.body,
   }
+}
+
+/**
+ * Fetch all updates mapped to timeline entries (month, year, title, slug).
+ * Used by TimelineSection to render the horizontal scroll timeline.
+ */
+export async function fetchTimelineEntries(): Promise<TimelineEntry[]> {
+  const response = await getUpdates({
+    fields: ['title', 'slug', 'publishedAt', 'createdAt'],
+    sort: 'publishedAt:desc',
+    pagination: { pageSize: 200 },
+  })
+
+  return response.data.map((update: Update) => {
+    const { month, year } = formatMonthYear(update.publishedAt ?? update.createdAt)
+    return {
+      month,
+      year,
+      title: update.title,
+      slug: update.slug,
+    }
+  })
 }

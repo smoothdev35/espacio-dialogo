@@ -5,6 +5,8 @@ export interface UpdateCardProps {
   slug: string
   excerpt: string
   publishedAt: string
+  /** Raw ISO date for `<time datetime>` — machine-readable */
+  dateIso: string
   readTime: string
   featuredImage: { url: string; alternativeText: string | null } | null
   category: { name: string; slug: string } | null
@@ -23,6 +25,8 @@ export interface UpdateDetailProps {
   slug: string
   excerpt: string
   publishedAt: string
+  /** Raw ISO date for `<time datetime>` — machine-readable */
+  dateIso: string
   readTime: string
   featuredImage: { url: string; alternativeText: string | null } | null
   category: { name: string; slug: string } | null

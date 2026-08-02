@@ -2,53 +2,40 @@
 /**
  * HomeLayout
  *
- * Props: hero (HeroResult | null) — hero section content from Strapi
- *        featured (FeaturedUpdateResult | null) — featured update for blog section
- *        gridArticles (UpdateCardProps[]) — grid updates for blog section
- *        categories ({ name: string; slug: string }[]) — filter categories
- *        class? (string) — spread onto root <div> for consumer overrides
+ * Thin shell — all child sections self-fetch their data.
+ *
+ * Props: class? (string) — spread onto root <div> for consumer overrides
  * Slots: none
  * Tokens: none directly — delegates to child components
  * Hardcoded literals: none
  * Context variants: not needed
- * Composed from: Hero, Updates
+ * Composed from: Hero, Updates, BlogPostSlider, CTA
  */
 
 import Hero from './Hero.astro'
 import Updates from './Updates.astro'
-import type { UpdateCardProps } from '@/features/update/update.types'
-import type { FeaturedUpdateResult } from '@/features/update/update.api'
-import type { HeroResult } from './hero.api'
+import BlogPostSlider from '@/features/blogpost/BlogPostSlider.astro'
+import CTA from './CTA.astro'
 
 interface Props {
-  hero: HeroResult | null
-  featured: FeaturedUpdateResult | null
-  gridArticles: UpdateCardProps[]
-  categories: { name: string; slug: string }[]
   class?: string
 }
 
-const { hero, featured, gridArticles, categories, class: className } = Astro.props
+const { class: className } = Astro.props
 ---
 
 <div class:list={[className]}>
-  <!-- Hero renders fallback content when Strapi data is unavailable -->
-  <Hero
-    title={hero?.title}
-    subtitle={hero?.subtitle}
-    heroImage={hero?.heroImage ?? undefined}
-  />
+  <!-- Hero self-fetches its data -->
+  <Hero />
 
-  <!-- Updates section -->
-  <Updates
-    featured={featured}
-    gridArticles={gridArticles}
-    categories={categories}
-  />
+  <!-- Updates self-fetches its data -->
+  <Updates />
 
-  <!-- Placeholder: Blog / 65 / slider will go here -->
+  <!-- CTA self-contained section with Donate / Contact buttons -->
+  <CTA />
 
-  <!-- Placeholder: CTA section will go here -->
+  <!-- Blog posts slider self-fetches its data -->
+  <BlogPostSlider />
 
   <!-- Placeholder: Footer will go here -->
 </div>

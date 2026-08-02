@@ -8,18 +8,20 @@
  *
  * Props: class? (string) — spread onto root <section> for consumer overrides
  * Slots: none
- * Tokens: --spacing-section-pad, --spacing-component-gap, --spacing-row-gap, --font-headline, --font-body
+ * Tokens: --spacing-f10, --spacing-f4, --spacing-row-gap, --font-headline, --font-body
  * Hardcoded literals: none — page bg shows through via body
  * Context variants: not needed
  * Composed from: Container, FilterPills, FeaturedUpdateCard, UpdateGrid, UpdatePagination
  */
 
 import Container from '@/layouts/Container.astro'
+import SectionHeader from '@/components/ui/astro/SectionHeader.astro'
 import FeaturedUpdateCard from '@/features/update/FeaturedUpdateCard.astro'
 import UpdateGrid from '@/features/update/UpdateGrid.astro'
 import FilterPills from '@/components/ui/astro/FilterPills.astro'
 import UpdatePagination from '@/features/update/UpdatePagination.astro'
 import { fetchUpdates } from '@/features/update/update.api'
+import { UPDATES } from '@/lib/content'
 
 interface Props {
   class?: string
@@ -40,36 +42,30 @@ const categories = updateData.categories
 {/* Section bg is transparent — page background shows through via body */}
 <section id="updates" class:list={[className]}>
   <Container>
-    <div class="flex flex-col gap-component-gap">
+          <div class="flex flex-col gap-f9">
       <!-- Tagline + heading + description — always visible -->
-      <div class="flex flex-col">
-        <p class="text-tagline font-bold uppercase tracking-widest text-muted mb-4">
-          Updates
-        </p>
-        <h1 class="mb-6">
-          What's happening now
-        </h1>
-        <p class="max-w-2xl font-medium">
-          The latest developments in Nicaragua's ongoing transition.
-        </p>
-      </div>
+      <SectionHeader
+        tagline={UPDATES.tagline}
+        heading={UPDATES.heading}
+        description={UPDATES.description}
+        level="h1"
+      />
 
       {featured || gridArticles.length > 0 || categories.length > 0 ? (
-        <div class="flex flex-col gap-component-gap">
+        <div class="flex flex-col gap-f8">
           <!-- Filters — only when categories exist -->
-          <!-- one-off: push filters 8px below heading gap -->
           {categories.length > 0 && (
             <FilterPills
               name="update-category"
               options={categories.map((c) => ({ label: c.name, value: c.slug }))}
-              allLabel="All updates"
-              ariaLabel="Update category filters"
-              class="mt-2"
+              allLabel={UPDATES.filterAllLabel}
+              ariaLabel={UPDATES.filterAriaLabel}
+              class="-mt-1.5"
             />
           )}
 
           <!-- Listing block: featured + pagination + grid -->
-          <div class="flex flex-col gap-component-gap">
+    <div class="flex flex-col gap-f8">
             <!-- Featured update card — always visible when data exists -->
             {
               featured ? (
@@ -77,7 +73,7 @@ const categories = updateData.categories
                   <FeaturedUpdateCard {...featured} />
                 </div>
               ) : (
-                <p class="text-small text-muted">No featured update available.</p>
+                <p class="text-small text-muted">{UPDATES.noFeatured}</p>
               )
             }
 
@@ -88,13 +84,13 @@ const categories = updateData.categories
             <UpdateGrid articles={gridArticles} />
 
             <!-- Empty state — shown when filter + pagination yield no grid items -->
-            <p data-update-empty hidden class="col-span-full text-center text-muted py-12">
-              No updates in this category
+            <p data-update-empty hidden class="col-span-full text-page-text text-center py-16 text-h6">
+              {UPDATES.noCategoryMatch}
             </p>
           </div>
         </div>
       ) : (
-        <p class="text-center text-muted py-16">No updates published yet.</p>
+        <p class="text-page-text text-center py-16 text-h6">{UPDATES.noUpdates}</p>
       )}
 
     </div>

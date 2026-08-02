@@ -2,27 +2,26 @@
 /**
  * FilterPills
  *
- * Shared pill-style filter navigation with optional search input.
+ * Shared pill-style filter navigation. Horizontal scroll with hidden scrollbar.
  * No domain-specific data attributes — consumers query by name or listen for custom events.
  *
  * Events (on the root nav element):
- *   'pill-change'   → { value: string, label: string } — fired when a pill is clicked
- *   'search-change' → { query: string }                 — fired when search input changes (debounced 300ms)
+ *   'pill-change' → { value: string, label: string } — fired when a pill is clicked
  *
  * Props:
  *   name              string                — unique id for this filter group (e.g. "update-category", "blog-tag")
  *   options           { label: string; value: string }[]  — filter pill options
  *   ariaLabel         string                — accessibility label for the <nav>
  *   allLabel?         string                — label for the "All" pill (default "All")
- *   showSearch?       boolean               — show search input (default false)
- *   searchPlaceholder? string               — search input placeholder (default "Search...")
  *   class?            string                — spread onto root <nav> for consumer overrides
  * Slots: none
- * Tokens: --color-nav-bg, --color-nav-btn-fg, --color-muted, --color-input, --color-input-text, --color-input-border, --color-input-focus-border
+ * Tokens: --color-filter-bg, --color-filter-fg, --color-muted
  * Hardcoded literals: none
  * Context variants: not needed
  * Composed from: none
  */
+
+import { FILTER } from '@/lib/content'
 
 interface FilterPill {
   label: string
@@ -34,8 +33,6 @@ interface Props {
   options: FilterPill[]
   ariaLabel: string
   allLabel?: string
-  showSearch?: boolean
-  searchPlaceholder?: string
   class?: string
 }
 
@@ -43,9 +40,7 @@ const {
   name,
   options,
   ariaLabel,
-  allLabel = 'All',
-  showSearch = false,
-  searchPlaceholder = 'Search...',
+  allLabel = FILTER.allLabel,
   class: className,
 } = Astro.props
 ---
@@ -53,59 +48,49 @@ const {
 <nav
   aria-label={ariaLabel}
   data-filter-pills={name}
-  class:list={[className]}
+  class:list={['-mx-2 flex min-w-0 items-center', className]}
 >
-  <ul class="flex flex-wrap gap-2 items-center">
-    <li>
+  <ul
+    class="scrollbar-hide m-0 flex list-none items-center gap-2 overflow-x-auto px-2 py-1.5 lg:flex-wrap"
+  >
+    <li class="m-0 p-0">
       <button
         type="button"
         data-pill=""
         aria-current="true"
-        class="text-muted px-4 py-2.5"
+        class="text-muted whitespace-nowrap px-4 py-2.5 text-sm md:text-base"
       >
         {allLabel}
       </button>
     </li>
     {
       options.map((opt) => (
-        <li>
+        <li class="m-0 p-0">
           <button
             type="button"
             data-pill={opt.value}
-            class="text-muted px-4 py-2.5"
+            class="text-muted whitespace-nowrap px-4 py-2.5 text-sm md:text-base"
           >
             {opt.label}
           </button>
         </li>
       ))
     }
-    {
-      showSearch && (
-        <li class="ml-auto">
-          <input
-            type="search"
-            data-pill-search
-            placeholder={searchPlaceholder}
-            class="px-4 py-2.5 bg-(--color-input) text-(--color-input-text) border border-(--color-input-border) rounded-md placeholder:text-(--color-input-placeholder)"
-          />
-        </li>
-      )
-    }
   </ul>
 </nav>
 
 <style>
-  /* Active pill — nav-bg + nav-btn-fg tokens */
+  /* Active pill — filter-bg + filter-fg tokens */
   [data-pill][aria-current='true'] {
-    background-color: var(--color-nav-bg);
-    color: var(--color-nav-btn-fg);
+    background-color: var(--color-filter-bg);
+    color: var(--color-filter-fg);
   }
 
   /* Inactive pill — hover/focus-visible preview same as active */
   [data-pill]:not([aria-current='true']):hover,
   [data-pill]:not([aria-current='true']):focus-visible {
-    background-color: var(--color-nav-bg);
-    color: var(--color-nav-btn-fg);
+    background-color: var(--color-filter-bg);
+    color: var(--color-filter-fg);
   }
 </style>
 
@@ -135,26 +120,13 @@ const {
           }
         }
 
-        nav.dispatchEvent(new CustomEvent('pill-change', {
-          detail: { value: value, label: label },
-          bubbles: true,
-        }))
+        nav.dispatchEvent(
+          new CustomEvent('pill-change', {
+            detail: { value: value, label: label },
+            bubbles: true,
+          }),
+        )
       })
-
-      // ── Search input: debounced dispatch ──
-      var searchInput = nav.querySelector('[data-pill-search]')
-      if (searchInput) {
-        var debounceTimer = null
-        searchInput.addEventListener('input', function () {
-          if (debounceTimer) clearTimeout(debounceTimer)
-          debounceTimer = setTimeout(function () {
-            nav.dispatchEvent(new CustomEvent('search-change', {
-              detail: { query: searchInput.value },
-              bubbles: true,
-            }))
-          }, 300)
-        })
-      }
     })
   })()
 </script>
