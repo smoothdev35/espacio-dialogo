@@ -52,6 +52,7 @@
 | **Epic1-chore-03** | `[chore]` | Rename Article → Update (schema, routes, UIDs, TS types, seed refs). Create BlogPost content type — schema, controller, services, routes, bootstrap permissions, TS types.                                                                     | P0  | M    | `[MERGED]` | None                         |
 | **Epic1-chore-04** | `[chore]` | Seed BlogPost bootstrap data — 3 sample blog posts in Spanish, reusing existing authors/tags, picsum images. Idempotent.                                                                                                       | P0  | S    | `[MERGED]` | 🔗 Related to Epic1-chore-03 |
 | **Epic1-chore-05** | `[chore]` | Seed Hero single type with default title/subtitle/image. Idempotent via findOne guard. Updated seed EXPECTED_COUNTS.                                                                                                            | P0  | S    | `[MERGED]` | 🔗 Related to US-01          |
+| **Epic1-chore-06** | `[chore]` | Create Press content type (Strapi collectionType) — schema: title, slug (uid), excerpt, source, externalUrl, media (images+videos), videoPoster (optional image for video thumbnails). Controller with media/videoPoster populate, routes with public find/findOne, services. Shared TypeScript type `Press` in types/strapi.ts. Seed 4 press items with placeholder images. | P1  | M    | `[DRAFT]` | 🔗 Related to US-07-feat-03 |
 
 #### US-01: Hero Section Content Type
 
@@ -85,12 +86,11 @@
 | **Epic2-chore-06** | `[chore]` | Accessibility QA — keyboard navigation, screen reader, contrast ratios, focus management                                                                                                     | P2  | S    | `[DRAFT]`  | None                                                        |
 | **Epic2-chore-07** | `[chore]` | Shared FilterPills component — reusable pill-style filter nav + search input. Takes filter options. Emits pill-change / search-change events. Used by homepage (categories) and blog listing (tags). | P1  | M    | `[MERGED]` | 🔗 Related to US-10                                         |
 | **Epic2-chore-08** | `[chore]` | Shared LoadMoreButton component — append-on-click button with scroll context preservation. Generic: accepts item count + load callback.                                                      | P1  | S    | `[MERGED]` | 🔗 Related to US-07                                         |
-| **Epic2-chore-10** | `[chore]` | Shared TableOfContents sidebar component — auto-generates from h2/h3 headings, sticky positioning, scroll-spy active state, smooth scroll to sections.                                       | P1  | M    | `[DRAFT]`  | 🔗 Related to US-08                                         |
 | **Epic2-chore-13** | `[chore]` | NotFound / 404 page layout — error message + two CTA buttons (Home, Blog). Uses BaseLayout with nav + footer.                                                                               | P1  | S    | `[MERGED]` | 🔗 Related to US-12                                         |
 | **Epic2-chore-15** | `[chore]` | Shared UpdatePagination component — client-side pagination controls for the updates grid on homepage (page indicators + prev/next). Featured update stays fixed above paginated grid.           | P1  | M    | `[MERGED]` | 🔗 Related to US-10                                         |
 | **Epic2-chore-16** | `[chore]` | Sticky footer layout — `body: flex min-h-screen flex-col`, `main: flex-1`. Footer sticks to viewport-bottom on short pages, normal flow on long pages. Remove 404 manual min-height. Hero max-height unaffected. | P1 | S | `[MERGED]` | 🔗 Related to US-03, US-12 |
 | **Epic2-chore-17** | `[chore]` | Empty states for API-dependent sections — BlogPostSlider (replace `: null` with message), /blog page (wrap LoadMore with empty conditional), Updates (hide FilterPills/grid/pagination when API returns zero data, show section-level message). Content-at-top layout. | P1 | S | `[MERGED]` | 🔗 Related to US-05, US-07 |
-| **Epic2-chore-18** | `[chore]` | Contact block in footer — small heading "Have a question ?", copy "Feel free to reach out!", horizontal 2-CTA combo: mailto button + copy-email button with clipboard copy visual notification. | P2 | S | `[ACTIVE]` | 🔗 Related to Epic2-chore-04 |
+| **Epic2-chore-18** | `[chore]` | Contact block in footer — small heading "Have a question ?", copy "Feel free to reach out!", horizontal 2-CTA combo: mailto button + copy-email button with clipboard copy visual notification. | P2 | S | `[MERGED]` | 🔗 Related to Epic2-chore-04 |
 
 #### US-03: Base Layout & Navigation
 
@@ -116,7 +116,7 @@
 | Task ID            | Type     | Target Technical Scope / Objective                                                                                                                                                             | Pri | Size | Status    | Relations / Lineage                              |
 | :----------------- | :------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-- | :--- | :-------- | :----------------------------------------------- |
 | **US-10-feat-01**  | `[feat]` | Integrate FilterPills on homepage — wire category filter pills to updates grid. Filtering resets to page 1, pagination operates within active filter. Empty state when no results.              | P0  | M    | `[MERGED]` | None                                             |
-| **US-10-feat-02**  | `[feat]` | Integrate FilterPills on blog listing — wire tag filter pills to blog post grid. Tag options extracted from loaded posts. Filters client-side.                                                   | P1  | M    | `[DRAFT]` | 🔗 Related to Epic2-chore-07                     |
+| **US-10-feat-02**  | `[feat]` | Integrate FilterPills on blog listing — wire tag filter pills to blog post grid. Tag options extracted from loaded posts. Filters client-side.                                                   | P1  | M    | `[MERGED]` | 🔗 Related to Epic2-chore-07                     |
 | **US-10-chore-01** | `[chore]` | Add pagination state management to client-side script (currentPage, totalPages, show/hide grid items by page index).                                                                             | P1  | S    | `[MERGED]` | 🔗 Related to US-10-feat-01                      |
 
 #### US-11: Search (Blog Listing)
@@ -128,7 +128,7 @@
 
 | Task ID            | Type     | Target Technical Scope / Objective                                                                                                                            | Pri | Size | Status    | Relations / Lineage                              |
 | :----------------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ | :-- | :--- | :-------- | :----------------------------------------------- |
-| **US-11-feat-01**  | `[feat]` | Implement client-side search with debounce — filters loaded blog posts by title, excerpt, author name. Works in conjunction with tag filter.              | P1  | M    | `[DRAFT]` | 🔗 Related to Epic2-chore-07                     |
+| **US-11-feat-01**  | `[feat]` | Implement client-side search with debounce — filters loaded blog posts by title, excerpt, author name. Works in conjunction with tag filter.              | P1  | M    | `[MERGED]` | 🔗 Related to Epic2-chore-07                     |
 
 #### US-12: 404 Not Found Page
 
@@ -183,42 +183,30 @@
 | :----------------- | :------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-- | :--- | :-------- | :----------------------------------------------- |
 | **US-06-feat-01**  | `[feat]` | Create `/updates/[slug].astro` dynamic route — self-fetches update by slug, renders page shell with BaseLayout, Container, and heading title.                                                       | P0  | S    | `[MERGED]` | None                                             |
 | **US-06-feat-02**  | `[feat]` | Build Update Header component — breadcrumb, category badge, h1 title, author byline, read time, publish date, share section, and featured image (desktop 2-col). Lives in `src/features/update/UpdateHeader.astro`. | P0  | M    | `[MERGED]` | 🔗 Related to US-06-feat-01                      |
-| **US-06-feat-03**  | `[feat]` | Build Update Body component — render Strapi block content (JSON array of headings, paragraphs, lists, quotes, code) as HTML. Lives in `src/features/update/UpdateBody.astro`.                      | P0  | M    | `[DRAFT]` | 🔗 Related to US-06-feat-01                      |
+| **US-06-feat-03**  | `[feat]` | Build Update Body component — render Strapi block content (JSON array of headings, paragraphs, lists, quotes, code) as HTML. Lives in `src/features/update/UpdateBody.astro`.                      | P0  | M    | `[MERGED]` | 🔗 Related to US-06-feat-01                      |
 | **US-06-feat-04**  | `[feat]` | Build inline Breadcrumb — Home → Updates (→ homepage #updates) → current update title. Encapsulation only, no reuse. Integrated in UpdateHeader component.                                         | P1  | S    | `[MERGED]` | 🔗 Related to US-06-feat-01                      |
-| **US-06-feat-05**  | `[feat]` | Build Horizontal Timeline component — scrollable list of update items (title + date), click navigates by slug. On page load, script scrolls active item into view. Lives in `src/features/update/UpdateTimeline.astro`. | P0  | M    | `[DRAFT]` | 🔗 Related to US-06-feat-01, US-06-chore-02      |
-| **US-06-feat-06**  | `[feat]` | Build inline Related Updates — horizontal list of 3–4 related updates (shared tags). Encapsulation only, no reuse. Integrated in page.                                                              | P1  | S    | `[DRAFT]` | 🔗 Related to US-06-feat-01                       |
-| **US-06-chore-02** | `[chore]` | Extend `update.api.ts` — add `fetchTimelineUpdates()` returning all updates (slug, title, date, category) for horizontal timeline.                                                                  | P1  | S    | `[DRAFT]` | None                                             |
-
-#### US-07: Blog Listing Page
-
-- **Intent:** As a Reader, I want to browse blog posts with tag filters, search, and load-more, and see a press section with third-party content, so I can discover long-form articles and related coverage.
-- **Scope Bounds:** Page route `/blog`. Heading + FilterPills integration (US-10) + search integration (US-11). 3-column responsive grid of transparent cards: featured media, excerpt, author, read time. Load More button (appends items, preserves scroll context). Horizontal Press section: custom link cards (title, thumbnail, source, URL) — editorially curated, not iframe/oEmbed. Nav + footer from base layout.
-- **Figma:** Provided during implementation.
-- **Artifact Link:** `docs/stories/US-07.md`
-
-| Task ID            | Type     | Target Technical Scope / Objective                                                                                                                                                                    | Pri | Size | Status    | Relations / Lineage                              |
-| :----------------- | :------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-- | :--- | :-------- | :----------------------------------------------- |
-| **US-07-feat-01**  | `[feat]` | Create `/blog` page route with self-fetching BlogListing section component. Fetches all blog posts, renders heading + FilterPills + grid.                                                             | P0  | M    | `[MERGED]` | 🔗 Related to Epic2-chore-07, Epic2-chore-08     |
-| **US-07-feat-02**  | `[feat]` | Build 3-column transparent card grid with LoadMore button — cards show featured media (3:2), title, excerpt, author avatar+name, read time. LoadMore appends next batch, preserves scroll position. | P0  | M    | `[DRAFT]` | 🔗 Related to Epic2-chore-08                     |
-| **US-07-feat-03**  | `[feat]` | Build horizontal PressCards section — editorially curated custom link cards (title, thumbnail, source name, external URL). Horizontal scroll. Component lives in `src/features/blogpost/`.   | P1  | M    | `[DRAFT]` | 🔗 Related to US-07-feat-01                      |
-| **US-07-feat-04**  | `[feat]` | Integrate CTA section at bottom of blog listing page — use existing homepage CTA pattern (heading, description, Donate + Contact buttons). P2 | S    | `[DRAFT]` | None                                                |
-| **US-07-chore-01** | `[chore]` | Extract readTime computation to shared utility `src/lib/read-time.ts` — calculates from body block word count. Generic across Update and BlogPost content types. Used by homepage cards, update detail page, and blog post detail page. | P1  | S    | `[MERGED]` | 🔗 Related to US-07-feat-01                      |
-| **US-07-chore-02** | `[chore]` | Extend blogpost.api.ts — fetchBlogPostsForListing with populate: featuredImage, author, tags. Returns BlogPostCardProps[] with all grid fields.                                                      | P1  | S    | `[MERGED]` | 🔗 Related to US-07-feat-01                      |
+| **US-06-feat-05**  | `[feat]` | Build Horizontal Timeline component — scrollable list of update items (title + date), click navigates by slug. On page load, script scrolls active item into view. Lives in `src/features/update/TimelineSection.astro` + `Timeline.tsx`. | P0  | M    | `[MERGED]` | 🔗 Related to US-06-feat-01, US-06-chore-02      |
+| **US-07-chore-03** | `[chore]` | Add `getPressItems()` to `src/lib/strapi.ts` — fetchCollection<Press> wrapper with public access.                                                                                                      | P1  | S    | `[DRAFT]` | 🛑 Blocked by Epic1-chore-06                     |
+| **US-07-chore-04** | `[chore]` | Create `src/features/press/press.api.ts` — `fetchPressItems()` + mapper: Press (Strapi doc) → PressItem (UI type). Determines image/video from media.mime, resolves posterUrl from videoPoster field. | P1  | S    | `[DRAFT]` | 🛑 Blocked by US-07-chore-03                     |
+| **US-07-feat-05**  | `[feat]` | Wire PressSliderSection to Strapi — accept `PressItem[]` as props (no more hardcoded data), update `blog.astro` to fetch press items server-side via `fetchPressItems()`, pass to component. Remove mock data and TODO comments. | P1  | S    | `[DRAFT]` | 🛑 Blocked by US-07-chore-04                     |
 
 #### US-08: BlogPost Detail Page
 
 - **Intent:** As a Reader, I want to open a full blog post by its slug, so that I can read the complete content with a table of contents, take action via CTA, and discover related posts.
-- **Scope Bounds:** Dynamic route `/blog/[slug].astro`. Post heading, rich text body rendering, featured image. Metadata: author byline with avatar, date, read time. Sticky sidebar Table of Contents: auto-generated from h2/h3 headings in body, scroll-spy highlights active section, click to smooth-scroll. CTA section: configurable primary action (support, join, donate — content managed per-post or global). Inline related posts horizontal list: 3–4 posts (same tags), encapsulation only. Nav + footer from base layout.
+- **Scope Bounds:** Dynamic route `/blog/[slug].astro`. BlogPostHeader (back link "← All posts" to /blog, tag pill badge, publish date, h1 title, full-width featured image rounded 8px, author name text-only, read time, share buttons). Rich text body rendering via shared BlocksRenderer. Author profile section below body (avatar circle, name, role). Share buttons + tags row after body. Sticky sidebar Table of Contents: auto-generated from h2/h3 headings in body, scroll-spy highlights active section, click to smooth-scroll. CTA section: configurable primary action (heading, description, button label, URL — content managed via BlogPostAction single type). Inline related posts horizontal list: 3–4 posts (shared tags, client-side filter). Nav + footer from base layout.
 - **Figma:** Provided during implementation.
 - **Artifact Link:** `docs/stories/US-08.md`
 
 | Task ID            | Type     | Target Technical Scope / Objective                                                                                                                                                                      | Pri | Size | Status    | Relations / Lineage                              |
 | :----------------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :-- | :--- | :-------- | :----------------------------------------------- |
-| **US-08-feat-01**  | `[feat]` | Create `/blog/[slug].astro` dynamic route — self-fetches blog post by slug, renders heading, featured image, rich text body, author/date/readTime metadata. Layout: content area + sticky sidebar.       | P0  | M    | `[DRAFT]` | 🛑 Blocked by Epic2-chore-10                     |
-| **US-08-feat-02**  | `[feat]` | Implement TableOfContents sidebar — parse h2/h3 from rich text blocks, render as nested list, sticky positioning, scroll-spy active state, smooth scroll on click. Uses shared TableOfContents component. | P1  | M    | `[DRAFT]` | 🛑 Blocked by Epic2-chore-10                     |
-| **US-08-feat-03**  | `[feat]` | Build CTA section component — configurable primary action (heading, description, button label, URL). Rendered after post body, before related posts. Consumes BlogPostAction single type.            | P1  | S    | `[DRAFT]` | 🛑 Blocked by Epic3-chore-05                                  |
-| **US-08-feat-04**  | `[feat]` | Build inline Related Posts — horizontal list of 3–4 related posts (shared tags). Encapsulation only, no reuse. Integrated in page.                                                                   | P1  | S    | `[DRAFT]` | 🔗 Related to US-08-feat-01                      |
-| **US-08-chore-01** | `[chore]` | Add TOC heading extraction utility — parse Strapi blocks response to extract h2/h3 text + generated IDs for scroll targeting.                                                                             | P1  | S    | `[DRAFT]` | 🔗 Related to US-08-feat-02                      |
+| **US-08-feat-01**  | `[feat]` | Create `/blog/[slug].astro` dynamic route — self-fetches blog post by slug, renders page shell with BaseLayout + Container, composes BlogPostHeader, rich text body, ToC sidebar, CTA, and related posts. Desktop: content area + sticky sidebar. Mobile: single column. | P0  | M    | `[MERGED]` | 🛑 Blocked by US-08-feat-05, 🛑 Blocked by US-08-chore-02, 🛑 Blocked by US-08-chore-03 |
+| **US-08-feat-02**  | `[feat]` | Implement TableOfContents sidebar — parse h2/h3 from rich text blocks, render as nested list, sticky positioning, scroll-spy active state, smooth scroll on click. Uses shared TableOfContents component in `src/components/TableOfContents.astro`. | P1  | M    | `[MERGED]` | 🛑 Blocked by US-08-chore-02                     |
+| **US-08-feat-03**  | `[feat]` | Build CTA section component — configurable primary action (heading, description, button label, URL). Rendered after post body, before related posts. Consumes BlogPostAction single type via `fetchBlogPostAction()`. | P1  | S    | `[MERGED]` | 🔗 Related to Epic3-chore-05, 🛑 Blocked by US-08-chore-03 |
+| **US-08-feat-04**  | `[feat]` | Build inline Related Posts — horizontal list of 3–4 related posts (shared tags, client-side filter). Encapsulation only, no reuse. Integrated in page.                                                                   | P1  | S    | `[MERGED]` | 🔗 Related to US-08-feat-01                      |
+| **US-08-feat-05**  | `[feat]` | Build BlogPostHeader component in `src/features/blogpost/BlogPostHeader.astro` — "← All posts" back link to /blog, tag pill badge from first tag, publish date, h1 title, full-width featured image (rounded 8px), author name text-only, read time, share buttons (link copy, LinkedIn, X, Facebook — 32×32 white circles). Responsive: mobile stacks image below title+metadata. | P0  | S    | `[MERGED]` | 🔗 Related to US-08-feat-01                      |
+| **US-08-chore-01** | `[chore]` | Add TOC heading extraction utility — parse Strapi blocks response to extract h2/h3 text + generated IDs for scroll targeting.                                                                             | P1  | S    | `[MERGED]` | 🔗 Related to US-08-feat-02                      |
+| **US-08-chore-02** | `[chore]` | Build shared TableOfContents component in `src/components/TableOfContents.astro` — sticky positioning, scroll-spy active state, nested h2/h3 rendering, smooth scroll on click, keyboard-accessible. Used by blog post detail page. Isolated from UI-layer concerns. | P1  | M    | `[MERGED]` | 🔗 Related to US-08                              |
+| **US-08-chore-03** | `[chore]` | Add `fetchBlogPostAction()` to `blogpost.api.ts` — fetches BlogPostAction single type for the CTA section.                                                                                             | P1  | S    | `[MERGED]` | 🔗 Related to US-08-feat-03, 🔗 Related to Epic3-chore-05 |
 
 
 ---
@@ -253,20 +241,28 @@
 
 ```
 Phase 1 — Shared Components + Backend Chores (parallel, no deps):
+  Epic1-chore-06  (Press content type + seed)
   Epic2-chore-07  (FilterPills)
   Epic2-chore-08  (LoadMoreButton)
-  Epic2-chore-10  (TableOfContents)
   Epic2-chore-13  (NotFound)
   Epic2-chore-15  (UpdatePagination)
   Epic3-chore-05  (BlogPostAction single type)
   US-06-chore-02  (fetchTimelineUpdates API)
+  US-08-chore-01  (TOC heading extraction utility)
+  US-08-chore-02  (TableOfContents component)
+  US-08-chore-03  (BlogPostAction API helper)
 
 Phase 2 — Feature Implementation (depends on Phase 1):
   US-05-feat-01   (homepage restructure)
   US-05-feat-02   (blog slider "View All")
-  US-06-feat-01   ✅ US-06-feat-02, ✅ US-06-feat-04, → US-06-feat-03, US-06-feat-05, US-06-feat-06
+  US-06-feat-01   ✅ US-06-feat-02, ✅ US-06-feat-04, → US-06-feat-03, ✅ US-06-feat-05
   US-07-feat-01   → US-07-feat-02, US-07-feat-03, US-07-feat-04
-  US-08-feat-01   → US-08-feat-02, US-08-feat-03, US-08-feat-04
+  US-07-chore-03  🛑 Epic1-chore-06 → US-07-chore-04 → US-07-feat-05 (Press Strapi wiring)
+  US-08-feat-05   (BlogPostHeader)
+  US-08-feat-03   🔗 Epic3-chore-05 (CTA section)
+  US-08-feat-02   🛑 US-08-chore-02 (ToC sidebar)
+  US-08-feat-04   (Related Posts)
+  US-08-feat-01   🛑 US-08-feat-05, 🛑 US-08-chore-02, 🛑 US-08-chore-03 (route shell)
   US-10-feat-01   (homepage filtering integration)
   US-10-feat-02   (blog listing filtering integration)
   US-11-feat-01   (blog listing search)
