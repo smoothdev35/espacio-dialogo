@@ -1,0 +1,167 @@
+---
+/**
+ * Dropdown
+ *
+ * Disclosure navigation pattern for menus (e.g. "More" in nav).
+ * For form selects, use Select.astro instead — they are semantically different.
+ *
+ * Props:
+ *   label — trigger button text
+ *   items — array of { label, href, active? }
+ *   class? — spread onto root wrapper for consumer overrides
+ *
+ * Slots: none
+ * Tokens: --color-nav-bg, --color-nav-border, --radius-small
+ * Hardcoded literals:
+ *   chevron SVG (no token equivalent — confirm)
+ * Context variants: not needed — inherits from parent via --color-nav-bg/--color-nav-border tokens
+ * Composed from: none
+ */
+
+interface DropdownItem {
+  label: string
+  href: string
+  active?: boolean
+}
+
+interface Props {
+  label: string
+  items: DropdownItem[]
+  class?: string
+}
+
+const { label, items, class: className = '' } = Astro.props
+
+// Unique ID per instance — Math.random is safe here since this
+// only needs to be unique within a single SSR pass.
+const uid = `dd-${Math.random().toString(36).slice(2, 8)}`
+const menuId = `${uid}-menu`
+---
+
+<div class:list={['relative', className]} data-dropdown={uid}>
+  <button
+    id={uid}
+    aria-haspopup="true"
+    aria-expanded="false"
+    aria-controls={menuId}
+    class="font-body leading-body hover:text-link-hover focus-visible:text-link-hover aria-expanded:text-link-hover flex list-none items-center gap-2 border-0 bg-transparent p-0"
+    data-dropdown-trigger
+    type="button"
+  >
+    {label}
+    <!-- Chevron -->
+    <svg
+      class="relative top-px h-4 w-4 shrink-0"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      data-dropdown-chevron
+      aria-hidden="true"
+    >
+      <path d="m18 9-6 6-6-6"></path>
+    </svg>
+  </button>
+
+  <ul
+    id={menuId}
+    role="list"
+    class="bg-nav-bg border-nav-border rounded-(--radius-small) absolute left-1/2 top-full z-50 mt-2 hidden min-w-[180px] -translate-x-1/2 border py-2 shadow-lg"
+    data-dropdown-menu
+  >
+    {
+      items.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            class:list={[
+              'font-body block px-4 py-2',
+              item.active ? 'text-link-hover' : '',
+            ]}
+            aria-current={item.active ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<script>
+  /**
+   * Dropdown controller — self-contained per-page.
+   * Astro deduplicates <script> blocks so this runs once regardless
+   * of how many <Dropdown /> instances exist on the page.
+   */
+  const dropdowns = []
+
+  document.querySelectorAll('[data-dropdown]').forEach((root) => {
+    const trigger = root.querySelector('[data-dropdown-trigger]')
+    const menu = root.querySelector('[data-dropdown-menu]')
+    const chevron = root.querySelector('[data-dropdown-chevron]')
+    if (!trigger || !menu) return
+
+    const state = {
+      root,
+      trigger,
+      menu,
+      chevron,
+      isOpen: false,
+      open() {
+        if (state.isOpen) return
+        // Close any other open dropdown first
+        dropdowns.forEach((d) => {
+          if (d !== state) d.close()
+        })
+        state.isOpen = true
+        state.trigger.setAttribute('aria-expanded', 'true')
+        state.menu.classList.remove('hidden')
+        state.chevron?.classList.add('rotate-180')
+      },
+      close() {
+        if (!state.isOpen) return
+        state.isOpen = false
+        state.trigger.setAttribute('aria-expanded', 'false')
+        state.menu.classList.add('hidden')
+        state.chevron?.classList.remove('rotate-180')
+      },
+    }
+
+    dropdowns.push(state)
+
+    // Toggle on trigger click
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation()
+      state.isOpen ? state.close() : state.open()
+    })
+
+    // Close on link click inside menu
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => state.close())
+    })
+  })
+
+  // Global close on outside click
+  document.addEventListener('click', (e) => {
+    dropdowns.forEach((d) => {
+      if (d.isOpen && !d.root.contains(e.target)) {
+        d.close()
+      }
+    })
+  })
+
+  // Global Escape closes any open dropdown and restores focus to trigger
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      dropdowns.forEach((d) => {
+        if (d.isOpen) {
+          d.close()
+          d.trigger.focus()
+        }
+      })
+    }
+  })
+</script>

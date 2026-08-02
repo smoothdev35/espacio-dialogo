@@ -22,6 +22,7 @@
  */
 
 import Button from '@/components/ui/astro/Button.astro'
+import { PAGINATION } from '@/lib/content'
 
 interface Props {
   name: string
@@ -33,7 +34,7 @@ interface Props {
 const {
   name,
   pageSize = 6,
-  buttonLabel = 'Load more',
+  buttonLabel = PAGINATION.loadMore,
   class: className,
 } = Astro.props
 ---

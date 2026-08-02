@@ -13,6 +13,7 @@
 
 import { useState, useCallback } from 'react'
 import { Button } from '../../components/ui/Button'
+import { FOOTER_CONTACT } from '../../lib/content'
 
 const EMAIL = 'hello@ndtc.org'
 
@@ -88,13 +89,13 @@ export default function FooterContact() {
   }, [])
 
   const copyLabel =
-    copyState === 'idle' ? 'Copy email' : copyState === 'copied' ? 'Copied!' : 'Failed!'
+    copyState === 'idle' ? FOOTER_CONTACT.copyEmail : copyState === 'copied' ? FOOTER_CONTACT.copied : FOOTER_CONTACT.copyFailed
 
   const announceMsg =
     copyState === 'copied'
-      ? 'Email address copied'
+      ? FOOTER_CONTACT.copiedAnnounce
       : copyState === 'error'
-        ? 'Failed to copy. Try again.'
+        ? FOOTER_CONTACT.copyFailedAnnounce
         : ''
 
   const copyIcon =
@@ -113,23 +114,23 @@ export default function FooterContact() {
         }
       `}</style>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         <div>
-          <p className="text-large font-semibold">Have a question ?</p>
-          <p className="mt-2 text-base">Feel free to reach out!</p>
+          <p className="text-large font-semibold">{FOOTER_CONTACT.heading}</p>
+          <p className="mt-2 text-body">{FOOTER_CONTACT.subtitle}</p>
         </div>
 
-        <div className="flex flex-col gap-4 mt-2 sm:flex-row sm:flex-wrap sm:gap-4">
-          <Button label="Send email" variant="primary" size="sm" href={`mailto:${EMAIL}`} />
+        <div className="flex flex-row flex-wrap gap-4 mt-4">
+          <Button label={FOOTER_CONTACT.sendEmail} variant="primary" size="md" class="lg:px-(--spacing-btn-x-sm) lg:py-(--spacing-btn-y-sm)" href={`mailto:${EMAIL}`} />
 
           <Button
             label={copyLabel}
             variant="secondary"
-            size="sm"
+            size="md"
             icon={copyIcon}
             iconPosition="trailing"
             onClick={handleCopy}
-            class={copyState === 'error' ? 'wiggle' : ''}
+            class={`${copyState === 'error' ? 'wiggle ' : ''}lg:px-(--spacing-btn-x-sm) lg:py-(--spacing-btn-y-sm)`}
           />
         </div>
 

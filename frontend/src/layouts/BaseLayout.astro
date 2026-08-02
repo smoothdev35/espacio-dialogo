@@ -17,6 +17,7 @@
 import '../styles/global.css'
 import Nav from '../components/Nav.astro'
 import Footer from '../components/Footer.astro'
+import { NAV } from '../lib/content'
 
 interface NavLink {
   label: string
@@ -41,19 +42,19 @@ const {
   title = 'EDD',
   class: className,
   navLinks = [
-    { label: 'Home', href: '/' },
-    { label: 'Blog', href: '/blog' },
-    { label: 'Contact', href: '/contact' },
+    { label: NAV.home, href: '/' },
+    { label: NAV.blog, href: '/blog' },
+    { label: NAV.contact, href: '#footer' },
   ],
   navActions = [
-    { label: 'Subscribe', href: '#', variant: 'secondary' },
-    { label: 'Donate', href: '#', variant: 'primary' },
+    { label: NAV.subscribe, href: '/subscribe', variant: 'secondary' },
+    { label: NAV.donate, href: '/donate', variant: 'primary' },
   ],
 } = Astro.props
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es-MX">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

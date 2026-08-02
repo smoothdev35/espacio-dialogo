@@ -16,13 +16,15 @@
  *         --brand-primary (color-mix for background tint)
  */
 
+import { SEARCH } from '@/lib/content'
+
 interface Props {
   name: string
   placeholder?: string
   class?: string
 }
 
-const { name, placeholder = 'Search...', class: className } = Astro.props
+const { name, placeholder = SEARCH.placeholder, class: className } = Astro.props
 ---
 
 <input
@@ -30,7 +32,7 @@ const { name, placeholder = 'Search...', class: className } = Astro.props
   data-search-bar={name}
   placeholder={placeholder}
   class:list={[
-    'px-4 py-2 text-(--color-input-text) border border-(--color-input-border) rounded-md placeholder:text-(--color-input-placeholder) text-sm md:text-base w-full md:w-[280px]',
+    'px-4 py-2 text-input-text border border-input-border rounded-md placeholder:text-input-placeholder text-sm w-[280px]',
     className,
   ]}
 />

@@ -1,0 +1,72 @@
+---
+/**
+ * CtaAction
+ *
+ * Reusable CTA section with bg-surface-alt, centered heading + optional description
+ * + CtaRow button row. Extracted from homepage and blog post CTA patterns.
+ * Always centers buttons regardless of count.
+ *
+ * Props:
+ *   heading     — h2 heading text
+ *   description — optional body paragraph below heading
+ *   buttons     — array of { label, href?, variant?, icon?, iconPosition? }
+ *   size        — 'sm' | 'md' | 'lg' forwarded to CtaRow (default 'md')
+ *   gap         — 'sm' | 'md' forwarded to CtaRow (default 'md')
+ *   class?      — spread onto root <section>
+ * Slots: none
+ * Tokens: --color-surface-alt, --spacing-f11, --container-small,
+ *         --spacing-f4, --color-muted, --text-body
+ * Hardcoded literals:
+ *   - max-w-xl (description) — content measure, no token equivalent
+ * Context variants: not needed — bg-surface-alt is a fixed non-page surface,
+ *                    content tokens (text, muted) adapt per theme
+ * Composed from: Container, CtaRow (which composes Button)
+ */
+import Container from '@/layouts/Container.astro'
+import CtaRow from './CtaRow.astro'
+
+export interface CtaActionButton {
+  label: string
+  href?: string
+  variant?: 'primary' | 'secondary' | 'inverse' | 'inverse-outline'
+  icon?: string
+  iconPosition?: 'leading' | 'trailing' | 'only'
+}
+
+interface Props {
+  heading: string
+  description?: string | null
+  buttons: CtaActionButton[]
+  size?: 'sm' | 'md' | 'lg'
+  gap?: 'sm' | 'md'
+  class?: string
+}
+
+const {
+  heading,
+  description,
+  buttons,
+  size = 'md',
+  gap = 'md',
+  class: className,
+} = Astro.props
+---
+
+<section
+  class:list={[
+    'bg-surface-alt py-f11',
+    className,
+  ]}
+>
+  <Container>
+    <div class="mx-auto flex max-w-(--container-small) flex-col items-center text-center">
+      <div class="flex flex-col items-center text-center gap-f8">
+        <h2>{heading}</h2>
+        {description && (
+          <p class="text-body max-w-xl font-medium">{description}</p>
+        )}
+      </div>
+      <CtaRow buttons={buttons} {size} {gap} class="mt-f9 justify-center" />
+    </div>
+  </Container>
+</section>

@@ -1,0 +1,58 @@
+---
+/**
+ * SectionHeader
+ *
+ * Encapsulated eyebrow + heading + copy pattern.
+ * Baked-in spacing — tagline, heading, and description all use
+ * gap-f8 (fluid 19px → 31px, matching CtaAction spacing).
+ * No external margin — caller controls gap to next block.
+ *
+ * Props:
+ *   tagline?    — eyebrow text above heading
+ *   heading     — main heading text
+ *   description? — optional supporting copy below heading
+ *   level?      — heading element: h1 | h2 | h3 (default: h2)
+ *   align?      — text alignment: left | center (default: left)
+ *   class?      — spread onto root flex container
+ * Slots: none
+ * Tokens: --spacing-f8, --text-tagline, --color-muted
+ * Hardcoded literals: none
+ * Context variants: not needed
+ */
+export interface Props {
+  tagline?: string
+  heading: string
+  description?: string
+  level?: 'h1' | 'h2' | 'h3'
+  align?: 'left' | 'center'
+  class?: string
+}
+
+const {
+  tagline,
+  heading,
+  description,
+  level = 'h2',
+  align = 'left',
+  class: className,
+} = Astro.props
+
+const HeadingTag = level
+const alignClass = align === 'center' ? 'text-center items-center' : ''
+---
+
+<div class:list={['flex flex-col gap-f8', alignClass, className]}>
+  {
+    tagline && (
+      <p class="font-body text-tagline font-bold tracking-widest text-muted">
+        {tagline}
+      </p>
+    )
+  }
+  <HeadingTag>{heading}</HeadingTag>
+  {
+    description && (
+      <p class="max-w-2xl font-medium">{description}</p>
+    )
+  }
+</div>

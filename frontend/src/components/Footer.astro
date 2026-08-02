@@ -17,6 +17,7 @@ import IconInstagram from './icons/IconInstagram.astro'
 import IconX from './icons/IconX.astro'
 import IconLinkedIn from './icons/IconLinkedIn.astro'
 import IconYoutube from './icons/IconYoutube.astro'
+import { FOOTER } from '../lib/content'
 
 interface Props {
   class?: string
@@ -25,24 +26,22 @@ interface Props {
 const { class: className } = Astro.props
 ---
 
-<footer id="footer" class:list={['font-body antialiased border-t border-(--color-border)', className]}>
+<footer id="footer" class:list={['font-body antialiased border-t border-border', className]}>
   <div class="px-(--spacing-page-gutters) py-12 lg:py-16">
     <!-- Main content grid -->
-    <div class="flex flex-col gap-row-gap sm:grid sm:grid-cols-2 sm:gap-8 md:gap-4">
+    <div class="flex flex-col gap-8 sm:grid sm:grid-cols-2">
       <!-- Left column: Logo + Location + Contact + Social -->
-      <div class="flex flex-col gap-6">
+      <div class="flex flex-col gap-f4">
         <!-- Logo -->
         <LogoLink />
 
-        <div class="-mt-4">
-          <FooterContact client:load />
-        </div>
+        <FooterContact client:load />
 
         <!-- Social icons -->
         <div
           class="mt-10 flex gap-4"
           role="list"
-          aria-label="Follow us on social media"
+          aria-label={FOOTER.socialAriaLabel}
         >
           <a
             href="https://facebook.com"
@@ -94,33 +93,33 @@ const { class: className } = Astro.props
 
       <!-- Right columns: Two link lists -->
       <div class="flex flex-col gap-8 sm:gap-16 md:gap-50 sm:flex-row sm:shrink-0">
-        <nav aria-label="Footer navigation - About">
+        <nav aria-label={FOOTER.aboutNavLabel}>
           <ul class="flex flex-col gap-3">
             <li>
-              <a href="#" class="font-semibold">Our mission</a>
+              <a href="#">{FOOTER.ourMission}</a>
             </li>
             <li>
-              <a href="/blog" class="font-semibold">Blog</a>
+              <a href="/blog">{FOOTER.blog}</a>
             </li>
             <li>
-              <a href="#" class="font-semibold">Donate</a>
+              <a href="/donate">{FOOTER.donate}</a>
             </li>
             <li>
-              <a href="#" class="font-semibold">Statements</a>
+              <a href="#">{FOOTER.statements}</a>
             </li>
           </ul>
         </nav>
 
-        <nav aria-label="Footer navigation - Content">
+        <nav aria-label={FOOTER.contentNavLabel}>
           <ul class="flex flex-col gap-3">
             <li>
-              <a href="#updates" class="font-semibold">Updates</a>
+              <a href="#updates">{FOOTER.updates}</a>
             </li>
             <li>
-              <a href="#" class="font-semibold">Analysis</a>
+              <a href="#">{FOOTER.analysis}</a>
             </li>
             <li>
-              <a href="#" class="font-semibold">News</a>
+              <a href="#">{FOOTER.news}</a>
             </li>
           </ul>
         </nav>
@@ -132,10 +131,10 @@ const { class: className } = Astro.props
       class="mt-row-gap flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
     >
       <a href="/legal" class="text-sm underline underline-offset-2"
-        >Legal notice</a
+        >{FOOTER.legalNotice}</a
       >
       <small id="copyright-year" class="font-body text-sm"
-        >© 2025 Espacio Diálogo. All rights reserved.</small
+        >{FOOTER.copyright(2025)}</small
       >
     </div>
   </div>
@@ -143,5 +142,5 @@ const { class: className } = Astro.props
 
 <script is:inline>
   document.getElementById('copyright-year').textContent =
-    `© ${new Date().getFullYear()} Espacio Diálogo. All rights reserved.`
+    `© ${new Date().getFullYear()} Espacio Diálogo. Todos los derechos reservados.`
 </script>
