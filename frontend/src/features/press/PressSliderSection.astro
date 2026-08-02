@@ -1,0 +1,367 @@
+---
+/**
+ * PressSliderSection
+ *
+ * Self-contained press coverage section with horizontal scrolling slider.
+ * Hardcoded data (no Strapi fetch yet). Clone of BlogPostSlider pattern.
+ *
+ * Props: class? (string) — spread onto root <section> for consumer overrides
+ * Slots: none
+ * Tokens: --spacing-f10, --spacing-f4, --spacing-f6, --spacing-row-gap,
+ *         --spacing-f4, --spacing-f5, --spacing-f6,
+ *         --color-surface, --color-surface-text, --color-muted, --color-dot-inactive,
+ *         --color-nav-btn-fg, --color-nav-bg, --color-nav-arrow-hover,
+ *         --font-headline, --font-body, --text-h5, --text-tagline,
+ *         --text-small, --text-regular, --text-body, --radius-medium,
+ *         --leading-h5, --tracking-heading
+ * Hardcoded literals:
+ *   - Inactive dots use bg-(--color-dot-inactive) — theme-aware
+ *   - scroll-snap / overflow-x — layout-specific, no token equivalent
+ *   - Card width 394px — inherited from BlogPostSlider Figma spec — confirm
+ *   - Arrow buttons 48×48, gap-4 dots — layout-specific
+ *   - transform: scale(1) + transition: transform in <style> block — bypasses global !important transition-colors on *
+ *   - Client JS: dots navigate cards, arrows prev/next, active dot on scroll — vanilla JS for interactivity
+ *   - 4 hardcoded press items (one with video) — TODO: replace with Strapi fetch
+ * Context variants: section uses --color-surface (theme-aware)
+ * Composed from: Container, SectionHeader, Button
+ */
+
+import Container from '@/layouts/Container.astro'
+import SectionHeader from '@/components/ui/astro/SectionHeader.astro'
+import type { PressItem } from './press.types'
+import Button from '@/components/ui/astro/Button.astro'
+import { formatDate } from '@/lib/date'
+import { PRESS } from '@/lib/content'
+
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+
+// TODO: replace with Strapi fetch when press content type is available
+const rawItems: Omit<PressItem, 'dateIso'>[] = [
+  {
+    title: 'Espacio Diálogo Launches Community Initiative Across 12 Cities',
+    slug: 'community-initiative-2026',
+    excerpt:
+      'The organization announces a groundbreaking program aimed at fostering constructive dialogue across diverse communities in Spain.',
+    publishedAt: '2026-06-15',
+    source: 'El País',
+    externalUrl: 'https://elpais.com',
+    media: {
+      type: 'video',
+      url: 'https://www.w3schools.com/html/mov_bbb.mp4',
+      posterUrl: 'https://placehold.co/600x400/1a2e60/ffffff?text=Press+Video',
+      alternativeText: null,
+    },
+  },
+  {
+    title: 'How Facilitated Dialogue Is Reshaping Civil Society',
+    slug: 'dialogue-reshaping-civil-society',
+    excerpt:
+      'A deep look at how facilitated conversation environments are transforming public discourse and bridging ideological divides.',
+    publishedAt: '2026-05-28',
+    source: 'La Vanguardia',
+    externalUrl: 'https://lavanguardia.com',
+    media: {
+      type: 'image',
+      url: 'https://placehold.co/600x400/213a78/ffffff?text=Dialogue+Cover',
+      alternativeText: 'Community dialogue session in progress',
+      posterUrl: null,
+    },
+  },
+  {
+    title: 'Annual Report Highlights Record Community Engagement',
+    slug: 'annual-report-2026',
+    excerpt:
+      'Espacio Diálogo latest annual report shows unprecedented participation levels, with over 50,000 participants in programs.',
+    publishedAt: '2026-04-10',
+    source: 'ABC',
+    externalUrl: 'https://abc.es',
+    media: null,
+  },
+  {
+    title: 'Expert Panel Tackles Polarization in Modern Media Landscape',
+    slug: 'expert-panel-media-polarization',
+    excerpt:
+      'Leading thinkers gather to address the challenges of media-driven polarization and propose evidence-based solutions.',
+    publishedAt: '2026-03-22',
+    source: 'El Mundo',
+    externalUrl: 'https://elmundo.es',
+    media: {
+      type: 'image',
+      url: 'https://placehold.co/600x400/ecae13/1b1c1e?text=Expert+Panel',
+      alternativeText: 'Expert panel discussion on media polarization',
+      posterUrl: null,
+    },
+  },
+]
+
+const pressItems: PressItem[] = rawItems.map((item) => ({
+  ...item,
+  dateIso: item.publishedAt,
+  publishedAt: formatDate(item.publishedAt),
+})) as PressItem[]
+---
+
+<!-- Containment: Contained — slider cards respect max-width column -->
+<section class:list={[className]}>
+  <Container>
+    <div class="flex flex-col gap-f9">
+      <!-- ═══ Title row ═══ -->
+      <SectionHeader
+        tagline="Prensa"
+        heading={PRESS.heading}
+        description={PRESS.description}
+      />
+
+      <!-- ═══ Slider row ═══ -->
+      <div class="flex flex-col gap-f9">
+        {
+          pressItems.length > 0 ? (
+            <>
+              <!-- Cards -->
+              <div
+                id="press-slider-track"
+                class="-mx-2 -mt-2 -mb-4 flex gap-f8 overflow-x-auto px-2 pt-2 pb-4 snap-x snap-mandatory scrollbar-hide items-start"
+                style="scrollbar-width: none; -ms-overflow-style: none; scroll-padding-left: 8px;"
+              >
+                {pressItems.map((item, i) => (
+                  <a
+                    href={item.externalUrl ?? `/press/${item.slug}`}
+                    data-index={i}
+                    class="press-card group flex w-[85vw] shrink-0 flex-col snap-start sm:w-[380px] lg:w-[394px] rounded-lg bg-card-bg text-page-text hover:underline-0!"
+                    {...(item.externalUrl
+                      ? { target: '_blank', rel: 'noopener noreferrer' }
+                      : {})}
+                  >
+                    <!-- Media: 3:2 ratio, rounded top corners only -->
+                    <div class="aspect-[3/2] overflow-hidden rounded-t-lg bg-surface-text/10">
+                      {item.media ? (
+                        item.media.type === 'video' ? (
+                          <video
+                            src={item.media.url}
+                            poster={item.media.posterUrl ?? undefined}
+                            preload="metadata"
+                            controls
+                            class="h-full w-full object-cover"
+                            aria-label={item.title}
+                          />
+                        ) : (
+                          <img
+                            src={item.media.url}
+                            alt={item.media.alternativeText ?? ''}
+                            class="h-full w-full object-cover"
+                            loading="lazy"
+                          />
+                        )
+                      ) : (
+                        <div
+                          class="flex h-full w-full items-center justify-center"
+                          aria-hidden="true"
+                        >
+                          <svg
+                            width="48"
+                            height="48"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="text-surface-text/20"
+                            aria-hidden="true"
+                          >
+                            <rect
+                              x="3"
+                              y="3"
+                              width="18"
+                              height="18"
+                              rx="2"
+                              ry="2"
+                            />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <polyline points="21,15 16,10 5,21" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+
+                    <!-- Content area: source+date → title → excerpt -->
+                    <div class="flex flex-col gap-f4 p-6">
+                      <div class="flex flex-col gap-0.5">
+                        <span class="text-large font-semibold">{item.source}</span>
+                        <time datetime={item.dateIso}>
+                          {item.publishedAt}
+                        </time>
+                      </div>
+
+                      <h5 class="lg:text-h6">
+                        {item.title}
+                      </h5>
+
+                      <p class="line-clamp-2">
+                        {item.excerpt}
+                      </p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+
+              <!-- Controls: dots + arrows -->
+              <div
+                class="flex flex-row items-center justify-between gap-4"
+              >
+                <!-- Dot breadcrumbs -->
+                <div class="flex gap-4">
+                  {pressItems.map((_, i) => (
+                    <button
+                      type="button"
+                      data-index={i}
+                      class="press-slider-dot h-2 w-2 rounded-full bg-dot-inactive hover:bg-nav-btn-fg focus-visible:bg-nav-btn-fg"
+                       aria-label={PRESS.goToItem(i + 1)}
+                    />
+                  ))}
+                </div>
+
+                <!-- Arrow buttons — nav variant (48×48) -->
+                <div class="flex gap-2">
+                  <Button
+                    id="press-slider-prev"
+                    variant="nav"
+                    size="md"
+                    iconPosition="only"
+                    label={PRESS.prevItems}
+                    icon='<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>'
+                  />
+                  <Button
+                    id="press-slider-next"
+                    variant="nav"
+                    size="md"
+                    iconPosition="only"
+                    label={PRESS.nextItems}
+                    icon='<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>'
+                  />
+                </div>
+              </div>
+            </>
+          ) : (
+              <p class="text-page-text text-center py-16 text-h6">
+                {PRESS.noItems}
+              </p>
+          )
+        }
+      </div>
+    </div>
+  </Container>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const track = document.getElementById('press-slider-track')
+    if (!track || !track.children.length) return
+
+    const cards = Array.from(track.querySelectorAll('.press-card'))
+    const dots = Array.from(document.querySelectorAll('.press-slider-dot'))
+    const prevBtn = document.getElementById('press-slider-prev')
+    const nextBtn = document.getElementById('press-slider-next')
+
+    const gap = parseInt(getComputedStyle(track).columnGap || '24', 10)
+
+    function getCardWidth() {
+      return cards[0]?.offsetWidth ?? 0
+    }
+
+    function getCurrentIndex() {
+      const w = getCardWidth() + gap
+      if (w <= 0) return 0
+      return Math.round(track!.scrollLeft / w)
+    }
+
+    function scrollToIndex(index: number) {
+      const w = getCardWidth() + gap
+      if (w <= 0) return
+      track!.scrollTo({ left: index * w, behavior: 'smooth' })
+    }
+
+    function updateUI() {
+      const i = getCurrentIndex()
+      dots.forEach((dot, idx) => {
+        const isActive = idx === i
+        ;(dot as HTMLButtonElement).disabled = isActive
+      })
+      if (prevBtn) {
+        ;(prevBtn as HTMLButtonElement).disabled = i <= 0
+      }
+      if (nextBtn) {
+        ;(nextBtn as HTMLButtonElement).disabled =
+          track!.scrollLeft + track!.clientWidth >= track!.scrollWidth - 1
+      }
+    }
+
+    // Dot clicks
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt(
+          dot.getAttribute('data-index') ?? '0',
+          10,
+        )
+        scrollToIndex(idx)
+      })
+    })
+
+    // Arrow clicks
+    prevBtn?.addEventListener('click', () =>
+      scrollToIndex(getCurrentIndex() - 1),
+    )
+    nextBtn?.addEventListener('click', () =>
+      scrollToIndex(getCurrentIndex() + 1),
+    )
+
+    // Update active dot on scroll (throttled via requestAnimationFrame)
+    let ticking = false
+    track!.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateUI()
+          ticking = false
+        })
+        ticking = true
+      }
+    })
+
+    // Initial state
+    updateUI()
+
+    // Recalculate on resize
+    let resizeTimer: ReturnType<typeof setTimeout>
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer)
+      resizeTimer = setTimeout(updateUI, 100)
+    })
+  })
+</script>
+
+<style is:global>
+  .press-slider-dot:disabled {
+    cursor: default;
+    background-color: var(--color-nav-btn-fg);
+  }
+</style>
+
+<style is:global>
+  /* Override global @layer base .dark * !important transition-colors.
+     Must be in @layer base AND higher specificity than .dark * (0,2,0).
+     .press-card img/video = (0,2,0) — ties .dark * in specificity,
+     declared later in same layer → wins. */
+  @layer base {
+    .press-card img,
+    .press-card video {
+      transition: transform 400ms cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+      transform: scale(1);
+    }
+
+
+  }
+</style>

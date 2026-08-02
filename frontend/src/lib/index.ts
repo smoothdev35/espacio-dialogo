@@ -13,4 +13,6 @@ export {
   getTag,
 } from './strapi'
 
+export { calculateReadTime } from './read-time'
+export { formatDate } from './date'
 

@@ -3,37 +3,36 @@
  * Blog Post Detail Page
  *
  * Dynamic route: /blog/[slug]
- * Assembles BlogPostHeader, rich text body, author profile, share+tags,
- * ToC sidebar, CTA section, and related posts.
+ * Assembles BlogPostHeader, rich text body, ToC sidebar,
+ * CTA section, and related posts slider.
+ *
+ * Semantic: <article> wraps header (wide container) + body (regular container).
+ * Header uses --container-wide (1536px) for the featured image to breathe.
  *
  * Props: documentId — Strapi document ID for direct single-type fetch
  *        (avoids slug filter through custom find controller)
  * Slots: none
  * Tokens: --color-page, --color-page-text, --color-muted, --color-surface-alt,
- *         --spacing-section-pad, --spacing-section-pad-lg, --container-small
+ *         --spacing-f10, --spacing-f11, --container-small, --container-wide
  * Hardcoded literals:
  *   - Article column max-w-(--container-small) (768px) — matches Figma body width
- *   - ToC sidebar w-56 (224px) — component-specific layout, no token equivalent
- *   - Related posts section py-(--spacing-section-pad) — standard section padding
- *   - CTA section py-(--spacing-section-pad-lg) — standard large section padding
+ *   - ToC sidebar w-80 (320px) — component-specific layout, no token equivalent
+ *   - Related posts section py-f10 — standard section padding
+ *   - CTA section py-f11 — standard large section padding
+  *   - mt-f11 — header→body gap
  * Context variants: not needed
- * Composed from: BaseLayout, Container, BlogPostHeader, BlocksRenderer,
- *                TableOfContents, CtaRow, Tag, Button,
- *                IconLink, IconLinkedIn, IconX, IconFacebook
+ * Composed from: BaseLayout, Container, BlogPostHeader, BlogPostSlider,
+ *                BlocksRenderer, TableOfContents, CtaAction
  */
 
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import Container from '@/layouts/Container.astro'
 import BlogPostHeader from '@/features/blogpost/BlogPostHeader.astro'
+import BlogPostSlider from '@/features/blogpost/BlogPostSlider.astro'
 import BlocksRenderer from '@/components/BlocksRenderer.astro'
 import TableOfContents from '@/components/TableOfContents.astro'
-import CtaRow from '@/components/CtaRow.astro'
-import Tag from '@/components/ui/astro/Tag.astro'
-import Button from '@/components/ui/astro/Button.astro'
-import IconLink from '@components/icons/IconLink.astro'
-import IconLinkedIn from '@components/icons/IconLinkedIn.astro'
-import IconX from '@components/icons/IconX.astro'
-import IconFacebook from '@components/icons/IconFacebook.astro'
+import CtaAction from '@/components/CtaAction.astro'
+
 import {
   fetchBlogPostByDocumentId,
   fetchBlogPostSlugs,
@@ -41,6 +40,7 @@ import {
   fetchRelatedBlogPosts,
 } from '@/features/blogpost/blogpost.api'
 import { extractHeadings } from '@/lib/blocks-renderer'
+import { BLOG_RELATED } from '@/lib/content'
 
 export interface Props {
   documentId: string
@@ -110,7 +110,7 @@ const ogImageAlt = post.featuredImage?.alternativeText ?? ''
       '@type': 'Article',
       headline: post.title,
       description: post.excerpt,
-      datePublished: post.publishedAt,
+      datePublished: post.dateIso,
       author: post.author
         ? {
             '@type': 'Person',
@@ -125,246 +125,54 @@ const ogImageAlt = post.featuredImage?.alternativeText ?? ''
     })}
   />
 
-  <!-- BlogPostHeader: full-width section -->
-  <BlogPostHeader post={post} />
+  <section>
+    <Container wide>
+    <article>
+      <BlogPostHeader post={post} />
 
-  <!-- Body + ToC sidebar section -->
-  <section class="py-(--spacing-section-pad-lg)">
-    <Container>
-      <div class="flex flex-col lg:flex-row lg:gap-10 xl:gap-16">
-        <!-- Article column — reading width -->
-        <article class="max-w-(--container-small) flex-1">
-          <!-- Rich text body -->
+      <!-- Body + ToC sidebar -->
+      <div class="mt-f11 flex flex-col lg:flex-row lg:justify-between">
+        <div class="w-full max-w-(--container-small)">
           <BlocksRenderer
             blocks={post.body}
             class="[&>blockquote]:my-9 [&>h2:not(:first-child)]:mt-6 [&>h2]:mb-5 [&>h3:not(:first-child)]:mt-6 [&>h3]:mb-5 [&>h4:not(:first-child)]:mt-6 [&>h4]:mb-5 [&>h5:not(:first-child)]:mt-5 [&>h5]:mb-4 [&>h6:not(:first-child)]:mt-5 [&>h6]:mb-4 [&>img]:my-12 [&>ol]:mb-4 [&>p]:mb-4 [&>pre]:my-9 [&>ul]:mb-4"
           />
+        </div>
 
-          <!-- Share buttons + Tags row (below body) -->
-          <div class="mt-row-gap border-border border-t pt-8">
-            <!-- Share buttons -->
-            <div
-              class="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6"
-            >
-              <span class="text-page-text text-sm font-semibold"
-                >Share this article</span
-              >
-              <div class="flex items-center gap-4">
-                <button
-                  type="button"
-                  class="text-page-text hover:text-link-hover focus-visible:text-link-hover flex h-8 w-8 cursor-pointer items-center justify-center transition-colors"
-                  aria-label="Copy link"
-                  data-copy-url={canonicalUrl}
-                >
-                  <IconLink class="h-5 w-5" />
-                </button>
-                <a
-                  href={`https://linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonicalUrl)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-page-text hover:text-link-hover focus-visible:text-link-hover flex h-8 w-8 items-center justify-center transition-colors"
-                  aria-label="Share on LinkedIn"
-                >
-                  <IconLinkedIn class="h-5 w-5" />
-                </a>
-                <a
-                  href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(canonicalUrl)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-page-text hover:text-link-hover focus-visible:text-link-hover flex h-8 w-8 items-center justify-center transition-colors"
-                  aria-label="Share on X"
-                >
-                  <IconX class="h-5 w-5" />
-                </a>
-                <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(canonicalUrl)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-page-text hover:text-link-hover focus-visible:text-link-hover flex h-8 w-8 items-center justify-center transition-colors"
-                  aria-label="Share on Facebook"
-                >
-                  <IconFacebook class="h-5 w-5" />
-                </a>
-              </div>
-            </div>
-
-            <!-- Tags -->
-            {
-              post.tags.length > 0 && (
-                <div class="mt-6 flex flex-wrap items-center gap-2">
-                  <span class="text-page-text mr-1 text-sm font-semibold">
-                    Tags:
-                  </span>
-                  {post.tags.map((tag) => (
-                    <Tag label={tag.name} />
-                  ))}
-                </div>
-              )
-            }
-          </div>
-
-          <!-- Author profile -->
-          {
-            post.author && (
-              <div class="bg-surface border-border mt-10 flex items-center gap-4 rounded-lg border p-6">
-                {post.author.avatar && (
-                  <img
-                    src={post.author.avatar.url}
-                    alt={
-                      post.author.avatar.alternativeText ??
-                      `${post.author.name}'s avatar`
-                    }
-                    class="h-14 w-14 shrink-0 rounded-full object-cover"
-                    loading="lazy"
-                  />
-                )}
-                <div>
-                  <p class="text-page-text text-base font-semibold">
-                    {post.author.name}
-                  </p>
-                  {post.author.bio && (
-                    <p class="text-muted mt-0.5 text-sm">{post.author.bio}</p>
-                  )}
-                </div>
-              </div>
-            )
-          }
-        </article>
-
-        <!-- ToC sidebar — hidden on mobile (< 1024px) -->
         {
           headings.length > 0 && (
-            <aside class="hidden w-56 shrink-0 lg:block">
+            <aside class="hidden w-80 shrink-0 xl:block sticky top-[calc(var(--nav-height)+2rem)] self-start">
               <TableOfContents headings={headings} />
             </aside>
           )
         }
       </div>
+    </article>
     </Container>
   </section>
 
   <!-- CTA section (bg-surface-alt) -->
   {
     blogPostAction && (
-      <section class="bg-surface-alt py-(--spacing-section-pad-lg)">
-        <Container>
-          <div class="max-w-(--container-small) mx-auto text-center">
-            <h2 class="mb-4">{blogPostAction.heading}</h2>
-            {blogPostAction.description && (
-              <p class="text-body text-muted mx-auto mb-8 max-w-xl">
-                {blogPostAction.description}
-              </p>
-            )}
-            <CtaRow
-              buttons={[
-                {
-                  label: blogPostAction.buttonLabel,
-                  href: blogPostAction.buttonUrl,
-                  variant: 'primary',
-                },
-              ]}
-              size="lg"
-              gap="md"
-            />
-          </div>
-        </Container>
-      </section>
+      <CtaAction
+        heading={blogPostAction.heading}
+        description={blogPostAction.description}
+        buttons={[
+          {
+            label: blogPostAction.buttonLabel,
+            href: blogPostAction.buttonUrl,
+            variant: 'primary',
+          },
+        ]}
+        size="lg"
+      />
     )
   }
 
-  <!-- Related posts section -->
+  <!-- Related posts slider -->
   {
     relatedPosts.length > 0 && (
-      <section class="py-(--spacing-section-pad)">
-        <Container>
-          <div class="gap-component-gap flex flex-col">
-            <div class="flex items-end justify-between">
-              <div>
-                <h2>Related articles</h2>
-              </div>
-              <Button
-                variant="secondary"
-                label="View all"
-                href="/blog"
-                size="md"
-              />
-            </div>
-
-            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {relatedPosts.map((rp) => (
-                <a
-                  href={`/blog/${rp.slug}`}
-                  class="border-border bg-card-bg hover:border-link-hover focus-visible:outline-border-focus group flex flex-col overflow-hidden rounded-lg border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
-                >
-                  {rp.featuredImage && (
-                    <div class="aspect-[3/2] overflow-hidden">
-                      <img
-                        src={rp.featuredImage.url}
-                        alt={rp.featuredImage.alternativeText ?? ''}
-                        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                    </div>
-                  )}
-                  <div class="flex flex-1 flex-col gap-2 p-4">
-                    <h3 class="font-headline text-h6 text-page-text group-hover:text-link-hover line-clamp-2 font-bold transition-colors">
-                      {rp.title}
-                    </h3>
-                    <p class="text-muted line-clamp-2 flex-1 text-sm">
-                      {rp.excerpt}
-                    </p>
-                    <div class="text-muted border-border flex items-center justify-between border-t pt-2 text-xs">
-                      {rp.author && <span>{rp.author.name}</span>}
-                      <span>{rp.publishedAt}</span>
-                    </div>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        </Container>
-      </section>
+      <BlogPostSlider posts={relatedPosts} heading={BLOG_RELATED.heading} showViewAll={false} />
     )
   }
 </BaseLayout>
-
-<script>
-  /**
-   * Clipboard copy handler for "Copy link" share buttons.
-   * Uses data-copy-url attribute to identify target buttons.
-   * Creates a temporary aria-live region for feedback announcement.
-   */
-  document.addEventListener('click', async (e) => {
-    const target = e.target as HTMLElement
-    const btn = target.closest<HTMLButtonElement>('[data-copy-url]')
-    if (!btn) return
-
-    const url = btn.getAttribute('data-copy-url')
-    if (!url) return
-
-    // Create aria-live region for feedback
-    let liveRegion = document.getElementById('copy-feedback')
-    if (!liveRegion) {
-      liveRegion = document.createElement('div')
-      liveRegion.id = 'copy-feedback'
-      liveRegion.setAttribute('aria-live', 'polite')
-      liveRegion.setAttribute('aria-atomic', 'true')
-      liveRegion.className = 'sr-only'
-      document.body.appendChild(liveRegion)
-    }
-
-    try {
-      await navigator.clipboard.writeText(url)
-      liveRegion.textContent = 'Link copied to clipboard'
-    } catch {
-      // Fallback: select and copy from a temporary input
-      const input = document.createElement('input')
-      input.value = url
-      document.body.appendChild(input)
-      input.select()
-      document.execCommand('copy')
-      document.body.removeChild(input)
-      liveRegion.textContent = 'Link copied to clipboard'
-    }
-  })
-</script>

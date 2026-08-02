@@ -2,25 +2,39 @@
 /**
  * TableOfContents
  *
- * Sticky sidebar table of contents with scroll-spy active state.
- * Renders h2/h3 headings as a nested list. Falls back to static
- * anchor links when JavaScript is unavailable or disabled.
+ * Sticky sidebar table of contents with box-edge "stairs" design.
+ * Each successive button's left edge shifts right by 1rem via
+ * margin-left, with width compensated so the right edge always
+ * reaches the parent's (aside's) right edge — active band
+ * (filter-bg) stays flush on the right. Padding is constant
+ * 1rem horizontally for text breathing room inside each pill.
+ *
+ * Driven by CSS custom property --toc-depth (array index) fed
+ * inline per item via the `style` prop:
+ *   item 0 → margin-left 0, width 100%
+ *   item 1 → margin-left 1rem, width calc(100% - 1rem)
+ *   item 2 → margin-left 2rem, width calc(100% - 2rem)
+ *   …
+ *
+ * Scales to any number of ToC items with zero CSS changes.
  *
  * Props:
  *   headings: TocEntry[] — { level: 2 | 3, text: string, id: string }[]
  *   class?: string — spread onto root <nav>
  * Slots: none
- * Tokens: --color-page-text, --color-muted, --color-link-text, --color-link-hover,
- *         --color-border-focus, --spacing-section-pad
+ * Tokens: --color-filter-bg, --color-filter-fg,
+ *         --color-page-text, --color-muted
  * Hardcoded literals:
- *   - pl-4 (h3 indent) — component-specific layout, no token equivalent
- *   - top-(--spacing-section-pad) (sticky offset) — needs token confirmation
- *   - 2px / 0 offset for border-left on active item — styling choice, no token equivalent
+ *   - gap-3 (vertical gap between items)
+ *   - text-sm (label heading)
+ *   - --toc-step: 1rem (stairs step)
+ *   - padding-left/padding-right: 1rem (constant)
  * Context variants: not needed
- * Composed from: none
+ * Composed from: Button (filter variant)
  */
 
 import type { TocEntry } from '@/lib/blocks-renderer'
+import Button from '@components/ui/astro/Button.astro'
 
 interface Props {
   headings: TocEntry[]
@@ -29,77 +43,58 @@ interface Props {
 }
 
 const { headings, label = 'Table of contents', class: className } = Astro.props
-
-/** Organise headings into h2 → nested h3 structure */
-function buildNestedList(items: TocEntry[]): { h2: TocEntry; h3s: TocEntry[] }[] {
-  const result: { h2: TocEntry; h3s: TocEntry[] }[] = []
-  let currentH3s: TocEntry[] = []
-
-  for (const item of items) {
-    if (item.level === 2) {
-      if (result.length > 0) {
-        result[result.length - 1].h3s = currentH3s
-      }
-      result.push({ h2: item, h3s: [] })
-      currentH3s = []
-    } else if (item.level === 3 && result.length > 0) {
-      currentH3s.push(item)
-    }
-  }
-  if (result.length > 0) {
-    result[result.length - 1].h3s = currentH3s
-  }
-
-  return result
-}
-
-const nested = buildNestedList(headings)
-const hasItems = nested.length > 0
+const hasItems = headings.length > 0
 ---
 
 {
   hasItems && (
     <nav
-      class:list={[
-        "toc-nav hidden lg:block sticky top-(--spacing-section-pad) max-h-[calc(100vh-var(--spacing-section-pad)*2)] overflow-y-auto",
-        className,
-      ]}
+      class:list={["toc-nav", className]}
       aria-label={label}
     >
-      <p class="text-sm font-semibold text-page-text mb-3 uppercase tracking-wider">{label}</p>
-      <ul class="space-y-1 text-sm">
+      <p class="text-sm font-semibold text-page-text mb-4 uppercase tracking-wider">{label}</p>
+      <ol class="flex flex-col gap-3">
         {
-          nested.map(({ h2, h3s }) => (
+          headings.map((heading, i) => (
             <li>
-              <a
-                href={`#${h2.id}`}
-                class="toc-link block py-1 text-muted hover:text-page-text transition-colors border-l-2 border-transparent hover:border-current pl-0"
-                data-toc-level={h2.level}
-              >
-                {h2.text}
-              </a>
-              {h3s.length > 0 && (
-                <ul class="pl-4 space-y-1 mt-1">
-                  {h3s.map((h3) => (
-                    <li>
-                      <a
-                        href={`#${h3.id}`}
-                        class="toc-link block py-0.5 text-muted hover:text-page-text transition-colors border-l-2 border-transparent hover:border-current"
-                        data-toc-level={h3.level}
-                      >
-                        {h3.text}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <Button
+                variant="filter"
+                size="md"
+                href={`#${heading.id}`}
+                label={heading.text}
+                class:list={['toc-link']}
+                style={`--toc-depth: ${i}`}
+                data-toc-level={heading.level}
+              />
             </li>
           ))
         }
-      </ul>
+      </ol>
     </nav>
   )
 }
+
+<style is:global>
+  /**
+   * ToC stair indentation — overrides Button's inline-flex justify-center
+   * and px-btn-x-md uniform padding. Global so it reaches through Button's
+   * component boundary (Astro scoped styles can't target child component DOM).
+   *
+   * Box-edge stairs: each successive item gets a larger margin-left,
+   * compensated by a narrower width so the right edge always reaches the
+   * parent's right edge. Padding stays constant (1rem) for text breathing
+   * room inside the pill. Driven by --toc-depth (array index) set inline.
+   */
+  .toc-link {
+    --toc-step: 1rem;
+    --toc-indent: calc(var(--toc-depth, 0) * var(--toc-step));
+    justify-content: flex-start !important;
+    margin-left: var(--toc-indent);
+    width: calc(100% - var(--toc-indent));
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+</style>
 
 <script>
   /**
@@ -155,7 +150,9 @@ const hasItems = nested.length > 0
           }
         },
         {
-          rootMargin: prefersReducedMotion ? '0px' : '-80px 0px -60% 0px',
+          rootMargin: prefersReducedMotion
+            ? '0px'
+            : '-105px 0px -60% 0px',
           threshold: 0,
         },
       )

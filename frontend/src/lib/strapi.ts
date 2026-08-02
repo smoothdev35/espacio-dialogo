@@ -1,6 +1,8 @@
 import type {
   Update,
   UpdateCard,
+  BlogPost,
+  BlogPostAction,
   Author,
   Category,
   StrapiCollectionResponse,
@@ -161,6 +163,29 @@ export function getAuthors(params?: StrapiQueryParams) {
 
 export function getAuthor(documentId: string, params?: StrapiQueryParams) {
   return fetchSingle<Author>('authors', documentId, params)
+}
+
+export function getBlogPosts(params?: StrapiQueryParams) {
+  return fetchCollection<BlogPost>('blog-posts', params)
+}
+
+export function getBlogPost(documentId: string, params?: StrapiQueryParams) {
+  return fetchSingle<BlogPost>('blog-posts', documentId, params)
+}
+
+export async function getBlogPostSlugs(
+  params?: StrapiQueryParams,
+): Promise<{ slug: string; documentId: string }[]> {
+  const result = await fetchCollection<BlogPost>('blog-posts', {
+    fields: ['slug'],
+    pagination: { pageSize: 100 },
+    ...params,
+  })
+  return result.data.map((p) => ({ slug: p.slug, documentId: p.documentId }))
+}
+
+export function getBlogPostAction(params?: StrapiQueryParams) {
+  return fetchSingleType<BlogPostAction>('blog-post-action', params)
 }
 
 export function getTags(params?: StrapiQueryParams) {

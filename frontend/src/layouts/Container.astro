@@ -2,9 +2,11 @@
 /**
  * Container
  *
- * Props: class? (string) — spread onto root element for consumer overrides
+ * Props:
+ *   class?: string — spread onto root element for consumer overrides
+ *   wide?: boolean — use --container-wide (1440px) instead of --max-width (1280px)
  * Slots: default — content that must respect max-width and page gutters
- * Tokens: --max-width, --spacing-page-gutters
+ * Tokens: --max-width, --container-wide, --spacing-page-gutters
  * Hardcoded literals: calc expression for gutter-accounted outer max-width
  * Context variants: not needed
  * Composed from: none
@@ -12,15 +14,18 @@
 
 interface Props {
   class?: string;
+  wide?: boolean;
 }
 
-const { class: className } = Astro.props;
+const { class: className, wide = false } = Astro.props;
 ---
 
 <div
   class:list={[
     "w-full mx-auto px-page-gutters",
-    "max-w-[calc(var(--max-width)+calc(var(--spacing-page-gutters)*2))]",
+    wide
+      ? "max-w-[calc(var(--container-wide)+calc(var(--spacing-page-gutters)*2))]"
+      : "max-w-[calc(var(--max-width)+calc(var(--spacing-page-gutters)*2))]",
     className,
   ]}
 >
