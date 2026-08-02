@@ -41,7 +41,7 @@ const errorId = `${id}-error`
       {...rest}
     />
     <span
-      class="flex h-4 w-4 shrink-0 items-center justify-center rounded-checkbox border border-checkbox-border bg-checkbox-bg transition-colors peer-checked:border-checkbox-bg-checked peer-checked:bg-checkbox-bg-checked peer-focus-visible:ring-2 peer-focus-visible:ring-border-focus peer-focus-visible:ring-offset-2 peer-disabled:opacity-50"
+      class="flex h-4 w-4 shrink-0 items-center justify-center rounded-checkbox border border-checkbox-border bg-checkbox-bg peer-checked:border-checkbox-bg-checked peer-checked:bg-checkbox-bg-checked peer-disabled:opacity-50"
       aria-hidden="true"
     >
       <svg
@@ -56,13 +56,13 @@ const errorId = `${id}-error`
         <path d="M1 5l3.5 3.5L11 1"></path>
       </svg>
     </span>
-    <span class="text-sm text-surface-text">{label}</span>
+    <span>{label}</span>
   </label>
   {
     hasError && (
       <p
         id={errorId}
-        class="ml-6 text-sm text-[var(--color-error)]"
+        class="ml-6 text-sm text-error"
         role="alert"
       >
         {errorMessage}

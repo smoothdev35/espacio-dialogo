@@ -6,13 +6,13 @@
  *        class? (string) — spread onto root element for consumer overrides
  * Slots: none
  * Tokens: --color-surface-text, --color-border, --radius-lg, --font-headline, --font-body,
- *         --spacing-card-gap-tight, --spacing-card-gap-base, --spacing-card-gap-loose
+ *         --spacing-f4, --spacing-f5, --spacing-f6, --text-h4
  * Hardcoded literals: border = color-mix(white 20%, transparent) — var(--color-border) resolves to same in dark mode
  *                     lg:min-h-[480px] — figma card height at desktop breakpoint
  * Context variants: not needed
  * Composed from: Tag (astro)
  *
- * Structure: single <a> wraps the entire card. Title is <h4> (not a link).
+ * Structure: single <a> wraps the entire card. Title is <h4> (H4, 36px at desktop per Figma).
  * Read-more is a <span> — underline animation triggers on card hover/focus.
  */
 
@@ -58,26 +58,26 @@ const {
   }
 
   <!-- Content panel: 50% width, 48px padding, read-more pinned to bottom -->
-  <div class="flex flex-col justify-between gap-card-gap-loose p-6 lg:p-12 lg:w-1/2">
+  <div class="flex flex-col justify-between gap-f8 p-6 lg:p-12 lg:w-1/2">
     <!-- Top group: info row + heading + excerpt -->
-    <div class="flex flex-col">
+    <div class="flex flex-col gap-f4">
       <!-- Info row: category tag + readTime (no date) -->
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-f4">
         {
           category && (
             <Tag label={category.name} />
           )
         }
-        <span class="text-muted">
+        <span class="text-muted font-semibold">
           {readTime}
         </span>
       </div>
 
-      <!-- Title: h4 for card-level heading (sits under h1/h2 section titles) -->
-      <h4 class="mt-card-gap-tight">{title}</h4>
+      <!-- Title: h4 for featured card heading (Figma: H4, 36px at desktop) -->
+      <h4>{title}</h4>
 
       <!-- Excerpt: card body is 16px (section-level body is 18px); opacity from design -->
-      <p class="mt-card-gap-base">
+      <p>
         {excerpt}
       </p>
     </div>

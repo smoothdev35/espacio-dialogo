@@ -23,17 +23,35 @@ const { class: className } = Astro.props
 
 <a
   href="/"
-  class:list={['logo-link flex items-center w-[72px] h-[72px]', className]}
+  class:list={['logo-link flex h-[72px] w-[72px] items-center', className]}
   aria-label="Espacio Diálogo - Home"
 >
-  <img src="/edd-logo.png" class="logo-light-mode object-contain" alt="" aria-hidden="true" />
-  <img src="/edd-logo-light.png" class="logo-dark-mode object-contain" alt="" aria-hidden="true" />
+  <img
+    src="/edd-logo.png"
+    class="logo-light-mode object-contain"
+    alt=""
+    aria-hidden="true"
+  />
+  <img
+    src="/edd-logo-light.png"
+    class="logo-dark-mode object-contain"
+    alt=""
+    aria-hidden="true"
+  />
 </a>
 
 <style>
-  .logo-light-mode { display: block; }
-  .logo-dark-mode  { display: none; }
+  .logo-light-mode {
+    display: block;
+  }
+  .logo-dark-mode {
+    display: none;
+  }
 
-  :global(.dark) .logo-light-mode { display: none; }
-  :global(.dark) .logo-dark-mode  { display: block; }
+  :global(.dark) .logo-light-mode {
+    display: none;
+  }
+  :global(.dark) .logo-dark-mode {
+    display: block;
+  }
 </style>

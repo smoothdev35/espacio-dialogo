@@ -110,11 +110,11 @@ const breadcrumbTitle = update.title.split(/\s+/).slice(0, 2).join(' ')
     <!-- Right column: featured image -->
     {
       update.featuredImage && (
-        <div class="w-full">
+        <div class="flex-1 min-w-0 mt-f9 xl:mt-0">
           <img
             src={update.featuredImage.url}
             alt={update.featuredImage.alternativeText ?? ''}
-            class="w-full aspect-video lg:aspect-[3/2] rounded-lg object-cover"
+            class="w-full aspect-video xl:aspect-3/2 2xl:aspect-video rounded-lg object-cover"
             loading="eager"
             decoding="async"
           />

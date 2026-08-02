@@ -38,12 +38,12 @@ const hasLeftIcon = Astro.slots.has('left-icon')
 const hasRightIcon = Astro.slots.has('right-icon')
 
 const inputClasses = [
-  'w-full rounded-input border bg-input text-input-text py-2',
+  'w-full border bg-input text-input-text py-2',
   'placeholder:text-input-placeholder',
-  'focus:bg-input-focus focus:border-input-focus-border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus',
+  'focus:bg-input-focus focus:border-input-focus-border',
   'disabled:bg-input-disabled disabled:cursor-not-allowed disabled:opacity-60',
   hasError
-    ? 'border-[var(--color-error)]'
+    ? 'border-error'
     : 'border-input-border',
   // Adjust padding based on icon presence
   hasLeftIcon ? 'pl-9' : 'pl-3',
@@ -53,11 +53,11 @@ const inputClasses = [
 ---
 
 <div class="flex flex-col gap-1">
-  <label for={id} class="text-sm font-medium text-surface-text">
+  <label for={id} class="text-sm">
     {label}
     {
       required && (
-        <span class="ml-1 text-[var(--color-error)]" aria-hidden="true">
+        <span class="ml-1 text-error" aria-hidden="true">
           *
         </span>
       )
@@ -97,7 +97,7 @@ const inputClasses = [
     helperText && !hasError && (
       <p
         id={`${id}-helper`}
-        class="text-sm text-surface-text opacity-70"
+        class="text-sm  opacity-70"
       >
         {helperText}
       </p>
@@ -107,7 +107,7 @@ const inputClasses = [
     hasError && (
       <p
         id={`${id}-error`}
-        class="text-sm text-[var(--color-error)]"
+        class="text-sm text-error"
         role="alert"
       >
         {errorMessage}

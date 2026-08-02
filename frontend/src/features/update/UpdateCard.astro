@@ -6,13 +6,13 @@
  *        class? (string) — spread onto root element for consumer overrides
  * Slots: none
  * Tokens: --color-surface-text, --color-border, --radius-lg, --font-headline, --font-body,
- *         --spacing-card-gap-tight, --spacing-card-gap-base, --spacing-card-gap-loose
+ *         --spacing-f4, --spacing-f5, --spacing-f6, --text-h5
  * Hardcoded literals: none
  *                     image aspect-video (16:9) — from Figma grid card ratio
  * Context variants: not needed
  * Composed from: Tag (astro)
  *
- * Structure: single <a> wraps the entire card. Title is <h4> (not a link).
+ * Structure: single <a> wraps the entire card. Title is <h5> (unified card heading token).
  * Read-more is a <span> — underline animation triggers on card hover/focus.
  */
 
@@ -39,7 +39,7 @@ const {
   href={`/updates/${slug}`}
   class:list={[
     'update-card group flex flex-col rounded-lg',
-    'bg-card-bg border-border border text-page-text hover:underline-0!',
+    'bg-card-bg border-border text-page-text hover:underline-0! border',
     className,
   ]}
 >
@@ -58,22 +58,22 @@ const {
   }
 
   <!-- Content: 24px padding, read-more pinned to bottom -->
-  <div class="flex flex-col justify-between gap-card-gap-loose p-6">
+  <div class="gap-f8 flex flex-col justify-between p-6">
     <!-- Top group: info row + heading + excerpt -->
-    <div class="flex flex-col">
+    <div class="gap-f4 flex flex-col">
       <!-- Info row: category tag + readTime (no date) -->
-      <div class="flex items-center gap-2">
+      <div class="gap-f4 flex items-center">
         {category && <Tag label={category.name} />}
-        <span class="text-muted">
+        <span class="text-muted font-semibold">
           {readTime}
         </span>
       </div>
 
-      <!-- Title: h4 for card-level heading (sits under h1/h2 section titles) -->
-      <h4 class="mt-card-gap-tight">{title}</h4>
+      <!-- Title: h5 for card-level heading (unified token across all cards) -->
+      <h5>{title}</h5>
 
       <!-- Excerpt: card body 16px (section-level body is 18px); clamp from design -->
-      <p class="mt-card-gap-base line-clamp-3">
+      <p class="line-clamp-3">
         {excerpt}
       </p>
     </div>
@@ -95,5 +95,4 @@ const {
   .update-card:focus-visible * {
     text-decoration-line: none;
   }
-
 </style>

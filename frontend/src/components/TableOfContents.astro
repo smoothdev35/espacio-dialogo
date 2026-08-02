@@ -205,17 +205,9 @@ const hasItems = nested.length > 0
 
         // Toggle visual active state
         if (isActive) {
-          link.classList.add(
-            '!text-page-text',
-            '!border-l-[var(--color-page-text)]',
-          )
-          link.classList.remove('text-muted', 'border-transparent')
+          link.classList.add('!bg-filter-bg', '!text-filter-fg')
         } else {
-          link.classList.remove(
-            '!text-page-text',
-            '!border-l-[var(--color-page-text)]',
-          )
-          link.classList.add('text-muted', 'border-transparent')
+          link.classList.remove('!bg-filter-bg', '!text-filter-fg')
         }
       })
     }

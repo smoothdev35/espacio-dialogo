@@ -17,7 +17,8 @@ const {
 const hasIcon = Astro.slots.has('icon')
 
 const tagClasses = [
-  'inline-flex items-center gap-1 rounded-tag border bg-tag text-tag-text border-tag-border px-2.5 py-1 text-small',
+  'inline-flex items-center gap-1 rounded-tag border bg-tag text-tag-text border-tag-border px-2.5 py-1',
+
   className,
 ].join(' ')
 ---
@@ -43,7 +44,7 @@ const tagClasses = [
       <button
         type="button"
         aria-label={`Remove ${label}`}
-        class="ml-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full text-current opacity-60 transition-opacity hover:opacity-100"
+        class="ml-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full text-current opacity-60 transition-opacity hover:opacity-100 focus-visible:opacity-100"
       >
         <svg
           class="h-3 w-3"

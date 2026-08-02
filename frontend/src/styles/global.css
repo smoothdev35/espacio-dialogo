@@ -115,6 +115,10 @@
     --nav-hover:  var(--brand-neutral-lighter);
     --nav-arrow-hover: var(--brand-neutral-lighter);
 
+    /* ─── Filter pill tokens — light mode defaults ──── */
+    --filter-bg: var(--brand-white);
+    --filter-fg: var(--brand-bay-of-many);
+
     /* ─── Input tokens ─────────────────────────────────── */
     --input:              var(--brand-neutral-lightest);
     --input-text:         var(--brand-neutral-darker);
@@ -197,6 +201,10 @@
       --nav-hover:  var(--brand-neutral-dark);
       --nav-arrow-hover: var(--brand-neutral-dark);
 
+      /* Filter pill — dark mode swaps */
+      --filter-bg: var(--brand-neutral-darkest);
+      --filter-fg: var(--brand-accent);
+
       /* Link */
       --link-text:   var(--brand-neutral-lightest);
       --link-hover:  var(--brand-accent);
@@ -271,26 +279,31 @@
   /* ═══ Spacing tokens ════════════════════════════════════ */
   /* Page gutters: 20px → 64px */
   --spacing-page-gutters: clamp(1.25rem, 0.104rem + 4.792vw, 4rem);
-  /* Section padding - medium: 32px → 80px */
-  --spacing-section-pad: clamp(2rem, 1rem + 5vw, 5rem);
-  /* Section padding - large: 48px → 112px */
-  --spacing-section-pad-lg: clamp(3rem, 1.667rem + 6.667vw, 7rem);
-  /* Component gap — default range */
-  --spacing-component-gap: clamp(1rem, 0.648rem + 1.502vw, 2rem);
   /* Row gap: 32px → 40px — vertical space between major rows/blocks */
   --spacing-row-gap: clamp(2rem, 1.6rem + 1vw, 2.5rem);
-  /* Card gap — tight: tag → title (16px) */
-  --spacing-card-gap-tight: 1rem;
-  /* Card gap — base: title → excerpt (24px) */
-  --spacing-card-gap-base: 1.5rem;
-  /* Card gap — loose: excerpt → ReadMore / author row (32px) */
-  --spacing-card-gap-loose: 2rem;
+  /* f4: 12px → 19px — text-level gaps */
+  --spacing-f4: clamp(0.75rem, 0.6rem + 0.75vw, 1.2rem);
+  /* f5: 18px → 24px — collapsed into f4 */
+  /* --spacing-f5: clamp(1.125rem, 0.99rem + 0.56vw, 1.5rem); — unused, removed */
+  /* f6: 20px → 28px — collapsed into f8 */
+  /* --spacing-f6: clamp(1.25rem, 1.083rem + 0.833vw, 1.75rem); — unused, removed */
+  /* f7: 32px → 53px — collapsed into f9 */
+  /* --spacing-f7: clamp(2rem, 1.45rem + 2.3vw, 3.3rem); — unused, removed */
+  /* f8: 19px → 31px — block/content gap */
+  --spacing-f8: clamp(1.2rem, 0.96rem + 1.2vw, 1.92rem);
+  /* f9: 31px → 49px — large block gap */
+  --spacing-f9: clamp(1.92rem, 1.536rem + 1.92vw, 3.072rem);
+  /* f10: 49px → 79px — section padding (medium) */
+  --spacing-f10: clamp(3.072rem, 2.458rem + 3.072vw, 4.915rem);
+  /* f11: 79px → 126px — section padding (large), CTA & Timeline sections, article header→body */
+  --spacing-f11: clamp(4.915rem, 3.932rem + 4.915vw, 7.864rem);
   /* Navbar height — matches <header> rendered height */
   --nav-height: 73px;
 
   /* ─── Container widths ───────────────────────────────── */
   --container-large: 1280px;
   --container-small: 768px;
+  --container-wide: 1440px;  /* Figma artboard width — article headers */
   --max-width: var(--container-large);
 
   /* ─── Button size geometry spacing ──────────────────── */
@@ -333,12 +346,12 @@
   /* ═══ Font sizes (fluid) ════════════════════════════════ */
   /* Viewport bounds: 320px → 1280px */
 
-  --text-h1: clamp(2.5rem, 0.833rem + 6.944vw, 4.5rem);
-  --text-h2: clamp(2rem, 1.583rem + 2.083vw, 3.25rem);
-  --text-h3: clamp(1.75rem, 1.417rem + 1.667vw, 2.75rem);
-  --text-h4: clamp(1.375rem, 1.083rem + 1.458vw, 2.25rem);
-  --text-h5: clamp(1.1875rem, 1rem + 0.938vw, 1.75rem);
-  --text-h6: clamp(1.0625rem, 0.958rem + 0.521vw, 1.375rem);
+  --text-h1: clamp(2.813rem, 2.25rem + 2.813vw, 4.5rem);
+  --text-h2: clamp(2.313rem, 1.833rem + 2.396vw, 3.75rem);
+  --text-h3: clamp(1.938rem, 1.542rem + 1.979vw, 3.125rem);
+  --text-h4: clamp(1.625rem, 1.313rem + 1.563vw, 2.563rem);
+  --text-h5: clamp(1.375rem, 1.104rem + 1.354vw, 2.188rem);
+  --text-h6: clamp(1.125rem, 0.896rem + 1.146vw, 1.813rem);
   --text-body: clamp(1rem, 0.917rem + 0.347vw, 1.125rem); /* Text Medium: 16→18 */
   --text-large: clamp(1.125rem, 0.542rem + 2.431vw, 1.375rem);
   /* ═══ Line heights ══════════════════════════════════════ */
@@ -395,6 +408,10 @@
   --color-nav-hover:  var(--nav-hover);
   --color-nav-arrow-hover: var(--nav-arrow-hover);
   --color-nav-btn-fg: var(--nav-btn-fg);
+
+  /* Filter pill colors */
+  --color-filter-bg: var(--filter-bg);
+  --color-filter-fg: var(--filter-fg);
 
   /* Input colors */
   --color-input: var(--input);
@@ -476,10 +493,10 @@
   /* ═══ Section ════════════════════════════════════════════ */
   section {
     width: 100%;
-    padding-block: var(--spacing-section-pad);
+    padding-block: var(--spacing-f10);
 
     & > :not([hidden]) ~ :not([hidden]) {
-      margin-top: var(--spacing-component-gap);
+      margin-top: var(--spacing-f8);
     }
   }
 
@@ -532,6 +549,12 @@
     letter-spacing: var(--tracking-heading);
   }
 
+  time {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    font-weight: 600;
+  }
+
   /* ═══ Small ══════════════════════════════════════════════ */
   small {
     font-size: var(--text-sm);
@@ -580,7 +603,6 @@
 
   /* ═══ UI Elements — font-weight medium ══════════════════ */
   span,
-  time,
   legend,
   summary {
     font-weight: var(--font-weight-medium);

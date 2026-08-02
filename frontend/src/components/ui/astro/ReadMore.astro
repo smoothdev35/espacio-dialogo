@@ -23,10 +23,10 @@ const { class: className } = Astro.props
 ---
 
 <span class:list={[
-  'readmore inline-flex w-fit items-center gap-2 text-link-text',
+  'readmore inline-flex w-fit items-center gap-2 text-link-text text-base',
   className,
 ]}>
-  Read more
+  {READ_MORE.label}
   <svg
     class="relative top-px h-4 w-4 shrink-0 transition-transform! duration-200! ease-in-out"
     xmlns="http://www.w3.org/2000/svg"

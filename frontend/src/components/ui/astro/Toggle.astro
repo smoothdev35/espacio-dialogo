@@ -27,12 +27,11 @@ const errorId = `${id}-error`
 
   const trackClasses = [
     'relative inline-flex h-6 w-11 shrink-0 items-center rounded-full',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2',
     'disabled:cursor-not-allowed disabled:opacity-60',
   checked
     ? 'bg-toggle-track-on'
     : 'bg-toggle-track border border-toggle-track-border',
-  hasError ? 'border-[var(--color-error)]' : '',
+  hasError ? 'border-error' : '',
   className,
 ].join(' ')
 
@@ -61,13 +60,13 @@ const thumbClasses = [
     >
       <span class:list={[thumbClasses]} aria-hidden="true" />
     </button>
-    <span class="text-sm text-surface-text">{label}</span>
+    <span>{label}</span>
   </label>
   {
     hasError && (
       <p
         id={errorId}
-        class="text-sm text-[var(--color-error)]"
+        class="text-sm text-error"
         role="alert"
       >
         {errorMessage}
