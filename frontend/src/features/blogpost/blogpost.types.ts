@@ -16,6 +16,8 @@ export interface BlogPostCardProps {
   slug: string
   excerpt: string
   publishedAt: string
+  /** Raw ISO date for `<time datetime>` — machine-readable */
+  dateIso: string
   readTime: string
   featuredImage: { url: string; alternativeText: string | null } | null
   tags?: { name: string; slug: string }[]
@@ -27,6 +29,8 @@ export interface BlogPostDetailProps {
   slug: string
   excerpt: string
   publishedAt: string
+  /** Raw ISO date for `<time datetime>` — machine-readable */
+  dateIso: string
   readTime: string
   featuredImage: { url: string; alternativeText: string | null } | null
   tags: { name: string; slug: string }[]

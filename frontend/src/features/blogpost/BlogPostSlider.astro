@@ -2,115 +2,98 @@
 /**
  * BlogPostSlider
  *
- * Self-fetches blog posts and renders a horizontal scrolling slider.
+ * Renders a horizontal scrolling slider of blog post cards.
  * Matches Figma "Blog / 65 /" design.
  *
- * Props: class? (string) — spread onto root <section> for consumer overrides
+ * Accepts optional `posts` prop. When omitted, self-fetches from Strapi.
+ *
+ * Props:
+ *   posts? — pre-fetched posts (skip self-fetch)
+ *   heading? — section heading (default: "Short heading goes here")
+ *   description? — optional subtitle below heading
+ *   showViewAll? — show "View all" button (default: true)
+ *   class? — spread onto root <section>
  * Slots: none
- * Tokens: --spacing-section-pad-large, --spacing-component-gap,
- *         --color-surface, --color-surface-text, --color-contrast-text,
- *         --color-tag, --color-tag-text, --font-headline, --font-body,
- *         --text-h5, --text-small, --text-regular, --text-tagline, --text-body,
- *         --radius-medium, --radius-tag, --leading-h5, --tracking-heading,
- *         --color-nav-bg (arrow bg), --color-nav-btn-fg (arrow icons + active dot fill)
+ * Tokens: --color-page (section background), --color-page-text, --color-muted,
+ *         --spacing-f4, --spacing-f5, --spacing-f6, --spacing-row-gap,
+ *         --font-headline, --font-body,
+ *         --text-h5, --text-tagline, --text-body,
+ *         --color-nav-bg (arrow bg), --color-nav-btn-fg (arrow icons + active dot fill),
+ *         --color-dot-inactive
  * Hardcoded literals:
- *   - Inactive dots use bg-(--color-muted) opacity-25 (theme-aware — always contrasts against any surface)
  *   - scroll-snap / overflow-x — layout-specific, no token equivalent
  *   - Card width 394px — from Figma spec — confirm
  *   - Arrow buttons 48×48, gap-4 dots — layout-specific
  *   - Arrow bg uses --color-nav-bg token (semantic, theme-aware)
  *   - Arrow SVG paths — standard chevron icons
- *   - flex-1 on content area — equalizes card height regardless of content length
- *   - transform: scale(1.08) + transition: transform in <style> block — bypasses global !important transition-colors on *
  *   - Client JS: dots navigate cards, arrows prev/next, active dot on scroll — no framework for interactivity
- * Context variants: section uses --color-surface (theme-aware)
- * Composed from: Container
+ * Context variants: not needed — section uses explicit bg-page, cards have no background
+ * Composed from: Container, SectionHeader, BlogPostCard
  */
 
 import Container from '@/layouts/Container.astro'
+import SectionHeader from '@/components/ui/astro/SectionHeader.astro'
+import BlogPostCard from './BlogPostCard.astro'
 import { fetchBlogPosts } from './blogpost.api'
 import type { BlogPostCardProps } from './blogpost.types'
 import Button from '@/components/ui/astro/Button.astro'
+import { BLOG_SLIDER } from '@/lib/content'
 
 interface Props {
+  posts?: BlogPostCardProps[]
+  tagline?: string
+  heading?: string
+  description?: string
+  showViewAll?: boolean
   class?: string
 }
 
-const { class: className } = Astro.props
+const { posts: providedPosts, tagline = BLOG_SLIDER.tagline, heading = BLOG_SLIDER.heading, description, showViewAll = true, class: className } = Astro.props
 
-const posts: BlogPostCardProps[] = await fetchBlogPosts().catch((err) => {
+const posts: BlogPostCardProps[] = providedPosts ?? (await fetchBlogPosts().catch((err) => {
   console.error('Failed to fetch blog posts:', err)
   return []
-})
+}))
 ---
 
 <section class:list={[className]}>
   <Container>
-    <div class="flex flex-col gap-row-gap">
+    <div class="flex flex-col gap-f9">
       <!-- ═══ Title row ═══ -->
       <div
-        class="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end"
+        class="flex flex-col items-start justify-between gap-f8 sm:flex-row sm:items-end"
       >
-        <div class="flex flex-col gap-4">
-          <p
-            class="font-body text-tagline font-bold tracking-widest text-muted"
-          >
-            Blog
-          </p>
-          <h2>Short heading goes here</h2>
-            <p class="max-w-2xl font-medium">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </p>
-        </div>
+        <SectionHeader
+          tagline={tagline}
+          heading={heading}
+          description={description}
+        />
 
-        <Button variant="secondary" label="View all" href="/blog" class="self-start md:self-auto" />
+        {showViewAll && <Button variant="secondary" label={BLOG_SLIDER.viewAll} href="/blog" class="self-start md:self-auto" />}
       </div>
 
       <!-- ═══ Slider row ═══ -->
-      <div class="flex flex-col gap-10">
+      <div class="flex flex-col gap-f9">
         {posts.length > 0 ? (
           <>
             <!-- Cards -->
             <div
               id="blog-slider-track"
-              class="flex gap-6 overflow-x-auto px-2 pt-2 pb-4 snap-x snap-mandatory scrollbar-hide"
+              class="-mx-2 -mt-2 -mb-4 flex gap-f8 overflow-x-auto px-2 pt-2 pb-4 snap-x snap-mandatory scrollbar-hide"
               style="scrollbar-width: none; -ms-overflow-style: none; scroll-padding-left: 8px;"
             >
               {
                 posts.map((post, i) => (
-                  <a
-                    href={`/blog/${post.slug}`}
-                    data-index={i}
-                    class="blog-card group flex w-[85vw] shrink-0 flex-col snap-start sm:w-[380px] lg:w-[394px] text-page-text hover:underline-0!"
+                  <BlogPostCard
+                    slug={post.slug}
+                    title={post.title}
+                    excerpt={post.excerpt}
+                    featuredImage={post.featuredImage}
+                    class="blog-card w-[85vw] shrink-0 snap-start sm:w-[380px] lg:w-[394px]"
                   >
-                    <!-- Image: 3:2 ratio, rounded top corners only -->
-                    <div class="aspect-[3/2] overflow-hidden rounded-t-radius-medium">
-                      {post.featuredImage ? (
-                        <img
-                          src={post.featuredImage.url}
-                          alt={post.featuredImage.alternativeText ?? ''}
-                          class="h-full w-full object-cover"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div class="h-full w-full bg-surface-text/10" aria-hidden="true" />
-                      )}
-                    </div>
-
-                    <!-- Content area: heading → excerpt -->
-                    <div class="flex flex-1 flex-col pt-6">
-                      <h5>
-                        {post.title}
-                      </h5>
-
-                      <p class="mt-card-gap-base line-clamp-2">
-                        {post.excerpt}
-                      </p>
-                    </div>
-
-                    <!-- Author row: avatar + name (top) + date·read (bottom) -->
+                    <!-- Author row -->
                     {post.author ? (
-                      <div class="mt-card-gap-loose flex items-center gap-4">
+                      <div slot="footer" class="flex items-center gap-4">
                         {post.author.avatar ? (
                           <img
                             src={post.author.avatar}
@@ -120,32 +103,32 @@ const posts: BlogPostCardProps[] = await fetchBlogPosts().catch((err) => {
                           />
                         ) : (
                           <div
-                            class="h-12 w-12 rounded-full bg-surface-text/10"
+                            class="h-12 w-12 rounded-full bg-muted"
                             aria-hidden="true"
                           />
                         )}
 
-                        <div class="flex flex-col gap-0.5">
+                        <div class="flex flex-col gap-y-1">
                           <span class="font-semibold">
                             {post.author.name}
                           </span>
                           <div
-                            class="flex items-center gap-2 text-small text-muted"
+                            class="flex items-center gap-2 text-sm font-semibold text-muted"
                           >
-                            <time datetime={post.publishedAt}>{post.publishedAt}</time>
-                            <span aria-hidden="true">·</span>
+                            <time datetime={post.dateIso}>{post.publishedAt}</time>
+                            <span aria-hidden="true">•</span>
                             <span>{post.readTime}</span>
                           </div>
                         </div>
                       </div>
-        ) : null}
-                  </a>
+                    ) : null}
+                  </BlogPostCard>
                 ))
               }
             </div>
 
             <!-- Controls: dots + arrows -->
-            <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            <div                 class="flex flex-row items-center justify-between gap-4">
               <!-- Dot breadcrumbs — 6 dots, Figma spec -->
               <div class="flex gap-4">
                 {
@@ -154,7 +137,7 @@ const posts: BlogPostCardProps[] = await fetchBlogPosts().catch((err) => {
                       type="button"
                       data-index={i}
                         class="blog-slider-dot h-2 w-2 rounded-full bg-dot-inactive hover:bg-nav-btn-fg focus-visible:bg-nav-btn-fg"
-                      aria-label={`Go to post ${i + 1}`}
+                      aria-label={BLOG_SLIDER.goToPost(i + 1)}
                     />
                   ))
                 }
@@ -167,7 +150,7 @@ const posts: BlogPostCardProps[] = await fetchBlogPosts().catch((err) => {
                   variant="nav"
                   size="md"
                   iconPosition="only"
-                  label="Previous posts"
+                  label={BLOG_SLIDER.prevPosts}
                   icon='<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>'
                 />
                 <Button
@@ -175,14 +158,14 @@ const posts: BlogPostCardProps[] = await fetchBlogPosts().catch((err) => {
                   variant="nav"
                   size="md"
                   iconPosition="only"
-                  label="Next posts"
+                  label={BLOG_SLIDER.nextPosts}
                   icon='<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>'
                 />
               </div>
             </div>
           </>
         ) : (
-          <p class="text-center text-muted py-16">No blog posts published yet.</p>
+          <p class="text-page-text text-center py-16 text-h6">{BLOG_SLIDER.noPosts}</p>
         )}
       </div>
     </div>
@@ -199,7 +182,7 @@ const posts: BlogPostCardProps[] = await fetchBlogPosts().catch((err) => {
     const prevBtn = document.getElementById('blog-slider-prev')
     const nextBtn = document.getElementById('blog-slider-next')
 
-    const gap = 24 // gap-6 = 24px
+    const gap = parseInt(getComputedStyle(track).columnGap || '24', 10)
 
     function getCardWidth() {
       return cards[0]?.offsetWidth ?? 0

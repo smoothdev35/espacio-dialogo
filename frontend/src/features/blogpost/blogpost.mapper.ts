@@ -19,11 +19,13 @@ import type {
 export function toBlogPostCardProps(
   post: BlogPost,
 ): BlogPostCardProps {
+  const rawDate = post.publishedAt ?? post.createdAt
   return {
     title: post.title,
     slug: post.slug,
     excerpt: post.excerpt,
-    publishedAt: formatDate(post.publishedAt ?? post.createdAt),
+    publishedAt: formatDate(rawDate),
+    dateIso: rawDate,
     readTime: calculateReadTime(post.body),
     featuredImage: post.featuredImage
       ? {
@@ -47,11 +49,13 @@ export function toBlogPostCardProps(
 export function toBlogPostDetailProps(
   post: BlogPost,
 ): BlogPostDetailProps {
+  const rawDate = post.publishedAt ?? post.createdAt
   return {
     title: post.title,
     slug: post.slug,
     excerpt: post.excerpt,
-    publishedAt: formatDate(post.publishedAt ?? post.createdAt),
+    publishedAt: formatDate(rawDate),
+    dateIso: rawDate,
     readTime: calculateReadTime(post.body),
     featuredImage: post.featuredImage
       ? {

@@ -3,39 +3,39 @@
  * BlogPostHeader
  *
  * Renders the top-of-page header for the BlogPost detail page:
- * back link → tag + date → h1 title → featured image → author/read-time + share
- * Desktop: stacked layout with full-width image between title and bottom row
- * Mobile: reordered — image drops below all text content
+ * back link → tags (all) + date → h1 title → featured image (16:9) →
+ * bottom bar: author/read-time (left) + share buttons (right)
+ * Desktop: single row for bottom bar (justify-between)
+ * Mobile: bottom bar stacks (share below author info)
  *
  * Props:
  *   post: BlogPostDetailProps — mapped blog post data (consumed by header only)
- *   class?: string — spread onto root <section>
  * Slots: none
  * Tokens: --color-page-text, --color-muted, --color-link-text, --color-link-hover,
- *         --color-page, --spacing-section-pad-lg, --spacing-component-gap
+ *         --spacing-f11, --spacing-f8
  * Hardcoded literals:
  *   - "←" chevron — decorative unicode, no token equivalent
  *   - "•" separator — presentation, no token equivalent
+ *   - gap-4 (share buttons gap) — component-specific layout, no token equivalent
  *   - gap-2 (metadata row gap) — component-specific layout, no token equivalent
  *   - rounded-lg (featured image) — matches Figma radius (8px), no token equivalent
  *   - h-6 w-6 (share icon button containers) — component-specific layout, no token equivalent
  * Context variants: not needed — uses default page background
- * Composed from: Tag, Container, IconLink, IconLinkedIn, IconX, IconFacebook
+ * Composed from: Tag, IconLink, IconLinkedIn, IconX, IconFacebook
  */
-import Container from '@/layouts/Container.astro'
 import Tag from '@components/ui/astro/Tag.astro'
 import IconLink from '@components/icons/IconLink.astro'
 import IconLinkedIn from '@components/icons/IconLinkedIn.astro'
 import IconX from '@components/icons/IconX.astro'
 import IconFacebook from '@components/icons/IconFacebook.astro'
 import type { BlogPostDetailProps } from './blogpost.types'
+import { BLOG_HEADER } from '@/lib/content'
 
 interface Props {
   post: BlogPostDetailProps
-  class?: string
 }
 
-const { post, class: className } = Astro.props
+const { post } = Astro.props
 
 /** Share URL — uses canonical URL at runtime via JS */
 const shareUrl = import.meta.env.SITE_URL
@@ -45,102 +45,110 @@ const shareUrl = import.meta.env.SITE_URL
     : `/blog/${post.slug}`
 ---
 
-{/* Containment: Contained — header content respects max-width column */}
-<section class:list={["bg-page py-(--spacing-section-pad-lg)", className]}>
-  <Container>
-    <div class="flex flex-col gap-(--spacing-component-gap) md:gap-6">
-      <!-- Back link — order 1 -->
-      <a
-        href="/blog"
-        class="order-1 inline-flex items-center gap-1 text-base font-medium text-muted hover:text-page-text transition-colors"
-      >
-        <span aria-hidden="true" class="text-lg leading-none">←</span>
-        All posts
-      </a>
+<div class="flex flex-col">
+  <!-- Back link -->
+  <a
+    href="/blog"
+    class="inline-flex items-center gap-1"
+  >
+    <span aria-hidden="true" class="text-lg leading-none">←</span>
+    {BLOG_HEADER.backToBlog}
+  </a>
 
-      <!-- Metadata: tag + date — order 2 -->
-      <div class="order-2 inline-flex flex-wrap items-center gap-2">
-        {
-          post.tags.length > 0 && (
-            <Tag label={post.tags[0].name} />
-          )
-        }
-        <time datetime={post.publishedAt} class="text-sm font-semibold text-muted">
-          {post.publishedAt}
-        </time>
+  <!-- Metadata: tags + date -->
+  <div class="mt-f8 inline-flex flex-wrap items-center gap-f4 gap-y-2">
+    {
+      post.tags.length > 0 && (
+        post.tags.map((tag) => <Tag label={tag.name} />)
+      )
+    }
+    <time datetime={post.dateIso} class="ml-1">
+      {post.publishedAt}
+    </time>
+  </div>
+
+  <!-- Title -->
+  <h2 class="mt-f8 max-w-(--container-large)">{post.title}</h2>
+
+  <!-- Featured image, between title and bottom bar -->
+  {
+    post.featuredImage && (
+      <div class="mt-f9">
+        <img
+          src={post.featuredImage.url}
+          alt={post.featuredImage.alternativeText ?? ''}
+          class="aspect-video w-full rounded-lg object-cover"
+          loading="eager"
+          decoding="async"
+        />
       </div>
+    )
+  }
 
-      <!-- Title — order 3 -->
-      <h1 class="order-3 max-w-(--container-large)">{post.title}</h1>
-
-      <!-- Author byline + read time — order 4 desktop, order 6 mobile (below share) -->
-      <div class="order-4 md:order-4">
-        {
-          post.author && (
-            <span class="text-base text-page-text">{post.author.name}</span>
-          )
-        }
-        {
-          post.author && (
-            <span aria-hidden="true" class="text-base text-muted mx-1">•</span>
-          )
-        }
-        <span class="text-base text-muted">{post.readTime}</span>
-      </div>
-
-      <!-- Share buttons — order 5 -->
-      <div class="order-5 md:order-5 flex items-center gap-4">
-        <button
-          type="button"
-          class="flex h-6 w-6 cursor-pointer items-center justify-center text-page-text transition-colors hover:text-link-hover focus-visible:text-link-hover"
-          aria-label="Copy link"
-          data-copy-url={shareUrl}
-        >
-          <IconLink class="w-5 h-5" />
-        </button>
-        <a
-          href={`https://linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="flex h-6 w-6 items-center justify-center text-page-text transition-colors hover:text-link-hover focus-visible:text-link-hover"
-          aria-label="Share on LinkedIn"
-        >
-          <IconLinkedIn class="w-5 h-5" />
-        </a>
-        <a
-          href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="flex h-6 w-6 items-center justify-center text-page-text transition-colors hover:text-link-hover focus-visible:text-link-hover"
-          aria-label="Share on X"
-        >
-          <IconX class="w-5 h-5" />
-        </a>
-        <a
-          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="flex h-6 w-6 items-center justify-center text-page-text transition-colors hover:text-link-hover focus-visible:text-link-hover"
-          aria-label="Share on Facebook"
-        >
-          <IconFacebook class="w-5 h-5" />
-        </a>
-      </div>
-
-      <!-- Featured image — order 6 on mobile, order 5 on desktop (between title + bottom row) -->
+  <!-- Bottom bar: author+readtime (left) + share buttons (right) -->
+  <div class="flex flex-col gap-4 mt-6 sm:flex-row sm:items-center sm:justify-between">
+    <!-- Author byline + read time -->
+    <div class="flex items-center gap-2">
       {
-        post.featuredImage && (
-          <div class="order-6 md:order-[5] -mt-2 md:mt-0">
-            <img
-              src={post.featuredImage.url}
-              alt={post.featuredImage.alternativeText ?? ''}
-              class="w-full aspect-[3/2] rounded-lg object-cover"
-              loading="eager"
-              decoding="async"
-            />
-          </div>
+        post.author?.avatar && (
+          <img
+            src={post.author.avatar.url}
+            alt={post.author.avatar.alternativeText ?? `${post.author.name}'s avatar`}
+            class="h-6 w-6 shrink-0 rounded-full object-cover"
+            loading="lazy"
+          />
         )
       }
+      {
+        post.author && (
+          <span class="text-base font-semibold">{post.author.name}</span>
+        )
+      }
+      {
+        post.author && (
+          <span aria-hidden="true" class="text-base text-muted">•</span>
+        )
+      }
+      <span class="text-base font-semibold text-muted">{post.readTime}</span>
     </div>
-  </Container>
-</section>
+
+    <!-- Share buttons -->
+    <div class="flex items-center gap-4">
+      <button
+        type="button"
+        class="flex h-6 w-6 cursor-pointer items-center justify-center transition-colors hover:text-link-hover focus-visible:text-link-hover"
+        aria-label={BLOG_HEADER.copyLink}
+        data-copy-url={shareUrl}
+      >
+        <IconLink class="h-5 w-5" />
+      </button>
+      <a
+        href={`https://linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex h-6 w-6 items-center justify-center text-page-text transition-colors hover:text-link-hover focus-visible:text-link-hover"
+        aria-label={BLOG_HEADER.shareLinkedIn}
+      >
+        <IconLinkedIn class="h-5 w-5" />
+      </a>
+      <a
+        href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex h-6 w-6 items-center justify-center text-page-text transition-colors hover:text-link-hover focus-visible:text-link-hover"
+        aria-label={BLOG_HEADER.shareX}
+      >
+        <IconX class="h-5 w-5" />
+      </a>
+      <a
+        href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex h-6 w-6 items-center justify-center text-page-text transition-colors hover:text-link-hover focus-visible:text-link-hover"
+        aria-label={BLOG_HEADER.shareFacebook}
+      >
+        <IconFacebook class="h-5 w-5" />
+      </a>
+    </div>
+  </div>
+</div>

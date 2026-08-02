@@ -1,0 +1,89 @@
+---
+/**
+ * BlogPostCard — shared blog card for slider and listing layouts.
+ *
+ * Props:
+ *   slug: string                          — post URL slug
+ *   title: string                         — post heading
+ *   dataTags?: string                     — inline data attr for listing filter JS
+ *   dataSearchable?: string               — inline data attr for listing search JS
+ *   class?: string                        — consumer overrides (width, padding, etc.)
+ *
+ * Slots:
+ *   metadata — content between image and heading (tags, readTime, etc.)
+ *   footer   — content below excerpt (author row, ReadMore, etc.)
+ *
+ * Tokens:
+ *   --color-page-text, --color-surface-text, --color-muted,
+ *   --spacing-f4, --spacing-f5, --spacing-f6, --text-h5
+ *
+ * Hardcoded literals: none
+ *
+ * Context variants: not needed — card is transparent, inherits page background
+ * Composed from: (none — leaf component)
+ */
+
+interface Props {
+  slug: string;
+  title: string;
+  excerpt?: string;
+  featuredImage?: { url: string; alternativeText?: string | null } | null;
+  /** Optional data attrs for search/filter JS on listing pages */
+  dataTags?: string;
+  dataSearchable?: string;
+  class?: string;
+}
+
+const {
+  slug,
+  title,
+  excerpt,
+  featuredImage,
+  dataTags,
+  dataSearchable,
+  class: className,
+} = Astro.props;
+---
+
+<a
+  href={`/blog/${slug}`}
+  data-tags={dataTags}
+  data-searchable={dataSearchable}
+  class:list={[
+    'text-page-text group flex flex-col hover:underline-0!',
+    className,
+  ]}
+>
+  <!-- Featured image: 3:2 aspect ratio, rounded corners -->
+  <div class="aspect-[3/2] overflow-hidden rounded-lg bg-muted">
+    {featuredImage ? (
+      <img
+        src={featuredImage.url}
+        alt={featuredImage.alternativeText ?? ''}
+        class="h-full w-full object-cover"
+        loading="lazy"
+      />
+    ) : (
+      <div class="h-full w-full bg-muted" aria-hidden="true" />
+    )}
+  </div>
+
+  <!-- Card body: pt-6 matches UpdateCard image→tag distance (24px Figma) -->
+  <div class="flex flex-1 flex-col justify-between gap-f8 pt-6">
+    <div class="flex flex-col gap-f4">
+      <!-- Metadata: tags, readTime, date, etc. -->
+      <slot name="metadata" />
+
+      <!-- Heading -->
+      <h5 class="lg:text-h6">{title}</h5>
+
+      <!-- Excerpt -->
+      {excerpt && (
+        <p class="line-clamp-2">{excerpt}</p>
+      )}
+    </div>
+
+    <!-- Footer: author row, ReadMore, etc. -->
+    <slot name="footer" />
+  </div>
+</a>
