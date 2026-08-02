@@ -8,71 +8,78 @@
  *
  * Props: class? (string) — spread onto root <nav> for consumer overrides
  * Slots: none
- * Tokens: --color-primary, --color-contrast-text, --color-page-text, --color-page, --color-muted, --radius-button
- * Hardcoded literals: ← → for prev/next button text (decorative arrows, no semantic value)
- *                     PAGE_SIZE = 4 (from plan — 2-col grid × 2 rows)
+ * Tokens: --color-page-text, --radius-md
+ * Hardcoded literals: PAGE_SIZE = 4 (from plan — 2-col grid × 2 rows)
  * Context variants: not needed
- * Composed from: none
+ * Composed from: Button (nav variant)
  */
+
+import Button from '@/components/ui/astro/Button.astro'
+import { UPDATE_PAGINATION } from '@/lib/content'
 
 interface Props {
   class?: string
 }
 
 const { class: className } = Astro.props
+
+const chevronLeft =
+  '<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>'
+
+const chevronRight =
+  '<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>'
 ---
 
 <nav
-  aria-label="Update pagination"
+  aria-label={UPDATE_PAGINATION.ariaLabel}
   data-update-pagination
   class:list={[
-    "flex items-center justify-center gap-2",
+    "flex items-center justify-center gap-4",
     className,
   ]}
 >
-  <button
-    type="button"
+  <Button
+    variant="nav"
+    size="md"
+    iconPosition="only"
+    label={UPDATE_PAGINATION.prevPage}
+    icon={chevronLeft}
     data-page-prev
-    aria-label="Previous page"
-    class="px-3 py-1.5 rounded-(--radius-button) text-(--color-page-text) disabled:text-(--color-muted) disabled:cursor-not-allowed"
-  >
-    ←
-  </button>
+  />
 
-  <div data-page-buttons class="flex items-center gap-1"></div>
+  <div data-page-buttons class="flex items-center gap-2"></div>
 
-  <button
-    type="button"
+  <Button
+    variant="nav"
+    size="md"
+    iconPosition="only"
+    label={UPDATE_PAGINATION.nextPage}
+    icon={chevronRight}
     data-page-next
-    aria-label="Next page"
-    class="px-3 py-1.5 rounded-(--radius-button) text-(--color-page-text) disabled:text-(--color-muted) disabled:cursor-not-allowed"
-  >
-    →
-  </button>
+  />
 </nav>
 
-<style>
-  /* Page buttons — static classes for dynamically created buttons */
+<style is:global>
+  /* Page buttons — global selectors for dynamically created DOM elements */
   [data-page] {
-    padding: 0.375rem 0.75rem;
-    border-radius: var(--radius-button);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
     color: var(--color-page-text);
     transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   [data-page]:hover {
-    background-color: var(--color-page-text);
-    color: var(--color-page);
+    background-color: color-mix(in srgb, var(--color-page-text) 10%, transparent);
   }
 
   [data-page][aria-current='true'] {
-    background-color: var(--color-primary);
-    color: var(--color-contrast-text);
+    background-color: color-mix(in srgb, var(--color-page-text) 20%, transparent);
+    font-weight: 700;
   }
 
-  [data-page][aria-current='true']:hover {
-    background-color: var(--color-primary);
-    color: var(--color-contrast-text);
+  /* Pagination visibility — separate from filter's `hidden` attribute */
+  [data-page-hidden="true"] {
+    display: none;
   }
 </style>
 
@@ -93,12 +100,12 @@ const { class: className } = Astro.props
       return items.filter(function (el) { return !el.hidden })
     }
 
-    function showPage(page, items) {
-      if (!items) items = getVisibleItems()
+    function showPage(page) {
+      var items = getVisibleItems()
 
       for (var i = 0; i < items.length; i++) {
         var idx = parseInt(items[i].getAttribute('data-page-index') || '0')
-        items[i].hidden = idx !== page
+        items[i].dataset.pageHidden = (idx !== page).toString()
       }
 
       var buttons = pageContainer.querySelectorAll('[data-page]')
@@ -130,13 +137,15 @@ const { class: className } = Astro.props
         empty.hidden = items.length > 0
       }
 
-      // Hide pagination when 0 or 1 pages
+      // Always visible — show single page with disabled arrows
       if (totalPages <= 1) {
-        nav.hidden = true
-        pageContainer.innerHTML = ''
-        // Clear any stale page-index hiding from previous pagination
+        nav.hidden = false
+        pageContainer.innerHTML = '<button type="button" data-page="0" aria-current="true">1</button>'
+        prevBtn.disabled = true
+        nextBtn.disabled = true
         for (var i = 0; i < items.length; i++) {
-          items[i].hidden = false
+          delete items[i].dataset.pageHidden
+          items[i].setAttribute('data-page-index', '0')
         }
         return
       }
@@ -156,14 +165,16 @@ const { class: className } = Astro.props
       pageContainer.innerHTML = html
 
       // Show first page
-      showPage(0, items)
+      showPage(0)
     }
 
-    // Delegated click on page buttons
+    // Delegated click on page buttons — no-op if clicking the active page
     pageContainer.addEventListener('click', function (e) {
       var btn = e.target.closest('[data-page]')
       if (!btn) return
-      showPage(parseInt(btn.getAttribute('data-page')))
+      var page = parseInt(btn.getAttribute('data-page'))
+      if (page === getCurrentPage()) return
+      showPage(page)
     })
 
     prevBtn.addEventListener('click', function () {

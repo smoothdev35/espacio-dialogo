@@ -3,24 +3,31 @@
  * UpdateHeader
  *
  * Renders the top-of-page header for the Update detail page:
- * breadcrumb → category badge → h1 title → author byline → metadata → share section
- * Desktop: 2-col grid (text left, featured image right)
- * Mobile: single column stack
+ * breadcrumb → category badge → h2 title → author (avatar+name) • read time • date → share section
+ * Desktop: flex row — text column fixed at 448px, image fills remaining space with 16:9.
+ * Mobile: single column stack.
+ *
+ * Semantic: <header> inside <article>, <h2> for article-level heading.
+ * Gaps driven by fluid tokens (--spacing-component-gap, --spacing-f7).
+ * Image: always aspect-video (16:9), no breakpoint override.
  *
  * Props:
  *   update: UpdateDetailProps — full update data
  *   class?: string — spread onto root <header>
  * Slots: none
  * Tokens: --color-page-text, --color-muted, --color-link-text, --color-link-hover,
- *         --color-border, --color-page, --color-tag, --color-tag-text, --color-tag-border
+ *         --color-border, --color-page, --color-tag, --color-tag-text, --color-tag-border,
+ *         --spacing-component-gap, --spacing-f7
  * Hardcoded literals:
  *   - gap-2 (breadcrumb gap) — component-specific layout, no token equivalent
- *   - text-sm (metadata font size) — tailwind default
- *   - text-base (byline font size) — tailwind default
- *   - aspect-[3/2] (featured image ratio) — layout choice, no token equivalent — confirm
+ *   - gap-x-2 gap-y-1 (author metadata gap) — component-specific layout, no token equivalent
+ *   - text-sm (read time / date) — fixed 14px per Figma desktop+mobile
+ *   - text-base (author/breadcrumb/share) — fixed 16px per Figma desktop+mobile
  *   - "/ " separator — presentation, no token equivalent
  *   - "•" separator — presentation, no token equivalent
- *   - h-6 w-6 (share icon link containers) — component-specific layout, no token equivalent
+ *   - h-6 w-6 (avatar + share icon containers) — component-specific layout, no token equivalent
+ *   - gap-16 (64px — text↔image gap) — component-specific layout, no token equivalent
+ *   - w-[448px] (text column width) — component-specific layout, no token equivalent
  * Context variants: not needed — default page background
  * Composed from: Tag (astro), IconLink, IconLinkedIn, IconX, IconFacebook
  */
@@ -30,6 +37,7 @@ import IconLinkedIn from '@components/icons/IconLinkedIn.astro'
 import IconX from '@components/icons/IconX.astro'
 import IconFacebook from '@components/icons/IconFacebook.astro'
 import type { UpdateDetailProps } from './update.types'
+import { UPDATE_HEADER } from '@/lib/content'
 
 interface Props {
   update: UpdateDetailProps
@@ -43,64 +51,63 @@ const breadcrumbTitle = update.title.split(/\s+/).slice(0, 2).join(' ')
 ---
 
 <header class:list={[className]}>
-  <div class="grid grid-cols-1 lg:grid-cols-[420px_1fr] gap-8 items-start">
-    <!-- Left column: text content -->
-    <div class="flex flex-col">
-      <!-- Breadcrumb -->
-      <nav class="mb-5" aria-label="Breadcrumb">
-        <ol class="flex flex-wrap items-center gap-2 text-base text-muted">
-          <li><a href="/" class="text-base">Home</a></li>
+  <div class="flex flex-col xl:flex-row gap-0 2xl:gap-16 items-start">
+    <!-- Left column: text content — fixed width -->
+    <div class="flex flex-col xl:w-[448px] xl:shrink-0">
+      <!-- Breadcrumb + category badge in same row -->
+      <nav aria-label="Breadcrumb">
+        <ol class="flex flex-wrap items-center gap-2 text-base">
+          <li><a href="/">{UPDATE_HEADER.home}</a></li>
           <li aria-hidden="true">/</li>
-          <li><a href="/#updates" class="text-base">Updates</a></li>
+          <li><a href="/#updates">{UPDATE_HEADER.updates}</a></li>
           <li aria-hidden="true">/</li>
           <li aria-current="page" class="font-medium text-page-text text-base" title={update.title}>{breadcrumbTitle}</li>
         </ol>
       </nav>
 
-      <!-- Category badge — styled same as UpdateCard pills -->
-      {
-        update.category && (
-          <div class="mb-8">
-            <Tag label={update.category.name} />
-          </div>
-        )
-      }
+      <!-- Title — h2 naturally picks up text-h2 from global.css -->
+      <h2 class="mt-f8">{update.title}</h2>
 
-      <!-- Title — text-h2 overrides global h1 font-size (design: 52px desktop / 36px mobile) -->
-      {/* override: global h1 font-size — design requires smaller heading for featured media balance */}
-      <h1 class="text-h2 mb-6">{update.title}</h1>
+      <!-- Author avatar + name (row 1), read time + date (row 2) -->
+      <div class="flex flex-col gap-y-1 mt-f9">
+        <div class="flex items-center gap-2">
+          {
+            update.author?.avatar && (
+              <img
+                src={update.author.avatar.url}
+                alt={update.author.avatar.alternativeText ?? `${update.author.name}'s avatar`}
+                class="h-6 w-6 shrink-0 rounded-full object-cover"
+                loading="lazy"
+              />
+            )
+          }
+          {
+            update.author && (
+              <span class="text-base font-semibold">{update.author.name}</span>
+            )
+          }
+        </div>
+        <div class="flex items-center gap-x-2">
+          <span class="text-sm font-semibold text-muted">{update.readTime}</span>
+          <span aria-hidden="true" class="text-sm text-muted">•</span>
+          <time datetime={update.dateIso}>{update.publishedAt}</time>
+        </div>
+      </div>
 
-      <!-- Author byline — only when author exists -->
-      {
-        update.author && (
-          <p class="text-base mb-1">
-            <span class="text-muted">By </span>
-            <span class="font-semibold text-page-text">{update.author.name}</span>
-          </p>
-        )
-      }
-
-      <!-- Metadata: read time • published date -->
-      <p class="text-sm text-muted">
-        <time datetime={update.publishedAt}>{update.readTime}</time>
-        <span aria-hidden="true"> • </span>
-        <span>Published on <time datetime={update.publishedAt}>{update.publishedAt}</time></span>
-      </p>
-
-      <!-- Share section — buttons trigger actions (copy link, share), not navigation -->
-      <div class="mt-6">
-        <p class="text-base font-semibold mb-3">Share this dispatch</p>
-        <div class="flex items-center gap-4">
-          <button type="button" class="flex h-6 w-6 cursor-pointer items-center justify-center text-page-text transition-colors hover:text-link-hover focus-visible:text-link-hover" aria-label="Copy link">
+      <!-- Share section -->
+      <div class="mt-f8">
+        <p class="text-base font-medium">{UPDATE_HEADER.shareDispatch}</p>
+        <div class="flex items-center gap-4 mt-f4">
+          <button type="button" class="flex h-6 w-6 cursor-pointer items-center justify-center transition-colors hover:text-link-hover focus-visible:text-link-hover" aria-label={UPDATE_HEADER.copyLink}>
             <IconLink class="w-5 h-5" />
           </button>
-          <button type="button" class="flex h-6 w-6 cursor-pointer items-center justify-center text-page-text transition-colors hover:text-link-hover focus-visible:text-link-hover" aria-label="Share on LinkedIn">
+          <button type="button" class="flex h-6 w-6 cursor-pointer items-center justify-center transition-colors hover:text-link-hover focus-visible:text-link-hover" aria-label={UPDATE_HEADER.shareLinkedIn}>
             <IconLinkedIn class="w-5 h-5" />
           </button>
-          <button type="button" class="flex h-6 w-6 cursor-pointer items-center justify-center text-page-text transition-colors hover:text-link-hover focus-visible:text-link-hover" aria-label="Share on X">
+          <button type="button" class="flex h-6 w-6 cursor-pointer items-center justify-center transition-colors hover:text-link-hover focus-visible:text-link-hover" aria-label={UPDATE_HEADER.shareX}>
             <IconX class="w-5 h-5" />
           </button>
-          <button type="button" class="flex h-6 w-6 cursor-pointer items-center justify-center text-page-text transition-colors hover:text-link-hover focus-visible:text-link-hover" aria-label="Share on Facebook">
+          <button type="button" class="flex h-6 w-6 cursor-pointer items-center justify-center transition-colors hover:text-link-hover focus-visible:text-link-hover" aria-label={UPDATE_HEADER.shareFacebook}>
             <IconFacebook class="w-5 h-5" />
           </button>
         </div>

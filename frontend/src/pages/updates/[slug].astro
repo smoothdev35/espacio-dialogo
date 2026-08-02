@@ -3,23 +3,25 @@
  * Update Detail Page
  *
  * Dynamic route: /updates/[slug]
+ * Semantic: <article> wraps header (wide container) + body (regular container).
+ * Header uses --container-wide (1536px) for the featured image to breathe.
+ *
  * Props: none — reads slug from Astro.params
  * Slots: none
- * Tokens: --color-page, --color-page-text, --color-muted, --spacing-section-pad-lg (article padding)
+ * Tokens: --color-page, --color-page-text, --color-muted,
+ *         --spacing-f11, --container-small, --container-wide
  * Hardcoded literals:
- *   - mt-[calc(var(--spacing-section-pad-lg)*1.5)] — 1.5× section-pad-lg between header and body
+  *   - mt-f11 — header→body gap
  *   - max-w-(--container-small) — 768px reading width via token
  * Context variants: not needed
- * Composed from: BaseLayout, Container, UpdateHeader, UpdateBody
- *
- * Semantic structure: <article> = self-contained composition, <header> = post metadata.
- * Single py-section-pad-lg on article instead of two stacked sections.
+ * Composed from: BaseLayout, Container, UpdateHeader, UpdateBody, TimelineSection
  */
 
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import Container from '@/layouts/Container.astro'
 import UpdateHeader from '@/features/update/UpdateHeader.astro'
 import UpdateBody from '@/features/update/UpdateBody.astro'
+import TimelineSection from '@/features/update/TimelineSection.astro'
 import { fetchUpdateBySlug, fetchUpdateSlugs } from '@/features/update/update.api'
 
 export async function getStaticPaths() {
@@ -45,16 +47,18 @@ const title = `${update.title} — EDD`
 ---
 
 <BaseLayout title={title}>
-  <article class="py-section-pad-lg">
-    <Container>
-      <header>
-        <UpdateHeader update={update} />
-      </header>
+  <section>
+    <Container wide>
+    <article>
+      <UpdateHeader update={update} />
 
-      <!-- Internal gap: 1.5× section-pad-lg between header bottom and body content -->
-      <div class="mx-auto mt-[calc(var(--spacing-section-pad-lg)*1.5)] max-w-(--container-small)">
+      <!-- Body: 1.5× section-pad-lg gap from header bottom -->
+      <div class="mx-auto mt-f11 max-w-(--container-small)">
         <UpdateBody body={update.body} />
       </div>
+    </article>
     </Container>
-  </article>
+  </section>
+
+  <TimelineSection currentSlug={update.slug} />
 </BaseLayout>

@@ -1,0 +1,78 @@
+---
+/**
+ * TimelineSection — Astro wrapper
+ *
+ * Self-fetches timeline entries and renders a horizontal scroll timeline
+ * with heading block. Renders nothing if 0 entries.
+ *
+ * Props:
+ *   currentSlug: string — slug of the currently viewed update (highlighted)
+ *   tagline?: string  — overline text above heading (default "Timeline")
+ *   heading?: string  — section heading (default "Follow the thread of a nation in resistance")
+ *   description?: string  — supporting text (default "Scroll through the key moments...")
+ *   class?: string    — consumer override for the section element
+ * Slots: none
+ * Tokens: --color-surface-alt, --color-muted, --spacing-f11,
+ *         --spacing-f4, --spacing-f6, --container-small
+ * Hardcoded literals:
+ *   - mt-f9 — heading-to-timeline gap
+ * Context variants: not needed — --color-surface-alt is surface-aware
+ * Composed from: Container, SectionHeader, Timeline
+ *
+ * Design (Figma: Timeline / 16 /):
+ *   Section bg: s4 = #d2d7e4 = --color-surface-alt (same as CTA)
+ *   Desktop padding: 112px top/bottom = --spacing-f11
+ *   Mobile padding: 64px top/bottom
+ *   Heading: <h2> — element selector applies --text-h2, Lora Bold, fluid
+ *   Tagline: Inter Semi Bold 16px
+ *   Description: body text (--text-body fluid via body inheritance)
+ *   Gap heading-block → timeline: 80px (Figma)
+ */
+
+import Container from '@/layouts/Container.astro'
+import SectionHeader from '@/components/ui/astro/SectionHeader.astro'
+import Timeline from './Timeline'
+import { fetchTimelineEntries } from './update.api'
+import { TIMELINE } from '@/lib/content'
+
+interface Props {
+  currentSlug: string
+  tagline?: string
+  heading?: string
+  description?: string
+  class?: string
+}
+
+const {
+  currentSlug,
+  tagline = TIMELINE.tagline,
+  heading = TIMELINE.heading,
+  description = TIMELINE.description,
+  class: className,
+} = Astro.props
+
+const entries = await fetchTimelineEntries()
+
+if (entries.length === 0) return
+---
+
+<section
+  class:list={['bg-surface-alt py-f11', className]}
+>
+  <Container>
+    <!-- Heading block -->
+    <div class="mx-auto max-w-(--container-small)">
+      <SectionHeader
+        tagline={tagline}
+        heading={heading}
+        description={description}
+        align="center"
+      />
+    </div>
+
+    <!-- Timeline -->
+    <div class="mt-f9">
+      <Timeline entries={entries} currentSlug={currentSlug} client:load />
+    </div>
+  </Container>
+</section>
