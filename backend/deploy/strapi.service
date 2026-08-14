@@ -12,7 +12,7 @@ Group=strapi
 WorkingDirectory=/opt/strapi/backend
 
 EnvironmentFile=/opt/strapi/backend/.env
-ExecStart=/usr/bin/node /opt/strapi/backend/node_modules/.bin/strapi start
+ExecStart=/opt/strapi/backend/node_modules/.bin/strapi start
 
 Restart=always
 RestartSec=10

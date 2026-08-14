@@ -7,15 +7,12 @@ set -euo pipefail
 #
 # Usage:
 #   scp deploy/* root@<droplet-ip>:~
-#   ssh root@<droplet-ip> \
-#     REPO=https://github.com/org/repo.git \
-#     bash /root/bootstrap.sh
+#   ssh root@<droplet-ip> 'DOMAIN=api.espaciodialogo.com bash /root/bootstrap.sh'
 # ============================================================
 
 STACK_USER="${STACK_USER:-strapi}"
 APP_DIR="/opt/${STACK_USER}"
 DOMAIN="${DOMAIN:-api.espaciodialogo.com}"
-REPO="${REPO:-}"
 
 echo "==> Updating system packages"
 apt-get update && apt-get upgrade -y
@@ -31,18 +28,23 @@ echo "==> Installing Node.js 22"
 curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
 apt-get install -y nodejs
 corepack enable
-npm install -g pnpm
+command -v pnpm >/dev/null 2>&1 || npm install -g pnpm
 
 echo "==> Creating ${STACK_USER} user"
 id -u "${STACK_USER}" &>/dev/null || useradd -m -s /bin/bash -d "${APP_DIR}" "${STACK_USER}"
 
 echo "==> Configuring PostgreSQL"
 sudo -u postgres psql <<SQL
-CREATE USER ${STACK_USER} WITH PASSWORD 'changeme-in-env-file';
-CREATE DATABASE ${STACK_USER} OWNER ${STACK_USER};
-\du
-\l
+DO \$\$
+BEGIN
+   IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = '${STACK_USER}') THEN
+      CREATE ROLE ${STACK_USER} LOGIN PASSWORD 'changeme-in-env-file';
+   END IF;
+END
+\$\$;
 SQL
+sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname = '${STACK_USER}'" | grep -q 1 || \
+    sudo -u postgres createdb -O "${STACK_USER}" "${STACK_USER}"
 
 echo "==> Hardening PostgreSQL"
 sudo -u postgres psql -c "ALTER USER ${STACK_USER} SET password_encryption = 'scram-sha-256';"
@@ -53,24 +55,24 @@ chown "${STACK_USER}:${STACK_USER}" "${APP_DIR}"
 
 echo "==> Creating uploads directory"
 mkdir -p "${APP_DIR}/backend/public/uploads"
-chown -R "${STACK_USER}:${STACK_USER}" "${APP_DIR}/backend/public"
+chown -R "${STACK_USER}:${STACK_USER}" "${APP_DIR}/backend"
 
-if [ -n "${REPO}" ]; then
-    echo "==> Cloning repository (sparse — backend + types only)"
-    sudo -u "${STACK_USER}" git clone --filter=blob:none --sparse "${REPO}" "${APP_DIR}"
-    cd "${APP_DIR}"
-    sudo -u "${STACK_USER}" git sparse-checkout set backend types
-    echo "==> Repository cloned. Skipping build — .env required first."
-else
-    echo "==> Skipping repo clone (REPO not set). Clone manually:"
-    echo "    ssh ${STACK_USER}@<host> 'cd ${APP_DIR} && git clone --filter=blob:none --sparse <repo> . && git sparse-checkout set backend types'"
-fi
+echo "==> Skipping repo clone (do manually after adding a deploy key):"
+echo "    1. Deploy key as ${STACK_USER}:"
+echo "       sudo -u ${STACK_USER} ssh-keygen -t ed25519 -C deploy -f ${APP_DIR}/.ssh/id_ed25519 -N ''"
+echo "    2. Add public key to GitHub repo (Settings > Deploy keys, read-only)."
+echo "    3. Clone sparse (backend + types only):"
+echo "       sudo -u ${STACK_USER} ssh-keyscan github.com >> ${APP_DIR}/.ssh/known_hosts"
+echo "       sudo -u ${STACK_USER} git clone --filter=blob:none --sparse <repo> /tmp/repo"
+echo "       sudo -u ${STACK_USER} git -C /tmp/repo sparse-checkout set backend types"
+echo "       sudo -u ${STACK_USER} cp -a /tmp/repo/. ${APP_DIR}/ && rm -rf /tmp/repo"
+echo "       chown -R ${STACK_USER}:${STACK_USER} ${APP_DIR}"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 echo "==> Setting up nginx"
 rm -f /etc/nginx/sites-enabled/default
-cp "${SCRIPT_DIR}/strapi.nginx" "/etc/nginx/sites-available/${DOMAIN}"
+sed "s/__DOMAIN__/${DOMAIN}/g" "${SCRIPT_DIR}/strapi.nginx" > "/etc/nginx/sites-available/${DOMAIN}"
 ln -sf "/etc/nginx/sites-available/${DOMAIN}" /etc/nginx/sites-enabled/
 nginx -t && systemctl restart nginx
 
@@ -92,7 +94,7 @@ echo "       ssh root@<host> 'chmod 600 ${APP_DIR}/backend/.env && chown ${STACK
 echo "       ssh root@<host> 'nano ${APP_DIR}/backend/.env'  # fill secrets"
 echo ""
 echo "    2. Build and start:"
-echo "       ssh root@<host> 'cd ${APP_DIR}/backend && pnpm install --prod && pnpm run build'"
+echo "       ssh ${STACK_USER}@<host> 'cd ${APP_DIR}/backend && pnpm install && NODE_OPTIONS=--max-old-space-size=2048 pnpm run build'"
 echo "       ssh root@<host> 'systemctl enable --now strapi'"
 echo ""
 echo "    3. Watch logs:"

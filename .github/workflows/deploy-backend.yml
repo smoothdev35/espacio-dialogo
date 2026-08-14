@@ -11,7 +11,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
 
     steps:
       - name: Deploy via SSH
@@ -29,19 +29,21 @@ jobs:
 
             echo "[deploy] Installing production dependencies"
             cd backend
-            pnpm install --prod
+            pnpm install
 
             echo "[deploy] Building admin panel"
-            pnpm run build
+            NODE_OPTIONS=--max-old-space-size=2048 pnpm run build
 
             echo "[deploy] Updating systemd service"
-            cp /opt/strapi/backend/deploy/strapi.service /etc/systemd/system/strapi.service
-            systemctl daemon-reload
+            sudo cp /opt/strapi/backend/deploy/strapi.service /etc/systemd/system/strapi.service
+            sudo systemctl daemon-reload
 
             echo "[deploy] Restarting Strapi"
-            systemctl restart strapi
+            sudo systemctl restart strapi
 
             echo "[deploy] Healthcheck"
             sleep 5
-            curl -sSfI http://127.0.0.1:1337/admin > /dev/null 2>&1 \
-              && echo "OK" || echo "WARN: healthcheck failed"
+            for i in $(seq 1 12); do
+              curl -sSfI http://127.0.0.1:1337/admin > /dev/null 2>&1 && { echo "OK"; break; }
+              [ "$i" -eq 12 ] && echo "WARN: healthcheck failed" || sleep 5
+            done
