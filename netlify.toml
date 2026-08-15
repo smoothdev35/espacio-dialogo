@@ -1,6 +1,10 @@
 [build]
-  command = "cd frontend && pnpm install && pnpm build"
+  command = "corepack enable && cd frontend && pnpm install --frozen-lockfile && pnpm build"
   publish = "frontend/dist"
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF frontend types netlify.toml"
 
 [build.environment]
   NODE_VERSION = "22"
+  STRAPI_URL = "https://api.espaciodialogo.com"
+  PUBLIC_STRAPI_URL = "https://api.espaciodialogo.com"
+  SITE_URL = "https://espaciodialogo.com"

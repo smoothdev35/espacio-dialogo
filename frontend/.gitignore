@@ -36,6 +36,7 @@ Thumbs.db
 # 🔑 Absolute Security & Secrets Containment (NEVER COMMIT THESE)
 # ==============================================================================
 **/.env*
+!**/.env.example
 **/*.pem
 **/*.key
 **/*.cert
