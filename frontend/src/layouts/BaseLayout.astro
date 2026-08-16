@@ -33,6 +33,7 @@ interface NavAction {
 
 interface Props {
   title?: string
+  description?: string
   class?: string
   navLinks?: NavLink[]
   navActions?: NavAction[]
@@ -40,6 +41,7 @@ interface Props {
 
 const {
   title = 'EDD',
+  description = 'Espacio Diálogo — colectivo que documenta, apoya y amplifica las voces que trabajan por una Nicaragua libre y democrática.',
   class: className,
   navLinks = [
     { label: NAV.home, href: '/' },
@@ -50,7 +52,9 @@ const {
     { label: NAV.subscribe, href: '/subscribe', variant: 'secondary' },
     { label: NAV.donate, href: '/donate', variant: 'primary' },
   ],
-} = Astro.props
+  } = Astro.props
+
+const strapiOrigin = import.meta.env.PUBLIC_STRAPI_URL
 ---
 
 <!doctype html>
@@ -59,9 +63,21 @@ const {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {
+      strapiOrigin && <link rel="preconnect" href={strapiOrigin} />
+    }
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:wght@700&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
     <title>{title}</title>
     <slot name="head" />
     <script is:inline>
