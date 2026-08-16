@@ -7,9 +7,10 @@
  * Always centers buttons regardless of count.
  *
  * Props:
- *   heading     — h2 heading text
+ *   heading     — heading text (h1 or h2 via level prop)
  *   description — optional body paragraph below heading
  *   buttons     — array of { label, href?, variant?, icon?, iconPosition? }
+ *   level       — heading element: h1 | h2 (default h2; h1 renders at text-h2 size)
  *   size        — 'sm' | 'md' | 'lg' forwarded to CtaRow (default 'md')
  *   gap         — 'sm' | 'md' forwarded to CtaRow (default 'md')
  *   class?      — spread onto root <section>
@@ -37,6 +38,7 @@ interface Props {
   heading: string
   description?: string | null
   buttons: CtaActionButton[]
+  level?: 'h1' | 'h2'
   size?: 'sm' | 'md' | 'lg'
   gap?: 'sm' | 'md'
   class?: string
@@ -46,10 +48,13 @@ const {
   heading,
   description,
   buttons,
+  level = 'h2',
   size = 'md',
   gap = 'md',
   class: className,
 } = Astro.props
+
+const HeadingTag = level
 ---
 
 <section
@@ -61,7 +66,7 @@ const {
   <Container>
     <div class="mx-auto flex max-w-(--container-small) flex-col items-center text-center">
       <div class="flex flex-col items-center text-center gap-f8">
-        <h2>{heading}</h2>
+        <HeadingTag class:list={[level === 'h1' && 'text-h2']}>{heading}</HeadingTag>
         {description && (
           <p class="text-body max-w-xl font-medium">{description}</p>
         )}

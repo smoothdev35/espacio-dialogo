@@ -3,11 +3,11 @@
  * UpdateHeader
  *
  * Renders the top-of-page header for the Update detail page:
- * breadcrumb → category badge → h2 title → author (avatar+name) • read time • date → share section
+ * breadcrumb → category badge → h1 title → author (avatar+name) • read time • date → share section
  * Desktop: flex row — text column fixed at 448px, image fills remaining space with 16:9.
  * Mobile: single column stack.
  *
- * Semantic: <header> inside <article>, <h2> for article-level heading.
+ * Semantic: <header> inside <article>, <h1> for article-level heading.
  * Gaps driven by fluid tokens (--spacing-component-gap, --spacing-f7).
  * Image: always aspect-video (16:9), no breakpoint override.
  *
@@ -65,8 +65,8 @@ const breadcrumbTitle = update.title.split(/\s+/).slice(0, 2).join(' ')
         </ol>
       </nav>
 
-      <!-- Title — h2 naturally picks up text-h2 from global.css -->
-      <h2 class="mt-f8">{update.title}</h2>
+      <!-- Title — h1 semantics, text-h2 keeps visual size -->
+      <h1 class="text-h2 mt-f8">{update.title}</h1>
 
       <!-- Author avatar + name (row 1), read time + date (row 2) -->
       <div class="flex flex-col gap-y-1 mt-f9">

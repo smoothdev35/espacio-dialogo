@@ -12,6 +12,8 @@
  *   heading     — main heading text
  *   description? — optional supporting copy below heading
  *   level?      — heading element: h1 | h2 | h3 (default: h2)
+ *   headingClass? — extra classes on the heading element (e.g. "text-h2" to
+ *                   keep h2 size when level="h1")
  *   align?      — text alignment: left | center (default: left)
  *   class?      — spread onto root flex container
  * Slots: none
@@ -24,6 +26,7 @@ export interface Props {
   heading: string
   description?: string
   level?: 'h1' | 'h2' | 'h3'
+  headingClass?: string
   align?: 'left' | 'center'
   class?: string
 }
@@ -33,6 +36,7 @@ const {
   heading,
   description,
   level = 'h2',
+  headingClass,
   align = 'left',
   class: className,
 } = Astro.props
@@ -49,7 +53,7 @@ const alignClass = align === 'center' ? 'text-center items-center' : ''
       </p>
     )
   }
-  <HeadingTag>{heading}</HeadingTag>
+  <HeadingTag class:list={[headingClass]}>{heading}</HeadingTag>
   {
     description && (
       <p class="max-w-2xl font-medium">{description}</p>

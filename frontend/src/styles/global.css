@@ -48,7 +48,7 @@
     /* Page surface */
     --page:       var(--brand-neutral-lightest);
     --page-text:  var(--brand-neutral-darker);
-    --muted: var(--brand-neutral);
+    --muted: #6b6c6e;
     --dot-inactive: var(--brand-neutral-lighter);
 
     /* Component surface */
