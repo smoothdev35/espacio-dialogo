@@ -5,7 +5,7 @@ import {
 } from './update.mapper'
 import type { TimelineEntry } from './timeline.types'
 import type { UpdateCardProps, UpdateDetailProps } from './update.types'
-import { resolveMediaUrl } from '@/lib/media'
+import { resolveMediaUrl, toResolvedImage } from '@/lib/media'
 import { calculateReadTime } from '@/lib/read-time'
 import { formatDate, formatMonthYear } from '@/lib/date'
 
@@ -50,7 +50,7 @@ export async function fetchUpdates(): Promise<FetchUpdatesResult> {
 }
 
 const UPDATE_DETAIL_POPULATE = {
-  featuredImage: { fields: ['url', 'alternativeText'] },
+  featuredImage: { populate: '*' },
   category: { fields: ['name', 'slug'] },
   tags: { fields: ['name', 'slug'] },
   author: {
@@ -95,12 +95,7 @@ export async function fetchUpdateBySlug(
     publishedAt: formatDate(rawDate),
     dateIso: rawDate,
     readTime: calculateReadTime(update.body),
-    featuredImage: update.featuredImage
-      ? {
-          url: resolveMediaUrl(update.featuredImage.url),
-          alternativeText: update.featuredImage.alternativeText,
-        }
-      : null,
+    featuredImage: toResolvedImage(update.featuredImage),
     category: update.category
       ? { name: update.category.name, slug: update.category.slug }
       : null,

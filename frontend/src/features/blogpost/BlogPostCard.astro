@@ -23,11 +23,14 @@
  * Composed from: (none — leaf component)
  */
 
+import { buildSrcSet } from '@/lib/media'
+import type { ResolvedImage } from '@/lib/media'
+
 interface Props {
   slug: string;
   title: string;
   excerpt?: string;
-  featuredImage?: { url: string; alternativeText?: string | null } | null;
+  featuredImage?: ResolvedImage | null;
   /** Optional data attrs for search/filter JS on listing pages */
   dataTags?: string;
   dataSearchable?: string;
@@ -60,6 +63,8 @@ const {
       <img
         src={featuredImage.url}
         alt={featuredImage.alternativeText ?? ''}
+        srcset={buildSrcSet(featuredImage)}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         class="h-full w-full object-cover"
         loading="lazy"
       />

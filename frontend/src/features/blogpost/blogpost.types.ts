@@ -10,6 +10,7 @@
  */
 
 import type { Block } from '@shared/strapi'
+import type { ResolvedImage } from '@/lib/media'
 
 export interface BlogPostCardProps {
   title: string
@@ -19,7 +20,7 @@ export interface BlogPostCardProps {
   /** Raw ISO date for `<time datetime>` — machine-readable */
   dateIso: string
   readTime: string
-  featuredImage: { url: string; alternativeText: string | null } | null
+  featuredImage: ResolvedImage | null
   tags?: { name: string; slug: string }[]
   author: { name: string; slug: string; avatar: string | null } | null
 }
@@ -32,7 +33,7 @@ export interface BlogPostDetailProps {
   /** Raw ISO date for `<time datetime>` — machine-readable */
   dateIso: string
   readTime: string
-  featuredImage: { url: string; alternativeText: string | null } | null
+  featuredImage: ResolvedImage | null
   tags: { name: string; slug: string }[]
   author: {
     name: string

@@ -20,6 +20,7 @@
 import Container from '@/layouts/Container.astro'
 import CtaRow from '@/components/CtaRow.astro'
 import { getHero } from './hero.api'
+import { buildSrcSet } from '@/lib/media'
 import { HERO } from '@/lib/content'
 
 interface Props {
@@ -37,7 +38,15 @@ const title = heroData?.title || HERO.fallbackTitle
 const subtitle =
   heroData?.subtitle ||
   HERO.fallbackSubtitle
-const heroImage = heroData?.heroImage || { url: '', alt: '' }
+const heroImage = heroData?.heroImage ?? {
+  url: '',
+  alternativeText: '',
+  width: 0,
+  height: 0,
+  formats: null,
+}
+
+const heroSrcSet = buildSrcSet(heroImage)
 ---
 
 <section
@@ -75,10 +84,11 @@ const heroImage = heroData?.heroImage || { url: '', alt: '' }
       }
       <img
         src={heroImage.url}
-        alt={heroImage.alt}
+        alt={heroImage.alternativeText}
+        srcset={heroSrcSet || undefined}
+        sizes="100vw"
         class="absolute inset-0 h-full w-full object-cover"
-        aria-hidden={!heroImage.alt}
-        fetchpriority="high"
+        aria-hidden={!heroImage.alternativeText}
       />
 
       {

@@ -29,6 +29,7 @@ import IconLinkedIn from '@components/icons/IconLinkedIn.astro'
 import IconX from '@components/icons/IconX.astro'
 import IconFacebook from '@components/icons/IconFacebook.astro'
 import type { BlogPostDetailProps } from './blogpost.types'
+import { buildSrcSet } from '@/lib/media'
 import { BLOG_HEADER } from '@/lib/content'
 
 interface Props {
@@ -77,9 +78,10 @@ const shareUrl = import.meta.env.SITE_URL
         <img
           src={post.featuredImage.url}
           alt={post.featuredImage.alternativeText ?? ''}
+          srcset={buildSrcSet(post.featuredImage)}
+          sizes="(max-width: 1536px) 100vw, 1536px"
           class="aspect-video w-full rounded-lg object-cover"
           loading="eager"
-          decoding="async"
         />
       </div>
     )

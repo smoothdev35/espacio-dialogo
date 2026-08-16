@@ -19,6 +19,7 @@
 import ReadMore from '@/components/ui/astro/ReadMore.astro'
 import Tag from '@components/ui/astro/Tag.astro'
 import type { UpdateCardProps } from './update.types'
+import { buildSrcSet } from '@/lib/media'
 
 interface Props extends UpdateCardProps {
   class?: string
@@ -50,6 +51,8 @@ const {
         <img
           src={featuredImage.url}
           alt={featuredImage.alternativeText ?? title}
+          srcset={buildSrcSet(featuredImage)}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           class="aspect-video h-full w-full object-cover"
           loading="lazy"
         />

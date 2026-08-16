@@ -1,4 +1,4 @@
-import { resolveMediaUrl } from '@/lib/media'
+import { toResolvedImage } from '@/lib/media'
 import { calculateReadTime } from '@/lib/read-time'
 import { formatDate } from '@/lib/date'
 import type {
@@ -19,12 +19,7 @@ export function toUpdateCardProps(
     publishedAt: formatDate(rawDate),
     dateIso: rawDate,
     readTime: calculateReadTime(update.body),
-    featuredImage: update.featuredImage
-      ? {
-          url: resolveMediaUrl(update.featuredImage.url),
-          alternativeText: update.featuredImage.alternativeText,
-        }
-      : null,
+    featuredImage: toResolvedImage(update.featuredImage),
     category: update.category
       ? {
           name: update.category.name,

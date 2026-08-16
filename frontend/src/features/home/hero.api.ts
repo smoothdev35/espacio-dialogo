@@ -8,14 +8,15 @@
  * Composed from: none
  */
 
-import { resolveMediaUrl } from '@/lib/media'
+import { toResolvedImage } from '@/lib/media'
+import type { ResolvedImage } from '@/lib/media'
 import { fetchSingleType } from '@/lib/strapi'
 import type { Hero } from '@shared/strapi'
 
 export interface HeroResult {
   title: string
   subtitle: string | null
-  heroImage: { url: string; alt: string } | null
+  heroImage: ResolvedImage | null
 }
 
 export async function getHero(): Promise<HeroResult | null> {
@@ -29,11 +30,6 @@ export async function getHero(): Promise<HeroResult | null> {
   return {
     title: hero.title,
     subtitle: hero.subtitle,
-    heroImage: hero.heroImage
-      ? {
-          url: resolveMediaUrl(hero.heroImage.url),
-          alt: hero.heroImage.alternativeText ?? '',
-        }
-      : null,
+    heroImage: toResolvedImage(hero.heroImage),
   }
 }

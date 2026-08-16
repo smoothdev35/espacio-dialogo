@@ -37,6 +37,7 @@ import IconLinkedIn from '@components/icons/IconLinkedIn.astro'
 import IconX from '@components/icons/IconX.astro'
 import IconFacebook from '@components/icons/IconFacebook.astro'
 import type { UpdateDetailProps } from './update.types'
+import { buildSrcSet } from '@/lib/media'
 import { UPDATE_HEADER } from '@/lib/content'
 
 interface Props {
@@ -121,9 +122,10 @@ const breadcrumbTitle = update.title.split(/\s+/).slice(0, 2).join(' ')
           <img
             src={update.featuredImage.url}
             alt={update.featuredImage.alternativeText ?? ''}
+            srcset={buildSrcSet(update.featuredImage)}
+            sizes="(max-width: 1280px) 100vw, 60vw"
             class="w-full aspect-video xl:aspect-3/2 2xl:aspect-video rounded-lg object-cover"
             loading="eager"
-            decoding="async"
           />
         </div>
       )

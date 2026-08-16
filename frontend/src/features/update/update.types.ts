@@ -1,4 +1,5 @@
 import type { Block } from '@shared/strapi'
+import type { ResolvedImage } from '@/lib/media'
 
 export interface UpdateCardProps {
   title: string
@@ -8,7 +9,7 @@ export interface UpdateCardProps {
   /** Raw ISO date for `<time datetime>` — machine-readable */
   dateIso: string
   readTime: string
-  featuredImage: { url: string; alternativeText: string | null } | null
+  featuredImage: ResolvedImage | null
   category: { name: string; slug: string } | null
 }
 
@@ -28,7 +29,7 @@ export interface UpdateDetailProps {
   /** Raw ISO date for `<time datetime>` — machine-readable */
   dateIso: string
   readTime: string
-  featuredImage: { url: string; alternativeText: string | null } | null
+  featuredImage: ResolvedImage | null
   category: { name: string; slug: string } | null
   tags: { name: string; slug: string }[]
   author: {

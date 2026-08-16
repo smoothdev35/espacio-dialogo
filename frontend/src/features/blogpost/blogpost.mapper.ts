@@ -5,7 +5,7 @@
  * Composed from: @/lib/read-time (calculateReadTime), @/lib/date (formatDate)
  */
 
-import { resolveMediaUrl } from '@/lib/media'
+import { resolveMediaUrl, toResolvedImage } from '@/lib/media'
 import { calculateReadTime } from '@/lib/read-time'
 import { formatDate } from '@/lib/date'
 import type {
@@ -27,12 +27,7 @@ export function toBlogPostCardProps(
     publishedAt: formatDate(rawDate),
     dateIso: rawDate,
     readTime: calculateReadTime(post.body),
-    featuredImage: post.featuredImage
-      ? {
-          url: resolveMediaUrl(post.featuredImage.url),
-          alternativeText: post.featuredImage.alternativeText,
-        }
-      : null,
+    featuredImage: toResolvedImage(post.featuredImage),
     tags: post.tags?.map((t) => ({ name: t.name, slug: t.slug })) ?? undefined,
     author: post.author
       ? {
@@ -57,12 +52,7 @@ export function toBlogPostDetailProps(
     publishedAt: formatDate(rawDate),
     dateIso: rawDate,
     readTime: calculateReadTime(post.body),
-    featuredImage: post.featuredImage
-      ? {
-          url: resolveMediaUrl(post.featuredImage.url),
-          alternativeText: post.featuredImage.alternativeText,
-        }
-      : null,
+    featuredImage: toResolvedImage(post.featuredImage),
     tags: (post.tags ?? []).map((t) => ({ name: t.name, slug: t.slug })),
     author: post.author
       ? {

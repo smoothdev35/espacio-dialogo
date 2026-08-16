@@ -25,7 +25,7 @@ const BLOG_POPULATE = {
 }
 
 const BLOG_DETAIL_POPULATE = {
-  featuredImage: { fields: ['url', 'alternativeText'] },
+  featuredImage: { populate: '*' },
   tags: { fields: ['name', 'slug'] },
   author: {
     populate: {
