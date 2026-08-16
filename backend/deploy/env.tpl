@@ -22,7 +22,6 @@ DATABASE_USERNAME=strapi
 DATABASE_PASSWORD=CHANGEME_DB_PASSWORD
 
 # Media — local for now (backup /opt/strapi/backend/public/uploads/)
-PUBLIC_STRAPI_URL=https://api.espaciodialogo.com
 
 # Seed (one-time, disable after bootstrap)
 SEED_ON_BOOT=false
