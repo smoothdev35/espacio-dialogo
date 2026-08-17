@@ -60,17 +60,22 @@ const posts: BlogPostCardProps[] = providedPosts ?? (await fetchBlogPosts().catc
   <Container>
     <div class="flex flex-col gap-f9">
       <!-- ═══ Title row ═══ -->
-      <div
-        class="flex flex-col items-start justify-between gap-f8 sm:flex-row sm:items-end"
+      <SectionHeader
+        tagline={tagline}
+        heading={heading}
+        description={description}
       >
-        <SectionHeader
-          tagline={tagline}
-          heading={heading}
-          description={description}
-        />
-
-        {showViewAll && <Button variant="secondary" label={BLOG_SLIDER.viewAll} href="/blog" class="self-start md:self-auto" />}
-      </div>
+        {
+          showViewAll && (
+            <Button
+              slot="action"
+              variant="secondary"
+              label={BLOG_SLIDER.viewAll}
+              href="/blog"
+            />
+          )
+        }
+      </SectionHeader>
 
       <!-- ═══ Slider row ═══ -->
       <div class="flex flex-col gap-f9">
