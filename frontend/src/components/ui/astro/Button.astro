@@ -30,7 +30,7 @@ const isLink = !!href
 const Tag = isLink ? 'a' : 'button'
 
 const baseClasses =
-  'inline-flex items-center justify-center gap-2 rounded-md disabled:cursor-not-allowed translate-y-0 active:translate-y-1'
+  'inline-flex items-center justify-center gap-2 rounded-md transition-all disabled:cursor-not-allowed translate-y-0 active:translate-y-1'
 
 const variantClasses: Record<string, string> = {
   primary: 'bg-btn-primary text-btn-primary-text border border-btn-primary-border shadow-btn-primary hover:bg-btn-primary-hover hover:text-btn-primary-text focus-visible:text-btn-primary-text active:shadow-btn-primary-active disabled:bg-btn-primary-disabled disabled:text-btn-primary-disabled-text disabled:shadow-none duration-150',
@@ -41,7 +41,7 @@ const variantClasses: Record<string, string> = {
    * where theme-based inversion would produce wrong contrast.
    */
   inverse:
-    'bg-contrast-text text-[#020306] border border-[#d9d9d9] shadow-btn-inverse hover:bg-btn-inverse-hover hover:text-[#020306] focus-visible:text-[#020306] active:shadow-btn-inverse-active disabled:bg-[#d9d9d9] disabled:text-[#b3b3b4] disabled:shadow-none duration-150',
+    'bg-contrast-text text-[#020306] border border-[#b3b3b4] shadow-btn-inverse hover:bg-btn-inverse-hover hover:text-[#020306] focus-visible:text-[#020306] active:shadow-btn-inverse-active disabled:bg-[#d9d9d9] disabled:text-[#b3b3b4] disabled:shadow-none duration-150',
   'inverse-outline':
     'bg-white/10 backdrop-blur-[3px] text-contrast-text border border-white/20 shadow-btn-inverse-outline hover:bg-btn-inverse-outline-hover hover:text-contrast-text focus-visible:text-contrast-text active:shadow-btn-inverse-outline-active disabled:opacity-50 disabled:shadow-none duration-150',
   /**
