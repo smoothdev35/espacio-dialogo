@@ -30,7 +30,7 @@ const { class: className } = Astro.props
 ]}>
   {READ_MORE.label}
   <svg
-    class="relative top-px h-4 w-4 shrink-0 transition-transform! duration-200! ease-in-out"
+    class="relative top-px h-4 w-4 shrink-0 transition-transform duration-200 ease-in-out"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
     fill="none"
@@ -64,13 +64,21 @@ const { class: className } = Astro.props
     transition-duration: 0.3s;
   }
 
-  a:hover .readmore::after,
+  @media (hover: hover) {
+    a:hover .readmore::after {
+      transform: scaleX(1);
+    }
+  }
   a:focus-visible .readmore::after {
     transform: scaleX(1);
   }
 
   /* Chevron push */
-  a:hover .readmore svg,
+  @media (hover: hover) {
+    a:hover .readmore svg {
+      transform: translateX(4px);
+    }
+  }
   a:focus-visible .readmore svg {
     transform: translateX(4px);
   }

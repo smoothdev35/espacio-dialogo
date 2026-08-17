@@ -84,13 +84,13 @@ const categories = updateData.categories
             <UpdateGrid articles={gridArticles} />
 
             <!-- Empty state — shown when filter + pagination yield no grid items -->
-            <p data-update-empty hidden class="col-span-full text-page-text text-center py-16 text-h6">
+            <p data-update-empty hidden class="col-span-full text-center py-16 text-h6">
               {UPDATES.noCategoryMatch}
             </p>
           </div>
         </div>
       ) : (
-        <p class="text-page-text text-center py-16 text-h6">{UPDATES.noUpdates}</p>
+        <p class="text-center py-16 text-h6">{UPDATES.noUpdates}</p>
       )}
 
     </div>

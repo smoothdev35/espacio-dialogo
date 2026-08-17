@@ -165,7 +165,7 @@ const posts: BlogPostCardProps[] = providedPosts ?? (await fetchBlogPosts().catc
             </div>
           </>
         ) : (
-          <p class="text-page-text text-center py-16 text-h6">{BLOG_SLIDER.noPosts}</p>
+          <p class="text-center py-16 text-h6">{BLOG_SLIDER.noPosts}</p>
         )}
       </div>
     </div>
@@ -262,11 +262,15 @@ const posts: BlogPostCardProps[] = providedPosts ?? (await fetchBlogPosts().catc
      declared later in same layer → wins. */
   @layer base {
     .blog-card img {
-      transition: transform 400ms cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+      transition: transform 400ms cubic-bezier(0.25, 0.1, 0.25, 1);
       transform: scale(1);
     }
 
-    .blog-card:hover img,
+    @media (hover: hover) {
+      .blog-card:hover img {
+        transform: scale(1.08);
+      }
+    }
     .blog-card:focus-visible img {
       transform: scale(1.08);
     }

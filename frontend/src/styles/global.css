@@ -468,21 +468,64 @@
     scroll-behavior: smooth;
   }
 
-  /* Theme transition — narrowed to the properties theme actually changes */
+  /* Non-inherited paint — background/border stay per-element */
   :where(:root, .dark) {
     & *,
     & *::before,
     & *::after {
       @apply duration-300 ease-in-out;
-      transition-property: background-color, color, border-color;
+      transition-property: background-color, border-color;
     }
   }
 
-  /* SVG icons — fill/stroke (currentColor) fade in sync with text */
-  svg,
-  svg * {
+  /* Inherited color — fade at source, descendants follow (avoids WebKit
+     deferring inherited-color transitions on descendants) */
+  body {
     @apply duration-300 ease-in-out;
-    transition-property: color, fill, stroke;
+    transition-property: color;
+  }
+
+  /* Explicit-color base elements */
+  a,
+  time,
+  ::placeholder {
+    @apply duration-300 ease-in-out;
+    transition-property: color;
+  }
+
+  /* Explicit-color utilities — own color, own transition */
+  .text-page-text,
+  .text-muted,
+  .text-surface-text,
+  .text-surface-text\/20,
+  .text-contrast-text,
+  .text-link-text,
+  .text-link-hover,
+  .text-error,
+  .text-btn-primary-text,
+  .text-btn-primary-disabled-text,
+  .text-btn-secondary-disabled-text,
+  .text-nav-btn-fg,
+  .text-filter-fg,
+  .text-input-text,
+  .text-input-placeholder,
+  .text-checkbox-check,
+  .text-tag-text {
+    @apply duration-300 ease-in-out;
+    transition-property: color;
+  }
+
+  /* Reduced motion — neutralize all transitions/animations/smooth scroll */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      transition-delay: 0ms !important;
+    }
+    html {
+      scroll-behavior: auto !important;
+    }
   }
 
   /* ═══ Body ═══════════════════════════════════════════════ */
@@ -579,10 +622,13 @@
     font-family: var(--font-body);
     font-size: var(--text-base);
     font-weight: var(--font-weight-medium);
+    -webkit-tap-highlight-color: transparent;
   }
 
-  a:hover {
-    color: var(--color-link-hover);
+  @media (hover: hover) {
+    a:hover {
+      color: var(--color-link-hover);
+    }
   }
 
   a:active {
@@ -596,6 +642,7 @@
     font-weight: var(--font-weight-medium);
     border-radius: var(--radius-md);
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
 
   /* ═══ Inputs, Textareas, Selects ════════════════════════ */

@@ -87,7 +87,12 @@ const {
   }
 
   /* Inactive pill — hover/focus-visible preview same as active */
-  [data-pill]:not([aria-current='true']):hover,
+  @media (hover: hover) {
+    [data-pill]:not([aria-current='true']):hover {
+      background-color: var(--color-filter-bg);
+      color: var(--color-filter-fg);
+    }
+  }
   [data-pill]:not([aria-current='true']):focus-visible {
     background-color: var(--color-filter-bg);
     color: var(--color-filter-fg);

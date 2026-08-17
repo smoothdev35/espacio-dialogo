@@ -247,7 +247,7 @@ const pressItems: PressItem[] = rawItems.map((item) => ({
               </div>
             </>
           ) : (
-              <p class="text-page-text text-center py-16 text-h6">
+              <p class="text-center py-16 text-h6">
                 {PRESS.noItems}
               </p>
           )
@@ -358,7 +358,7 @@ const pressItems: PressItem[] = rawItems.map((item) => ({
   @layer base {
     .press-card img,
     .press-card video {
-      transition: transform 400ms cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+      transition: transform 400ms cubic-bezier(0.25, 0.1, 0.25, 1);
       transform: scale(1);
     }
 

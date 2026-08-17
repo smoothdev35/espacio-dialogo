@@ -57,7 +57,7 @@ export function Button({
   onClick,
 }: ButtonProps) {
   const base =
-    'inline-flex items-center justify-center gap-2 rounded-md disabled:cursor-not-allowed translate-y-0 active:translate-y-1'
+    'inline-flex items-center justify-center gap-2 rounded-md transition-all disabled:cursor-not-allowed translate-y-0 active:translate-y-1 pointer-coarse:active:duration-0'
 
   const v = variantStyles[variant]
   const s = sizeStyles[size]?.(iconPosition, variant) ?? ''

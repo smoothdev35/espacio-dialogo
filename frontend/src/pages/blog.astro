@@ -72,12 +72,12 @@ const tagOptions = allTags.map((t) => ({ label: t.name, value: t.slug }))
                 </BlogPostCard>
               ))}
             </LoadMore>
-            <p data-blog-no-results class="text-page-text text-center py-16 text-h6 hidden">
+            <p data-blog-no-results class="text-center py-16 text-h6 hidden">
               {BLOG_LISTING.noResults}
             </p>
           </>
         ) : (
-          <p class="text-page-text text-center py-16 text-h6">
+          <p class="text-center py-16 text-h6">
             {BLOG_LISTING.noPosts}
           </p>
         )

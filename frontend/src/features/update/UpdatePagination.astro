@@ -68,8 +68,10 @@ const chevronRight =
     transition: background-color 0.2s ease, color 0.2s ease;
   }
 
-  [data-page]:hover {
-    background-color: color-mix(in srgb, var(--color-page-text) 10%, transparent);
+  @media (hover: hover) {
+    [data-page]:hover {
+      background-color: color-mix(in srgb, var(--color-page-text) 10%, transparent);
+    }
   }
 
   [data-page][aria-current='true'] {

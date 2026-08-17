@@ -30,7 +30,7 @@ const isLink = !!href
 const Tag = isLink ? 'a' : 'button'
 
 const baseClasses =
-  'inline-flex items-center justify-center gap-2 rounded-md transition-all disabled:cursor-not-allowed translate-y-0 active:translate-y-1'
+  'inline-flex items-center justify-center gap-2 rounded-md transition-all disabled:cursor-not-allowed translate-y-0 active:translate-y-1 pointer-coarse:active:duration-0'
 
 const variantClasses: Record<string, string> = {
   primary: 'bg-btn-primary text-btn-primary-text border border-btn-primary-border shadow-btn-primary hover:bg-btn-primary-hover hover:text-btn-primary-text focus-visible:text-btn-primary-text active:shadow-btn-primary-active disabled:bg-btn-primary-disabled disabled:text-btn-primary-disabled-text disabled:shadow-none duration-150',
