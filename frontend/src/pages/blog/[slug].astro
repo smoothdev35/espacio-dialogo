@@ -41,6 +41,7 @@ import {
 } from '@/features/blogpost/blogpost.api'
 import { extractHeadings } from '@/lib/blocks-renderer'
 import { BLOG_RELATED } from '@/lib/content'
+import { buildSrcSet } from '@/lib/media'
 
 export interface Props {
   documentId: string
@@ -77,10 +78,25 @@ const canonicalUrl = `${import.meta.env.SITE_URL ?? ''}/blog/${post.slug}`
 const pageDescription = post.excerpt
 const ogImage = post.featuredImage?.url ?? ''
 const ogImageAlt = post.featuredImage?.alternativeText ?? ''
+const featuredImage = post.featuredImage
+const featuredSrcSet = featuredImage ? buildSrcSet(featuredImage) : ''
 ---
 
 <BaseLayout title={title}>
   <!-- head slot: SEO meta, canonical, OG tags -->
+  {
+    featuredImage && (
+      <link
+        slot="head"
+        rel="preload"
+        as="image"
+        href={featuredImage.url}
+        imagesrcset={featuredSrcSet}
+        imagesizes="(max-width: 1536px) 100vw, 1536px"
+        fetchpriority="high"
+      />
+    )
+  }
   <link slot="head" rel="canonical" href={canonicalUrl} />
   <meta slot="head" name="description" content={pageDescription} />
   <meta slot="head" property="og:title" content={title} />

@@ -23,6 +23,7 @@ import UpdateHeader from '@/features/update/UpdateHeader.astro'
 import UpdateBody from '@/features/update/UpdateBody.astro'
 import TimelineSection from '@/features/update/TimelineSection.astro'
 import { fetchUpdateBySlug, fetchUpdateSlugs } from '@/features/update/update.api'
+import { buildSrcSet } from '@/lib/media'
 
 export async function getStaticPaths() {
   const slugs = await fetchUpdateSlugs()
@@ -43,10 +44,26 @@ if (!update) {
   return Astro.redirect('/404')
 }
 
+const featuredImage = update.featuredImage
+const featuredSrcSet = featuredImage ? buildSrcSet(featuredImage) : ''
+
 const title = `${update.title} — EDD`
 ---
 
 <BaseLayout title={title}>
+  {
+    featuredImage && (
+      <link
+        slot="head"
+        rel="preload"
+        as="image"
+        href={featuredImage.url}
+        imagesrcset={featuredSrcSet}
+        imagesizes="(max-width: 1280px) 100vw, 60vw"
+        fetchpriority="high"
+      />
+    )
+  }
   <section>
     <Container wide>
     <article>
