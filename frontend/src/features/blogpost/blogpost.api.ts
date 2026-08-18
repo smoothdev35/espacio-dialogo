@@ -13,10 +13,19 @@
  * Composed from: none
  */
 
-import { getBlogPosts, getBlogPost, getBlogPostAction, getBlogPostSlugs } from '@/lib/strapi'
-import type { BlogPost } from '@shared/strapi'
+import {
+  getBlogPosts,
+  getBlogPost,
+  getBlogPostAction,
+  getBlogPostSlugs,
+} from '@/lib/strapi'
+import type { BlogPost, BlogPostAction } from '@shared/strapi'
 import { toBlogPostCardProps, toBlogPostDetailProps } from './blogpost.mapper'
-import type { BlogPostCardProps, BlogPostDetailProps, BlogPostActionProps } from './blogpost.types'
+import type {
+  BlogPostCardProps,
+  BlogPostDetailProps,
+  BlogPostActionProps,
+} from './blogpost.types'
 
 const BLOG_POPULATE = {
   featuredImage: { populate: '*' },
@@ -56,7 +65,9 @@ export async function fetchBlogPostsForListing(): Promise<BlogPostCardProps[]> {
   return posts.map(toBlogPostCardProps)
 }
 
-export async function fetchBlogPostSlugs(): Promise<{ slug: string; documentId: string }[]> {
+export async function fetchBlogPostSlugs(): Promise<
+  { slug: string; documentId: string }[]
+> {
   return getBlogPostSlugs()
 }
 
@@ -71,9 +82,14 @@ export async function fetchBlogPostByDocumentId(
 }
 
 export async function fetchBlogPostAction(): Promise<BlogPostActionProps | null> {
-  const action = await getBlogPostAction({
-    populate: '*',
-  })
+  let action: BlogPostAction | null = null
+  try {
+    action = await getBlogPostAction({
+      populate: '*',
+    })
+  } catch {
+    return null
+  }
   if (!action) return null
   return {
     heading: action.heading,

@@ -15,7 +15,11 @@ import { toPressItem } from './press.mapper'
 import type { PressItem } from './press.types'
 
 export async function fetchPressItems(): Promise<PressItem[]> {
-  const response = await getPressItems()
-  const items: Press[] = response.data
-  return items.map(toPressItem)
+  try {
+    const response = await getPressItems()
+    const items: Press[] = response.data
+    return items.map(toPressItem)
+  } catch {
+    return []
+  }
 }
