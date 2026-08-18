@@ -15,8 +15,8 @@ import type { Hero } from '@shared/strapi'
 
 export interface HeroResult {
   title: string
-  subtitle: string | null
-  heroImage: ResolvedImage | null
+  subtitle: string
+  heroImage: ResolvedImage
 }
 
 export async function getHero(): Promise<HeroResult | null> {

@@ -20,7 +20,7 @@ export interface BlogPostCardProps {
   /** Raw ISO date for `<time datetime>` — machine-readable */
   dateIso: string
   readTime: string
-  featuredImage: ResolvedImage | null
+  featuredImage: ResolvedImage
   tags?: { name: string; slug: string }[]
   author: { name: string; slug: string; avatar: string | null } | null
 }
@@ -33,7 +33,7 @@ export interface BlogPostDetailProps {
   /** Raw ISO date for `<time datetime>` — machine-readable */
   dateIso: string
   readTime: string
-  featuredImage: ResolvedImage | null
+  featuredImage: ResolvedImage
   tags: { name: string; slug: string }[]
   author: {
     name: string
@@ -46,7 +46,7 @@ export interface BlogPostDetailProps {
 
 export interface BlogPostActionProps {
   heading: string
-  description: string | null
+  description: string
   buttonLabel: string
   buttonUrl: string
 }

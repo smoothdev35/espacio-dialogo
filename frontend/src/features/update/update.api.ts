@@ -1,8 +1,6 @@
 import { getUpdates, getCategories } from '@/lib/strapi'
 import type { Update } from '@shared/strapi'
-import {
-  toUpdateCardProps,
-} from './update.mapper'
+import { toUpdateCardProps } from './update.mapper'
 import type { TimelineEntry } from './timeline.types'
 import type { UpdateCardProps, UpdateDetailProps } from './update.types'
 import { resolveMediaUrl, toResolvedImage } from '@/lib/media'
@@ -15,7 +13,7 @@ export interface FetchUpdatesResult {
   categories: { name: string; slug: string }[]
 }
 
-export interface FeaturedUpdateResult extends UpdateCardProps {}
+export type FeaturedUpdateResult = UpdateCardProps
 
 const UPDATE_POPULATE = {
   featuredImage: { populate: '*' },
@@ -34,9 +32,7 @@ export async function fetchUpdates(): Promise<FetchUpdatesResult> {
   const mapped = updates.map(toUpdateCardProps)
 
   const featured =
-    mapped.length > 0
-      ? ({ ...mapped[0] } as FeaturedUpdateResult)
-      : null
+    mapped.length > 0 ? ({ ...mapped[0] } as FeaturedUpdateResult) : null
 
   const grid = mapped.slice(1)
 
@@ -96,9 +92,7 @@ export async function fetchUpdateBySlug(
     dateIso: rawDate,
     readTime: calculateReadTime(update.body),
     featuredImage: toResolvedImage(update.featuredImage),
-    category: update.category
-      ? { name: update.category.name, slug: update.category.slug }
-      : null,
+    category: { name: update.category.name, slug: update.category.slug },
     tags: (update.tags ?? []).map((t) => ({ name: t.name, slug: t.slug })),
     author: update.author
       ? {
@@ -129,7 +123,9 @@ export async function fetchTimelineEntries(): Promise<TimelineEntry[]> {
   })
 
   return response.data.map((update: Update) => {
-    const { month, year } = formatMonthYear(update.publishedAt ?? update.createdAt)
+    const { month, year } = formatMonthYear(
+      update.publishedAt ?? update.createdAt,
+    )
     return {
       month,
       year,

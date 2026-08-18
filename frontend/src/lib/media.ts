@@ -38,8 +38,7 @@ export interface ResolvedImage {
   formats: Record<string, ImageFormat> | null
 }
 
-export function toResolvedImage(media: Media | null): ResolvedImage | null {
-  if (!media) return null
+export function toResolvedImage(media: Media): ResolvedImage {
   return {
     url: resolveMediaUrl(media.url),
     alternativeText: media.alternativeText,

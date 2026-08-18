@@ -9,8 +9,8 @@ export interface UpdateCardProps {
   /** Raw ISO date for `<time datetime>` — machine-readable */
   dateIso: string
   readTime: string
-  featuredImage: ResolvedImage | null
-  category: { name: string; slug: string } | null
+  featuredImage: ResolvedImage
+  category: { name: string; slug: string }
 }
 
 export interface UpdateGridProps {
@@ -29,8 +29,8 @@ export interface UpdateDetailProps {
   /** Raw ISO date for `<time datetime>` — machine-readable */
   dateIso: string
   readTime: string
-  featuredImage: ResolvedImage | null
-  category: { name: string; slug: string } | null
+  featuredImage: ResolvedImage
+  category: { name: string; slug: string }
   tags: { name: string; slug: string }[]
   author: {
     name: string
