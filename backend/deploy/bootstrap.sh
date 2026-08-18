@@ -28,7 +28,8 @@ echo "==> Installing Node.js 22"
 curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
 apt-get install -y nodejs
 corepack enable
-command -v pnpm >/dev/null 2>&1 || npm install -g pnpm
+# Use the package.json-packaged pnpm version (packageManager); corepack downloads it on demand
+corepack pnpm --version
 
 echo "==> Creating ${STACK_USER} user"
 id -u "${STACK_USER}" &>/dev/null || useradd -m -s /bin/bash -d "${APP_DIR}" "${STACK_USER}"
@@ -94,7 +95,7 @@ echo "       ssh root@<host> 'chmod 600 ${APP_DIR}/backend/.env && chown ${STACK
 echo "       ssh root@<host> 'nano ${APP_DIR}/backend/.env'  # fill secrets"
 echo ""
 echo "    2. Build and start:"
-echo "       ssh ${STACK_USER}@<host> 'cd ${APP_DIR}/backend && pnpm install && NODE_OPTIONS=--max-old-space-size=2048 pnpm run build'"
+echo "       ssh ${STACK_USER}@<host> 'cd ${APP_DIR}/backend && corepack pnpm install && NODE_OPTIONS=--max-old-space-size=2048 pnpm run build'"
 echo "       ssh root@<host> 'systemctl enable --now strapi'"
 echo ""
 echo "    3. Watch logs:"

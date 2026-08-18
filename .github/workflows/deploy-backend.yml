@@ -29,7 +29,13 @@ jobs:
 
             echo "[deploy] Installing production dependencies"
             cd backend
-            pnpm install
+            if command -v corepack >/dev/null 2>&1; then
+              export COREPACK_DEFAULT_TO_LATEST=0
+              pnpm_cmd="corepack pnpm"
+            else
+              pnpm_cmd="pnpm"
+            fi
+            $pnpm_cmd install
 
             echo "[deploy] Building admin panel"
             NODE_OPTIONS=--max-old-space-size=2048 pnpm run build
