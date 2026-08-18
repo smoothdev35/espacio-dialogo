@@ -48,27 +48,22 @@ const hasItems = headings.length > 0
 
 {
   hasItems && (
-    <nav
-      class:list={["toc-nav", className]}
-      aria-label={label}
-    >
-      <p class="text-sm font-semibold mb-4 uppercase tracking-wider">{label}</p>
+    <nav class:list={['toc-nav', className]} aria-label={label}>
+      <p class="mb-4 text-sm font-semibold uppercase tracking-wider">{label}</p>
       <ol class="flex flex-col gap-3">
-        {
-          headings.map((heading, i) => (
-            <li>
-              <Button
-                variant="filter"
-                size="md"
-                href={`#${heading.id}`}
-                label={heading.text}
-                class:list={['toc-link']}
-                style={`--toc-depth: ${i}`}
-                data-toc-level={heading.level}
-              />
-            </li>
-          ))
-        }
+        {headings.map((heading, i) => (
+          <li>
+            <Button
+              variant="filter"
+              size="md"
+              href={`#${heading.id}`}
+              label={heading.text}
+              class:list={['toc-link']}
+              style={`--toc-depth: ${i}`}
+              data-toc-level={heading.level}
+            />
+          </li>
+        ))}
       </ol>
     </nav>
   )
@@ -102,12 +97,20 @@ const hasItems = headings.length > 0
    * Degrades gracefully — if IntersectionObserver is unsupported,
    * static anchor links still function.
    */
+  function prefersReducedMotion(): boolean {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  }
+
   class ToCScrollSpy {
-    private nav: HTMLElement | null
-    private links: NodeListOf<HTMLAnchorElement>
-    private headings: HTMLElement[]
+    private nav: HTMLElement | null = null
+    private links: NodeListOf<HTMLAnchorElement> =
+      document.querySelectorAll('.toc-link')
+    private headings: HTMLElement[] = []
     private observer: IntersectionObserver | null = null
     private activeId: string | null = null
+    private topOffset = 105
+    private bottomOffset = 0
+    private rafId = 0
 
     constructor() {
       this.nav = document.querySelector('.toc-nav')
@@ -126,38 +129,62 @@ const hasItems = headings.length > 0
 
       if (this.headings.length === 0) return
 
+      if (!prefersReducedMotion()) {
+        this.bottomOffset = window.innerHeight * 0.4
+      } else {
+        this.topOffset = 0
+      }
+
       this.setupObserver()
       this.setupClickHandlers()
+      window.addEventListener('scroll', this.onScroll, { passive: true })
+    }
+
+    private onScroll = (): void => {
+      if (!this.rafId) {
+        this.rafId = requestAnimationFrame(this.scrollFrame)
+      }
+    }
+
+    private scrollFrame = (): void => {
+      this.rafId = 0
+      this.syncActive()
     }
 
     private setupObserver(): void {
-      const prefersReducedMotion = window.matchMedia(
-        '(prefers-reduced-motion: reduce)',
-      ).matches
-
-      this.observer = new IntersectionObserver(
-        (entries) => {
-          // Find the topmost visible heading
-          const visible = entries
-            .filter((entry) => entry.isIntersecting)
-            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
-
-          if (visible.length > 0) {
-            const top = visible[0].target.id
-            if (top !== this.activeId) {
-              this.setActive(top)
-            }
-          }
-        },
-        {
-          rootMargin: prefersReducedMotion
-            ? '0px'
-            : '-105px 0px -60% 0px',
-          threshold: 0,
-        },
-      )
+      this.observer = new IntersectionObserver(() => this.syncActive(), {
+        rootMargin: prefersReducedMotion() ? '0px' : '-105px 0px -60% 0px',
+        threshold: 0,
+      })
 
       this.headings.forEach((h) => this.observer?.observe(h))
+    }
+
+    private syncActive(): void {
+      // Classic scroll-spy: the active heading is the last one that has
+      // scrolled past the sticky-header offset, or — before any heading
+      // reaches it — the topmost heading visible in the band. The clicked
+      // target settles at viewport top (above the band), so activating only
+      // "visible" headings broke click-sync; position logic fixes it.
+      // Driven by a throttled scroll listener (authoritative, fires on the
+      // final settle frame) plus the IntersectionObserver as a fallback for
+      // non-scroll layout shifts.
+      let activeId = ''
+      let topmostVisible = ''
+
+      for (const heading of this.headings) {
+        const top = heading.getBoundingClientRect().top
+        if (top <= this.topOffset) {
+          activeId = heading.id
+        } else if (top < this.bottomOffset && !topmostVisible) {
+          topmostVisible = heading.id
+        }
+      }
+
+      const candidate = activeId || topmostVisible || this.headings[0].id
+      if (candidate !== this.activeId) {
+        this.setActive(candidate)
+      }
     }
 
     private setupClickHandlers(): void {
@@ -174,14 +201,12 @@ const hasItems = headings.length > 0
           history.replaceState(null, '', href)
 
           // If JS is available, use smooth scroll
-          const prefersReducedMotion = window.matchMedia(
-            '(prefers-reduced-motion: reduce)',
-          ).matches
+          const reduceMotion = prefersReducedMotion()
 
           e.preventDefault()
 
           target.scrollIntoView({
-            behavior: prefersReducedMotion ? 'auto' : 'smooth',
+            behavior: reduceMotion ? 'auto' : 'smooth',
             block: 'start',
           })
 
@@ -211,6 +236,8 @@ const hasItems = headings.length > 0
 
     public destroy(): void {
       this.observer?.disconnect()
+      window.removeEventListener('scroll', this.onScroll)
+      if (this.rafId) cancelAnimationFrame(this.rafId)
     }
   }
 
