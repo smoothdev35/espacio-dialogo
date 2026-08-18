@@ -48,21 +48,14 @@ const shareUrl = import.meta.env.SITE_URL
 
 <div class="flex flex-col">
   <!-- Back link -->
-  <a
-    href="/blog"
-    class="inline-flex items-center gap-1"
-  >
+  <a href="/blog" class="inline-flex items-center gap-1">
     <span aria-hidden="true" class="text-lg leading-none">←</span>
     {BLOG_HEADER.backToBlog}
   </a>
 
   <!-- Metadata: tags + date -->
-  <div class="mt-f8 inline-flex flex-wrap items-center gap-f4 gap-y-2">
-    {
-      post.tags.length > 0 && (
-        post.tags.map((tag) => <Tag label={tag.name} />)
-      )
-    }
+  <div class="mt-f8 gap-f4 inline-flex flex-wrap items-center gap-y-2">
+    {post.tags.length > 0 && post.tags.map((tag) => <Tag label={tag.name} />)}
     <time datetime={post.dateIso} class="ml-1">
       {post.publishedAt}
     </time>
@@ -88,14 +81,19 @@ const shareUrl = import.meta.env.SITE_URL
   }
 
   <!-- Bottom bar: author+readtime (left) + share buttons (right) -->
-  <div class="flex flex-col gap-4 mt-6 sm:flex-row sm:items-center sm:justify-between">
+  <div
+    class="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+  >
     <!-- Author byline + read time -->
     <div class="flex items-center gap-2">
       {
         post.author?.avatar && (
           <img
             src={post.author.avatar.url}
-            alt={post.author.avatar.alternativeText ?? `${post.author.name}'s avatar`}
+            alt={
+              post.author.avatar.alternativeText ??
+              `${post.author.name}'s avatar`
+            }
             class="h-6 w-6 shrink-0 rounded-full object-cover"
             loading="lazy"
           />
@@ -108,17 +106,19 @@ const shareUrl = import.meta.env.SITE_URL
       }
       {
         post.author && (
-          <span aria-hidden="true" class="text-base text-muted">•</span>
+          <span aria-hidden="true" class="text-muted text-base">
+            •
+          </span>
         )
       }
-      <span class="text-base font-semibold text-muted">{post.readTime}</span>
+      <span class="text-muted text-base font-semibold">{post.readTime}</span>
     </div>
 
     <!-- Share buttons -->
     <div class="flex items-center gap-4">
       <button
         type="button"
-        class="flex h-6 w-6 cursor-pointer items-center justify-center transition-colors hover:text-link-hover focus-visible:text-link-hover"
+        class="hover:text-link-hover focus-visible:text-link-hover flex h-6 w-6 cursor-pointer items-center justify-center"
         aria-label={BLOG_HEADER.copyLink}
         data-copy-url={shareUrl}
       >
@@ -128,7 +128,7 @@ const shareUrl = import.meta.env.SITE_URL
         href={`https://linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
         target="_blank"
         rel="noopener noreferrer"
-        class="flex h-6 w-6 items-center justify-center text-page-text transition-colors hover:text-link-hover focus-visible:text-link-hover"
+        class="text-page-text hover:text-link-hover focus-visible:text-link-hover flex h-6 w-6 items-center justify-center"
         aria-label={BLOG_HEADER.shareLinkedIn}
       >
         <IconLinkedIn class="h-5 w-5" />
@@ -137,7 +137,7 @@ const shareUrl = import.meta.env.SITE_URL
         href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`}
         target="_blank"
         rel="noopener noreferrer"
-        class="flex h-6 w-6 items-center justify-center text-page-text transition-colors hover:text-link-hover focus-visible:text-link-hover"
+        class="text-page-text hover:text-link-hover focus-visible:text-link-hover flex h-6 w-6 items-center justify-center"
         aria-label={BLOG_HEADER.shareX}
       >
         <IconX class="h-5 w-5" />
@@ -146,7 +146,7 @@ const shareUrl = import.meta.env.SITE_URL
         href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
         target="_blank"
         rel="noopener noreferrer"
-        class="flex h-6 w-6 items-center justify-center text-page-text transition-colors hover:text-link-hover focus-visible:text-link-hover"
+        class="text-page-text hover:text-link-hover focus-visible:text-link-hover flex h-6 w-6 items-center justify-center"
         aria-label={BLOG_HEADER.shareFacebook}
       >
         <IconFacebook class="h-5 w-5" />

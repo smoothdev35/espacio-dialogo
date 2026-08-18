@@ -31,7 +31,6 @@
  * Context variants: not needed — default page background
  * Composed from: Tag (astro), IconLink, IconLinkedIn, IconX, IconFacebook
  */
-import Tag from '@components/ui/astro/Tag.astro'
 import IconLink from '@components/icons/IconLink.astro'
 import IconLinkedIn from '@components/icons/IconLinkedIn.astro'
 import IconX from '@components/icons/IconX.astro'
@@ -52,7 +51,7 @@ const breadcrumbTitle = update.title.split(/\s+/).slice(0, 2).join(' ')
 ---
 
 <header class:list={[className]}>
-  <div class="flex flex-col xl:flex-row gap-0 2xl:gap-16 items-start">
+  <div class="flex flex-col items-start gap-0 xl:flex-row 2xl:gap-16">
     <!-- Left column: text content — fixed width -->
     <div class="flex flex-col xl:w-[448px] xl:shrink-0">
       <!-- Breadcrumb + category badge in same row -->
@@ -62,7 +61,13 @@ const breadcrumbTitle = update.title.split(/\s+/).slice(0, 2).join(' ')
           <li aria-hidden="true">/</li>
           <li><a href="/#updates">{UPDATE_HEADER.updates}</a></li>
           <li aria-hidden="true">/</li>
-          <li aria-current="page" class="font-medium text-base" title={update.title}>{breadcrumbTitle}</li>
+          <li
+            aria-current="page"
+            class="text-base font-medium"
+            title={update.title}
+          >
+            {breadcrumbTitle}
+          </li>
         </ol>
       </nav>
 
@@ -70,13 +75,16 @@ const breadcrumbTitle = update.title.split(/\s+/).slice(0, 2).join(' ')
       <h1 class="text-h2 mt-f8">{update.title}</h1>
 
       <!-- Author avatar + name (row 1), read time + date (row 2) -->
-      <div class="flex flex-col gap-y-1 mt-f9">
+      <div class="mt-f9 flex flex-col gap-y-1">
         <div class="flex items-center gap-2">
           {
             update.author?.avatar && (
               <img
                 src={update.author.avatar.url}
-                alt={update.author.avatar.alternativeText ?? `${update.author.name}'s avatar`}
+                alt={
+                  update.author.avatar.alternativeText ??
+                  `${update.author.name}'s avatar`
+                }
                 class="h-6 w-6 shrink-0 rounded-full object-cover"
                 loading="lazy"
               />
@@ -89,8 +97,9 @@ const breadcrumbTitle = update.title.split(/\s+/).slice(0, 2).join(' ')
           }
         </div>
         <div class="flex items-center gap-x-2">
-          <span class="text-sm font-semibold text-muted">{update.readTime}</span>
-          <span aria-hidden="true" class="text-sm text-muted">•</span>
+          <span class="text-muted text-sm font-semibold">{update.readTime}</span
+          >
+          <span aria-hidden="true" class="text-muted text-sm">•</span>
           <time datetime={update.dateIso}>{update.publishedAt}</time>
         </div>
       </div>
@@ -98,18 +107,34 @@ const breadcrumbTitle = update.title.split(/\s+/).slice(0, 2).join(' ')
       <!-- Share section -->
       <div class="mt-f8">
         <p class="text-base font-medium">{UPDATE_HEADER.shareDispatch}</p>
-        <div class="flex items-center gap-4 mt-f4">
-          <button type="button" class="flex h-6 w-6 cursor-pointer items-center justify-center transition-colors hover:text-link-hover focus-visible:text-link-hover" aria-label={UPDATE_HEADER.copyLink}>
-            <IconLink class="w-5 h-5" />
+        <div class="mt-f4 flex items-center gap-4">
+          <button
+            type="button"
+            class="hover:text-link-hover focus-visible:text-link-hover flex h-6 w-6 cursor-pointer items-center justify-center"
+            aria-label={UPDATE_HEADER.copyLink}
+          >
+            <IconLink class="h-5 w-5" />
           </button>
-          <button type="button" class="flex h-6 w-6 cursor-pointer items-center justify-center transition-colors hover:text-link-hover focus-visible:text-link-hover" aria-label={UPDATE_HEADER.shareLinkedIn}>
-            <IconLinkedIn class="w-5 h-5" />
+          <button
+            type="button"
+            class="hover:text-link-hover focus-visible:text-link-hover flex h-6 w-6 cursor-pointer items-center justify-center"
+            aria-label={UPDATE_HEADER.shareLinkedIn}
+          >
+            <IconLinkedIn class="h-5 w-5" />
           </button>
-          <button type="button" class="flex h-6 w-6 cursor-pointer items-center justify-center transition-colors hover:text-link-hover focus-visible:text-link-hover" aria-label={UPDATE_HEADER.shareX}>
-            <IconX class="w-5 h-5" />
+          <button
+            type="button"
+            class="hover:text-link-hover focus-visible:text-link-hover flex h-6 w-6 cursor-pointer items-center justify-center"
+            aria-label={UPDATE_HEADER.shareX}
+          >
+            <IconX class="h-5 w-5" />
           </button>
-          <button type="button" class="flex h-6 w-6 cursor-pointer items-center justify-center transition-colors hover:text-link-hover focus-visible:text-link-hover" aria-label={UPDATE_HEADER.shareFacebook}>
-            <IconFacebook class="w-5 h-5" />
+          <button
+            type="button"
+            class="hover:text-link-hover focus-visible:text-link-hover flex h-6 w-6 cursor-pointer items-center justify-center"
+            aria-label={UPDATE_HEADER.shareFacebook}
+          >
+            <IconFacebook class="h-5 w-5" />
           </button>
         </div>
       </div>
@@ -118,13 +143,13 @@ const breadcrumbTitle = update.title.split(/\s+/).slice(0, 2).join(' ')
     <!-- Right column: featured image -->
     {
       update.featuredImage && (
-        <div class="flex-1 min-w-0 mt-f9 xl:mt-0">
+        <div class="mt-f9 min-w-0 flex-1 xl:mt-0">
           <img
             src={update.featuredImage.url}
             alt={update.featuredImage.alternativeText ?? ''}
             srcset={buildSrcSet(update.featuredImage)}
             sizes="(max-width: 1280px) 100vw, 60vw"
-            class="w-full aspect-video xl:aspect-3/2 2xl:aspect-video rounded-lg object-cover"
+            class="xl:aspect-3/2 aspect-video w-full rounded-lg object-cover 2xl:aspect-video"
             loading="eager"
           />
         </div>

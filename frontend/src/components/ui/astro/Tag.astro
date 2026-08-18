@@ -31,7 +31,7 @@ const tagClasses = [
       </span>
     )
   }
-  <span>{label}</span>
+  {label}
   {
     hasIcon && iconPosition === 'trailing' && (
       <span class="inline-flex shrink-0">
@@ -44,7 +44,7 @@ const tagClasses = [
       <button
         type="button"
         aria-label={`Remove ${label}`}
-        class="ml-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full text-current opacity-60 transition-opacity hover:opacity-100 focus-visible:opacity-100"
+        class="ml-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full text-current opacity-60 hover:opacity-100 focus-visible:opacity-100"
       >
         <svg
           class="h-3 w-3"

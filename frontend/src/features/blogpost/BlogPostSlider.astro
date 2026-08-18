@@ -48,17 +48,26 @@ interface Props {
   class?: string
 }
 
-const { posts: providedPosts, tagline = BLOG_SLIDER.tagline, heading = BLOG_SLIDER.heading, description, showViewAll = true, class: className } = Astro.props
+const {
+  posts: providedPosts,
+  tagline = BLOG_SLIDER.tagline,
+  heading = BLOG_SLIDER.heading,
+  description,
+  showViewAll = true,
+  class: className,
+} = Astro.props
 
-const posts: BlogPostCardProps[] = providedPosts ?? (await fetchBlogPosts().catch((err) => {
-  console.error('Failed to fetch blog posts:', err)
-  return []
-}))
+const posts: BlogPostCardProps[] =
+  providedPosts ??
+  (await fetchBlogPosts().catch((err) => {
+    console.error('Failed to fetch blog posts:', err)
+    return []
+  }))
 ---
 
 <section class:list={[className]}>
   <Container>
-    <div class="flex flex-col gap-f9">
+    <div class="gap-f9 flex flex-col">
       <!-- ═══ Title row ═══ -->
       <SectionHeader
         tagline={tagline}
@@ -78,17 +87,17 @@ const posts: BlogPostCardProps[] = providedPosts ?? (await fetchBlogPosts().catc
       </SectionHeader>
 
       <!-- ═══ Slider row ═══ -->
-      <div class="flex flex-col gap-f9">
-        {posts.length > 0 ? (
-          <>
-            <!-- Cards -->
-            <div
-              id="blog-slider-track"
-              class="-mx-2 -mt-2 -mb-4 flex gap-f8 overflow-x-auto px-2 pt-2 pb-4 snap-x snap-mandatory scrollbar-hide"
-              style="scrollbar-width: none; -ms-overflow-style: none; scroll-padding-left: 8px;"
-            >
-              {
-                posts.map((post, i) => (
+      <div class="gap-f9 flex flex-col">
+        {
+          posts.length > 0 ? (
+            <>
+              {/* Cards */}
+              <div
+                id="blog-slider-track"
+                class="gap-f8 scrollbar-hide -mx-2 -mb-4 -mt-2 flex snap-x snap-mandatory overflow-x-auto px-2 pb-4 pt-2"
+                style="scrollbar-width: none; -ms-overflow-style: none; scroll-padding-left: 8px;"
+              >
+                {posts.map((post) => (
                   <BlogPostCard
                     slug={post.slug}
                     title={post.title}
@@ -96,7 +105,7 @@ const posts: BlogPostCardProps[] = providedPosts ?? (await fetchBlogPosts().catc
                     featuredImage={post.featuredImage}
                     class="blog-card w-[85vw] shrink-0 snap-start sm:w-[380px] lg:w-[394px]"
                   >
-                    <!-- Author row -->
+                    {/* Author row */}
                     {post.author ? (
                       <div slot="footer" class="flex items-center gap-4">
                         {post.author.avatar ? (
@@ -108,19 +117,17 @@ const posts: BlogPostCardProps[] = providedPosts ?? (await fetchBlogPosts().catc
                           />
                         ) : (
                           <div
-                            class="h-12 w-12 rounded-full bg-muted"
+                            class="bg-muted h-12 w-12 rounded-full"
                             aria-hidden="true"
                           />
                         )}
 
                         <div class="flex flex-col gap-y-1">
-                          <span class="font-semibold">
-                            {post.author.name}
-                          </span>
-                          <div
-                            class="flex items-center gap-2 text-sm font-semibold text-muted"
-                          >
-                            <time datetime={post.dateIso}>{post.publishedAt}</time>
+                          <span class="font-semibold">{post.author.name}</span>
+                          <div class="text-muted flex items-center gap-2 text-sm font-semibold">
+                            <time datetime={post.dateIso}>
+                              {post.publishedAt}
+                            </time>
                             <span aria-hidden="true">•</span>
                             <span>{post.readTime}</span>
                           </div>
@@ -128,50 +135,48 @@ const posts: BlogPostCardProps[] = providedPosts ?? (await fetchBlogPosts().catc
                       </div>
                     ) : null}
                   </BlogPostCard>
-                ))
-              }
-            </div>
+                ))}
+              </div>
 
-            <!-- Controls: dots + arrows -->
-            <div                 class="flex flex-row items-center justify-between gap-4">
-              <!-- Dot breadcrumbs — 6 dots, Figma spec -->
-              <div class="flex gap-4">
-                {
-                  posts.map((_, i) => (
+              {/* Controls: dots + arrows */}
+              <div class="flex flex-row items-center justify-between gap-4">
+                {/* Dot breadcrumbs — 6 dots, Figma spec */}
+                <div class="flex gap-4">
+                  {posts.map((_, i) => (
                     <button
                       type="button"
                       data-index={i}
-                        class="blog-slider-dot h-2 w-2 rounded-full bg-dot-inactive hover:bg-nav-btn-fg focus-visible:bg-nav-btn-fg"
+                      class="blog-slider-dot bg-dot-inactive hover:bg-nav-btn-fg focus-visible:bg-nav-btn-fg h-2 w-2 rounded-full"
                       aria-label={BLOG_SLIDER.goToPost(i + 1)}
                     />
-                  ))
-                }
-              </div>
+                  ))}
+                </div>
 
-              <!-- Arrow buttons — nav variant (48×48, token-driven bg/icon/hover) -->
-              <div class="flex gap-2">
-                <Button
-                  id="blog-slider-prev"
-                  variant="nav"
-                  size="md"
-                  iconPosition="only"
-                  label={BLOG_SLIDER.prevPosts}
-                  icon='<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>'
-                />
-                <Button
-                  id="blog-slider-next"
-                  variant="nav"
-                  size="md"
-                  iconPosition="only"
-                  label={BLOG_SLIDER.nextPosts}
-                  icon='<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>'
-                />
+                {/* Arrow buttons — nav variant (48×48, token-driven bg/icon/hover) */}
+                <div class="flex gap-2">
+                  <Button
+                    id="blog-slider-prev"
+                    variant="nav"
+                    size="md"
+                    iconPosition="only"
+                    label={BLOG_SLIDER.prevPosts}
+                    icon='<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>'
+                  />
+                  <Button
+                    id="blog-slider-next"
+                    variant="nav"
+                    size="md"
+                    iconPosition="only"
+                    label={BLOG_SLIDER.nextPosts}
+                    icon='<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>'
+                  />
+                </div>
               </div>
-            </div>
-          </>
-        ) : (
-          <p class="text-center py-16 text-h6">{BLOG_SLIDER.noPosts}</p>
-        )}
+            </>
+          ) : (
+            <p class="text-h6 py-16 text-center">{BLOG_SLIDER.noPosts}</p>
+          )
+        }
       </div>
     </div>
   </Container>
@@ -212,7 +217,9 @@ const posts: BlogPostCardProps[] = providedPosts ?? (await fetchBlogPosts().catc
         dot.disabled = isActive
       })
       if (prevBtn) prevBtn.disabled = i <= 0
-      if (nextBtn) nextBtn.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 1
+      if (nextBtn)
+        nextBtn.disabled =
+          track.scrollLeft + track.clientWidth >= track.scrollWidth - 1
     }
 
     // Dot clicks
@@ -224,8 +231,12 @@ const posts: BlogPostCardProps[] = providedPosts ?? (await fetchBlogPosts().catc
     })
 
     // Arrow clicks
-    prevBtn?.addEventListener('click', () => scrollToIndex(getCurrentIndex() - 1))
-    nextBtn?.addEventListener('click', () => scrollToIndex(getCurrentIndex() + 1))
+    prevBtn?.addEventListener('click', () =>
+      scrollToIndex(getCurrentIndex() - 1),
+    )
+    nextBtn?.addEventListener('click', () =>
+      scrollToIndex(getCurrentIndex() + 1),
+    )
 
     // Update active dot on scroll (throttled via requestAnimationFrame)
     let ticking = false
@@ -256,28 +267,20 @@ const posts: BlogPostCardProps[] = providedPosts ?? (await fetchBlogPosts().catc
     cursor: default;
     background-color: var(--color-nav-btn-fg);
   }
-
-
 </style>
 
 <style is:global>
-  /* Override global @layer base .dark * !important transition-colors.
-     Must be in @layer base AND higher specificity than .dark * (0,2,0).
-     .blog-card .blog-post-slider-image = (0,2,0) — ties .dark * in specificity,
-     declared later in same layer → wins. */
-  @layer base {
-    .blog-card img {
-      transition: transform 400ms cubic-bezier(0.25, 0.1, 0.25, 1);
-      transform: scale(1);
-    }
+  .blog-card img {
+    transition: transform 400ms cubic-bezier(0.25, 0.1, 0.25, 1);
+    transform: scale(1);
+  }
 
-    @media (hover: hover) {
-      .blog-card:hover img {
-        transform: scale(1.08);
-      }
-    }
-    .blog-card:focus-visible img {
+  @media (hover: hover) {
+    .blog-card:hover img {
       transform: scale(1.08);
     }
+  }
+  .blog-card:focus-visible img {
+    transform: scale(1.08);
   }
 </style>

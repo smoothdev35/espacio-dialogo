@@ -33,10 +33,7 @@ const chevronRight =
 <nav
   aria-label={UPDATE_PAGINATION.ariaLabel}
   data-update-pagination
-  class:list={[
-    "flex items-center justify-center gap-4",
-    className,
-  ]}
+  class:list={['flex items-center justify-center gap-4', className]}
 >
   <Button
     variant="nav"
@@ -65,28 +62,35 @@ const chevronRight =
     padding: 0.5rem 1rem;
     border-radius: var(--radius-md);
     color: var(--color-page-text);
-    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   @media (hover: hover) {
     [data-page]:hover {
-      background-color: color-mix(in srgb, var(--color-page-text) 10%, transparent);
+      background-color: color-mix(
+        in srgb,
+        var(--color-page-text) 10%,
+        transparent
+      );
     }
   }
 
   [data-page][aria-current='true'] {
-    background-color: color-mix(in srgb, var(--color-page-text) 20%, transparent);
+    background-color: color-mix(
+      in srgb,
+      var(--color-page-text) 20%,
+      transparent
+    );
     font-weight: 700;
   }
 
   /* Pagination visibility — separate from filter's `hidden` attribute */
-  [data-page-hidden="true"] {
+  [data-page-hidden='true'] {
     display: none;
   }
 </style>
 
 <script>
-  (function () {
+  ;(function () {
     var PAGE_SIZE = 4
     var nav = document.querySelector('[data-update-pagination]')
     var grid = document.querySelector('[data-update-grid]')
@@ -99,7 +103,9 @@ const chevronRight =
 
     function getVisibleItems() {
       var items = Array.from(grid.querySelectorAll(':scope > li'))
-      return items.filter(function (el) { return !el.hidden })
+      return items.filter(function (el) {
+        return !el.hidden
+      })
     }
 
     function showPage(page) {
@@ -142,7 +148,8 @@ const chevronRight =
       // Always visible — show single page with disabled arrows
       if (totalPages <= 1) {
         nav.hidden = false
-        pageContainer.innerHTML = '<button type="button" data-page="0" aria-current="true">1</button>'
+        pageContainer.innerHTML =
+          '<button type="button" data-page="0" aria-current="true">1</button>'
         prevBtn.disabled = true
         nextBtn.disabled = true
         for (var i = 0; i < items.length; i++) {
@@ -162,7 +169,8 @@ const chevronRight =
       // Build page buttons
       var html = ''
       for (var p = 0; p < totalPages; p++) {
-        html += '<button type="button" data-page="' + p + '">' + (p + 1) + '</button>'
+        html +=
+          '<button type="button" data-page="' + p + '">' + (p + 1) + '</button>'
       }
       pageContainer.innerHTML = html
 

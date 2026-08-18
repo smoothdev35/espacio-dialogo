@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -14,32 +14,33 @@
 
     /* Bay of Many — primary action palette */
     --brand-bay-of-many-lighter: #d2d7e4;
-    --brand-bay-of-many:         #213a78;
-    --brand-bay-of-many-dark:    #1a2e60;
-    --brand-bay-of-many-darker:  #0d1730;
+    --brand-bay-of-many: #213a78;
+    --brand-bay-of-many-dark: #1a2e60;
+    --brand-bay-of-many-darker: #0d1730;
 
     /* Buttercup — accent/highlight palette */
     --brand-buttercup: #ecae13;
 
     /* Neutral — gray/default palette */
     --brand-neutral-lightest: #f2f2f2;
-    --brand-neutral-lighter:  #d9d9d9;
-    --brand-neutral-light:    #b3b3b4;
-    --brand-neutral:          #808182;
-    --brand-neutral-dark:     #4d4e50;
-    --brand-neutral-darker:   #1b1c1e;
-    --brand-neutral-darkest:  #020306;
+    --brand-neutral-lighter: #d9d9d9;
+    --brand-neutral-light: #b3b3b4;
+    --brand-neutral: #808182;
+    --brand-neutral-dark: #4d4e50;
+    --brand-neutral-darker: #1b1c1e;
+    --brand-neutral-darkest: #020306;
+    --brand-neutral-muted: #6b6c6e;
 
     /* White */
     --brand-white: #ffffff;
 
     /* Brand role bridge */
     --brand-primary: var(--brand-bay-of-many);
-    --brand-accent:  var(--brand-buttercup);
+    --brand-accent: var(--brand-buttercup);
 
     /* Font families */
-    --font-headline: "Lora", serif;
-    --font-body:     "Inter", sans-serif;
+    --font-headline: 'Lora', serif;
+    --font-body: 'Inter', sans-serif;
 
     /* ════════════════════════════════════════════════════════ */
     /* ═══ Tier 2 — Semantic tokens ══════════════════════════ */
@@ -48,13 +49,13 @@
     /* ════════════════════════════════════════════════════════ */
 
     /* Page surface */
-    --page:       var(--brand-neutral-lightest);
-    --page-text:  var(--brand-neutral-darker);
-    --muted: #6b6c6e;
+    --page: var(--brand-neutral-lightest);
+    --page-text: var(--brand-neutral-darker);
+    --muted: var(--brand-neutral-muted);
     --dot-inactive: var(--brand-neutral-lighter);
 
     /* Component surface */
-    --surface:      var(--brand-neutral-lightest);
+    --surface: var(--brand-neutral-lightest);
     --surface-text: var(--brand-neutral-darker);
 
     /* Card surface */
@@ -73,30 +74,42 @@
     --border-focus: var(--brand-primary);
 
     /* Link */
-    --link-text:   var(--brand-neutral-darker);
-    --link-hover:  var(--brand-primary);
+    --link-text: var(--brand-neutral-darker);
+    --link-hover: var(--brand-primary);
     --link-active: var(--brand-neutral-darker);
 
     /* ─── Button tokens ────────────────────────────────── */
 
     /* Primary button */
-    --btn-primary:          var(--brand-primary);
-    --btn-primary-text:     var(--brand-white);
-    --btn-primary-border:   var(--brand-bay-of-many-darker);
-  --btn-primary-disabled: var(--brand-neutral-lighter);
-  --btn-primary-disabled-text: var(--brand-neutral-light);
-  --btn-primary-hover:   color-mix(in srgb, var(--brand-primary) 90%, var(--brand-white));
+    --btn-primary: var(--brand-primary);
+    --btn-primary-text: var(--brand-white);
+    --btn-primary-border: var(--brand-bay-of-many-darker);
+    --btn-primary-disabled: var(--brand-neutral-lighter);
+    --btn-primary-disabled-text: var(--brand-neutral-light);
+    --btn-primary-hover: color-mix(
+      in srgb,
+      var(--brand-primary) 90%,
+      var(--brand-white)
+    );
 
-  /* Secondary button */
-  --btn-secondary:          transparent;
-  --btn-secondary-border:   var(--brand-neutral-light);
-  --btn-secondary-disabled: transparent;
-  --btn-secondary-disabled-text: var(--brand-neutral-light);
-  --btn-secondary-hover: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+    /* Secondary button */
+    --btn-secondary: transparent;
+    --btn-secondary-border: var(--brand-neutral-light);
+    --btn-secondary-disabled: transparent;
+    --btn-secondary-disabled-text: var(--brand-neutral-light);
+    --btn-secondary-hover: color-mix(
+      in srgb,
+      var(--brand-primary) 8%,
+      transparent
+    );
 
-  /* Inverse button — always-light, no dark override */
-  --btn-inverse-hover:          var(--brand-neutral-lighter);
-  --btn-inverse-outline-hover:  color-mix(in srgb, var(--brand-white) 20%, transparent);
+    /* Inverse button — always-light, no dark override */
+    --btn-inverse-hover: var(--brand-neutral-lighter);
+    --btn-inverse-outline-hover: color-mix(
+      in srgb,
+      var(--brand-white) 20%,
+      transparent
+    );
 
     /* ─── Button size geometry tokens ──────────────────── */
     --btn-padding-x-sm: 1.25rem;
@@ -110,10 +123,10 @@
     --btn-padding-icon-lg: 0.75rem;
 
     /* ─── Nav tokens — light mode defaults; overridden in @variant dark ── */
-    --nav-bg:     var(--brand-white);
+    --nav-bg: var(--brand-white);
     --nav-border: var(--border);
     --nav-btn-fg: var(--brand-bay-of-many);
-    --nav-hover:  var(--brand-neutral-lighter);
+    --nav-hover: var(--brand-neutral-lighter);
     --nav-arrow-hover: var(--brand-neutral-lighter);
 
     /* ─── Filter pill tokens — light mode defaults ──── */
@@ -121,49 +134,57 @@
     --filter-fg: var(--brand-bay-of-many);
 
     /* ─── Input tokens ─────────────────────────────────── */
-    --input:              var(--brand-neutral-lightest);
-    --input-text:         var(--brand-neutral-darker);
-    --input-placeholder:  color-mix(in srgb, var(--brand-neutral-darker) 60%, transparent);
-    --input-border:       var(--border);
-    --input-focus:        var(--brand-white);
+    --input: var(--brand-neutral-lightest);
+    --input-text: var(--brand-neutral-darker);
+    --input-placeholder: color-mix(
+      in srgb,
+      var(--brand-neutral-darker) 60%,
+      transparent
+    );
+    --input-border: var(--border);
+    --input-focus: var(--brand-white);
     --input-focus-border: var(--brand-primary);
-    --input-disabled:     var(--brand-neutral-lighter);
+    --input-disabled: var(--brand-neutral-lighter);
 
     /* ─── Select tokens ────────────────────────────────── */
-    --select-menu:            var(--brand-white);
-    --select-menu-border:     var(--border);
-    --select-option-hover:    color-mix(in srgb, var(--brand-primary) 10%, transparent);
+    --select-menu: var(--brand-white);
+    --select-menu-border: var(--border);
+    --select-option-hover: color-mix(
+      in srgb,
+      var(--brand-primary) 10%,
+      transparent
+    );
     --select-option-selected: var(--brand-primary);
     --select-option-selected-text: var(--brand-white);
 
     /* ─── Checkbox tokens ──────────────────────────────── */
-    --checkbox-bg:           var(--brand-neutral-lightest);
-    --checkbox-bg-checked:   var(--brand-primary);
-    --checkbox-border:       var(--border);
-    --checkbox-check:        var(--brand-white);
+    --checkbox-bg: var(--brand-neutral-lightest);
+    --checkbox-bg-checked: var(--brand-primary);
+    --checkbox-border: var(--border);
+    --checkbox-check: var(--brand-white);
 
     /* ─── Radio tokens ─────────────────────────────────── */
-    --radio-bg:         var(--brand-neutral-lightest);
+    --radio-bg: var(--brand-neutral-lightest);
     --radio-bg-checked: var(--brand-primary);
-    --radio-border:     var(--border);
-    --radio-dot:        var(--brand-white);
+    --radio-border: var(--border);
+    --radio-dot: var(--brand-white);
 
     /* ─── Toggle tokens ────────────────────────────────── */
     --toggle-track: var(--brand-neutral-lighter);
     --toggle-track-border: var(--border);
-    --toggle-thumb:       var(--brand-white);
-    --toggle-track-on:    var(--brand-primary);
-    --toggle-thumb-on:    var(--brand-white);
+    --toggle-thumb: var(--brand-white);
+    --toggle-track-on: var(--brand-primary);
+    --toggle-thumb-on: var(--brand-white);
 
     /* ─── Tag tokens ───────────────────────────────────── */
-    --tag:          var(--brand-neutral-lightest);
-    --tag-text:     var(--brand-neutral-darker);
-    --tag-border:   var(--border);
+    --tag: var(--brand-neutral-lightest);
+    --tag-text: var(--brand-neutral-darker);
+    --tag-border: var(--border);
 
     /* ─── Tabs tokens ──────────────────────────────────── */
-    --tab-active-bg:   var(--brand-white);
+    --tab-active-bg: var(--brand-white);
     --tab-inactive-bg: transparent;
-    --tab-border:      var(--border);
+    --tab-border: var(--border);
 
     /* ═══ Dark mode overrides ═══════════════════════════════ */
     /* ════════════════════════════════════════════════════════ */
@@ -172,11 +193,11 @@
       color-scheme: dark;
 
       /* Page surface — dark */
-      --page:      var(--brand-neutral-darker);
+      --page: var(--brand-neutral-darker);
       --page-text: var(--brand-neutral-lightest);
 
       /* Component surface */
-      --surface:      var(--brand-bay-of-many-darker);
+      --surface: var(--brand-bay-of-many-darker);
       --surface-text: var(--brand-neutral-lightest);
 
       /* Card surface */
@@ -198,10 +219,10 @@
       --border-focus: var(--brand-accent);
 
       /* Nav — dark mode swaps bg/text */
-      --nav-bg:     var(--brand-neutral-darkest);
+      --nav-bg: var(--brand-neutral-darkest);
       --nav-border: var(--border);
       --nav-btn-fg: var(--brand-accent);
-      --nav-hover:  var(--brand-neutral-dark);
+      --nav-hover: var(--brand-neutral-dark);
       --nav-arrow-hover: var(--brand-neutral-dark);
 
       /* Filter pill — dark mode swaps */
@@ -209,71 +230,83 @@
       --filter-fg: var(--brand-accent);
 
       /* Link */
-      --link-text:   var(--brand-neutral-lightest);
-      --link-hover:  var(--brand-accent);
+      --link-text: var(--brand-neutral-lightest);
+      --link-hover: var(--brand-accent);
       --link-active: var(--brand-neutral-lightest);
 
       /* Primary button — dark mode inverts */
-      --btn-primary:          var(--brand-white);
-      --btn-primary-text:     var(--brand-neutral-darkest);
-      --btn-primary-border:   var(--brand-neutral-light);
+      --btn-primary: var(--brand-white);
+      --btn-primary-text: var(--brand-neutral-darkest);
+      --btn-primary-border: var(--brand-neutral-light);
       --btn-primary-disabled: var(--brand-neutral-dark);
       --btn-primary-disabled-text: var(--brand-neutral);
 
       /* Secondary button — dark mode */
-      --btn-secondary:          transparent;
-      --btn-secondary-border:   var(--brand-neutral-dark);
+      --btn-secondary: transparent;
+      --btn-secondary-border: var(--brand-neutral-dark);
       --btn-secondary-disabled: transparent;
       --btn-secondary-disabled-text: var(--brand-neutral);
 
       /* Button hover — dark mode overrides */
-      --btn-primary-hover:   var(--brand-neutral-lighter);
-      --btn-secondary-hover: color-mix(in srgb, var(--brand-neutral-lightest) 15%, transparent);
+      --btn-primary-hover: var(--brand-neutral-lighter);
+      --btn-secondary-hover: color-mix(
+        in srgb,
+        var(--brand-neutral-lightest) 15%,
+        transparent
+      );
 
       /* Input — dark mode */
-      --input:              var(--brand-neutral-darker);
-      --input-text:         var(--brand-neutral-lightest);
-      --input-placeholder:  color-mix(in srgb, var(--brand-neutral-lightest) 60%, transparent);
-      --input-border:       var(--border);
-      --input-focus:        var(--brand-bay-of-many-darker);
+      --input: var(--brand-neutral-darker);
+      --input-text: var(--brand-neutral-lightest);
+      --input-placeholder: color-mix(
+        in srgb,
+        var(--brand-neutral-lightest) 60%,
+        transparent
+      );
+      --input-border: var(--border);
+      --input-focus: var(--brand-bay-of-many-darker);
       --input-focus-border: var(--brand-white);
-      --input-disabled:     var(--brand-neutral-dark);
+      --input-disabled: var(--brand-neutral-dark);
 
       /* Select — dark mode */
-      --select-menu:        var(--brand-bay-of-many-darker);
+      --select-menu: var(--brand-bay-of-many-darker);
       --select-menu-border: var(--border);
-      --select-option-hover:    color-mix(in srgb, var(--brand-neutral-lightest) 10%, transparent);
+      --select-option-hover: color-mix(
+        in srgb,
+        var(--brand-neutral-lightest) 10%,
+        transparent
+      );
       --select-option-selected: var(--brand-primary);
       --select-option-selected-text: var(--brand-white);
 
       /* Checkbox — dark mode */
-      --checkbox-bg:         var(--brand-neutral-darker);
+      --checkbox-bg: var(--brand-neutral-darker);
       --checkbox-bg-checked: var(--brand-white);
-      --checkbox-border:     var(--border);
-      --checkbox-check:      var(--brand-neutral-darkest);
+      --checkbox-border: var(--border);
+      --checkbox-check: var(--brand-neutral-darkest);
 
       /* Radio — dark mode */
-      --radio-bg:         var(--brand-neutral-darker);
+      --radio-bg: var(--brand-neutral-darker);
       --radio-bg-checked: var(--brand-white);
-      --radio-border:     var(--border);
-      --radio-dot:        var(--brand-neutral-darkest);
+      --radio-border: var(--border);
+      --radio-dot: var(--brand-neutral-darkest);
 
       /* Toggle — dark mode */
-      --toggle-track:       var(--brand-neutral-darker);
+      --toggle-track: var(--brand-neutral-darker);
       --toggle-track-border: var(--border);
-      --toggle-thumb:       var(--brand-white);
-      --toggle-track-on:    var(--brand-white);
-      --toggle-thumb-on:    var(--brand-neutral-darkest);
+      --toggle-thumb: var(--brand-white);
+      --toggle-track-on: var(--brand-white);
+      --toggle-thumb-on: var(--brand-neutral-darkest);
 
       /* Tag — dark mode */
-      --tag:          var(--brand-neutral-darker);
-      --tag-text:     var(--brand-neutral-lightest);
-      --tag-border:   var(--border);
+      --tag: var(--brand-neutral-darker);
+      --tag-text: var(--brand-neutral-lightest);
+      --tag-border: var(--border);
 
       /* Tabs — dark mode */
-      --tab-active-bg:   var(--brand-bay-of-many-darker);
+      --tab-active-bg: var(--brand-bay-of-many-darker);
       --tab-inactive-bg: transparent;
-      --tab-border:      var(--border);
+      --tab-border: var(--border);
     }
   }
 }
@@ -306,7 +339,7 @@
   /* ─── Container widths ───────────────────────────────── */
   --container-large: 1280px;
   --container-small: 768px;
-  --container-wide: 1440px;  /* Figma artboard width — article headers */
+  --container-wide: 1440px; /* Figma artboard width — article headers */
   --max-width: var(--container-large);
 
   /* ─── Button size geometry spacing ──────────────────── */
@@ -355,7 +388,11 @@
   --text-h4: clamp(1.625rem, 1.313rem + 1.563vw, 2.563rem);
   --text-h5: clamp(1.375rem, 1.104rem + 1.354vw, 2.188rem);
   --text-h6: clamp(1.125rem, 0.896rem + 1.146vw, 1.813rem);
-  --text-body: clamp(1rem, 0.917rem + 0.347vw, 1.125rem); /* Text Medium: 16→18 */
+  --text-body: clamp(
+    1rem,
+    0.917rem + 0.347vw,
+    1.125rem
+  ); /* Text Medium: 16→18 */
   --text-large: clamp(1.125rem, 0.542rem + 2.431vw, 1.375rem);
   /* ═══ Line heights ══════════════════════════════════════ */
   --leading-h1: 1.2;
@@ -395,20 +432,20 @@
   --color-btn-primary-border: var(--btn-primary-border);
   --color-btn-primary-disabled: var(--btn-primary-disabled);
   --color-btn-primary-disabled-text: var(--btn-primary-disabled-text);
-  --color-btn-primary-hover:   var(--btn-primary-hover);
+  --color-btn-primary-hover: var(--btn-primary-hover);
 
   --color-btn-secondary: var(--btn-secondary);
   --color-btn-secondary-border: var(--btn-secondary-border);
   --color-btn-secondary-disabled: var(--btn-secondary-disabled);
   --color-btn-secondary-disabled-text: var(--btn-secondary-disabled-text);
-  --color-btn-secondary-hover:   var(--btn-secondary-hover);
-  --color-btn-inverse-hover:          var(--btn-inverse-hover);
-  --color-btn-inverse-outline-hover:  var(--btn-inverse-outline-hover);
+  --color-btn-secondary-hover: var(--btn-secondary-hover);
+  --color-btn-inverse-hover: var(--btn-inverse-hover);
+  --color-btn-inverse-outline-hover: var(--btn-inverse-outline-hover);
 
   /* Nav colors */
-  --color-nav-bg:     var(--nav-bg);
+  --color-nav-bg: var(--nav-bg);
   --color-nav-border: var(--nav-border);
-  --color-nav-hover:  var(--nav-hover);
+  --color-nav-hover: var(--nav-hover);
   --color-nav-arrow-hover: var(--nav-arrow-hover);
   --color-nav-btn-fg: var(--nav-btn-fg);
 
@@ -460,6 +497,10 @@
   --color-tab-active-bg: var(--tab-active-bg);
   --color-tab-inactive-bg: var(--tab-inactive-bg);
   --color-tab-border: var(--tab-border);
+
+  /* Transition durations */
+  --transition-fast: 150ms;
+  --transition-normal: 200ms;
 }
 
 @layer base {
@@ -468,56 +509,38 @@
     scroll-behavior: smooth;
   }
 
-  /* Non-inherited paint — background/border stay per-element */
-  :where(:root, .dark) {
-    & *,
-    & *::before,
-    & *::after {
-      @apply duration-300 ease-in-out;
-      transition-property: background-color, border-color;
-    }
+  /* ── Micro-interaction transitions (cascade-clean, tag/functional selectors) ── */
+  button,
+  [role='button'],
+  [role='switch'],
+  a[href],
+  summary,
+  [data-pill],
+  [data-search-bar],
+  [data-page],
+  [data-dropdown-trigger],
+  [data-modal-trigger],
+  [data-modal-close],
+  input[type='checkbox'],
+  input[type='radio'] {
+    transition-property: transform, opacity, color, background-color,
+      border-color, box-shadow;
+    transition-duration: var(--transition-fast);
+    transition-timing-function: ease-out;
   }
 
-  /* Inherited color — fade at source, descendants follow (avoids WebKit
-     deferring inherited-color transitions on descendants) */
-  body {
-    @apply duration-300 ease-in-out;
-    transition-property: color;
-  }
-
-  /* Explicit-color base elements */
-  a,
-  time,
-  ::placeholder {
-    @apply duration-300 ease-in-out;
-    transition-property: color;
-  }
-
-  /* Explicit-color utilities — own color, own transition */
-  .text-page-text,
-  .text-muted,
-  .text-surface-text,
-  .text-surface-text\/20,
-  .text-contrast-text,
-  .text-link-text,
-  .text-link-hover,
-  .text-error,
-  .text-btn-primary-text,
-  .text-btn-primary-disabled-text,
-  .text-btn-secondary-disabled-text,
-  .text-nav-btn-fg,
-  .text-filter-fg,
-  .text-input-text,
-  .text-input-placeholder,
-  .text-checkbox-check,
-  .text-tag-text {
-    @apply duration-300 ease-in-out;
-    transition-property: color;
+  /* ── Theme toggle snap: kill all transitions during .dark flip ── */
+  html.theme-switching *,
+  html.theme-switching *::before,
+  html.theme-switching *::after {
+    transition: none !important;
   }
 
   /* Reduced motion — neutralize all transitions/animations/smooth scroll */
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
@@ -674,7 +697,17 @@
   }
 
   /* Single rule — consistent across all focusable elements */
-  :is(a, button, input, textarea, select, [role='tab'], [role='tabpanel'], summary, [tabindex]):focus-visible {
+  :is(
+      a,
+      button,
+      input,
+      textarea,
+      select,
+      [role='tab'],
+      [role='tabpanel'],
+      summary,
+      [tabindex]
+    ):focus-visible {
     outline: 2px solid var(--color-border-focus);
     outline-offset: 4px;
   }
@@ -699,4 +732,3 @@
     color: var(--color-input-placeholder);
   }
 }
-

@@ -19,7 +19,6 @@
  *   - scroll-snap / overflow-x — layout-specific, no token equivalent
  *   - Card width 394px — inherited from BlogPostSlider Figma spec — confirm
  *   - Arrow buttons 48×48, gap-4 dots — layout-specific
- *   - transform: scale(1) + transition: transform in <style> block — bypasses global !important transition-colors on *
  *   - Client JS: dots navigate cards, arrows prev/next, active dot on scroll — vanilla JS for interactivity
  *   - 4 hardcoded press items (one with video) — TODO: replace with Strapi fetch
  * Context variants: section uses --color-surface (theme-aware)
@@ -108,7 +107,7 @@ const pressItems: PressItem[] = rawItems.map((item) => ({
 <!-- Containment: Contained — slider cards respect max-width column -->
 <section class:list={[className]}>
   <Container>
-    <div class="flex flex-col gap-f9">
+    <div class="gap-f9 flex flex-col">
       <!-- ═══ Title row ═══ -->
       <SectionHeader
         tagline="Prensa"
@@ -117,27 +116,27 @@ const pressItems: PressItem[] = rawItems.map((item) => ({
       />
 
       <!-- ═══ Slider row ═══ -->
-      <div class="flex flex-col gap-f9">
+      <div class="gap-f9 flex flex-col">
         {
           pressItems.length > 0 ? (
             <>
-              <!-- Cards -->
+              {/* Cards */}
               <div
                 id="press-slider-track"
-                class="-mx-2 -mt-2 -mb-4 flex gap-f8 overflow-x-auto px-2 pt-2 pb-4 snap-x snap-mandatory scrollbar-hide items-start"
+                class="gap-f8 scrollbar-hide -mx-2 -mb-4 -mt-2 flex snap-x snap-mandatory items-start overflow-x-auto px-2 pb-4 pt-2"
                 style="scrollbar-width: none; -ms-overflow-style: none; scroll-padding-left: 8px;"
               >
                 {pressItems.map((item, i) => (
                   <a
                     href={item.externalUrl ?? `/press/${item.slug}`}
                     data-index={i}
-                    class="press-card group flex w-[85vw] shrink-0 flex-col snap-start sm:w-[380px] lg:w-[394px] rounded-lg bg-card-bg text-page-text hover:underline-0!"
+                    class="press-card bg-card-bg text-page-text hover:underline-0! group flex w-[85vw] shrink-0 snap-start flex-col rounded-lg sm:w-[380px] lg:w-[394px]"
                     {...(item.externalUrl
                       ? { target: '_blank', rel: 'noopener noreferrer' }
                       : {})}
                   >
-                    <!-- Media: 3:2 ratio, rounded top corners only -->
-                    <div class="aspect-[3/2] overflow-hidden rounded-t-lg bg-surface-text/10">
+                    {/* Media: 3:2 ratio, rounded top corners only */}
+                    <div class="bg-surface-text/10 aspect-[3/2] overflow-hidden rounded-t-lg">
                       {item.media ? (
                         item.media.type === 'video' ? (
                           <video
@@ -188,44 +187,38 @@ const pressItems: PressItem[] = rawItems.map((item) => ({
                       )}
                     </div>
 
-                    <!-- Content area: source+date → title → excerpt -->
-                    <div class="flex flex-col gap-f4 p-6">
+                    {/* Content area: source+date → title → excerpt */}
+                    <div class="gap-f4 flex flex-col p-6">
                       <div class="flex flex-col gap-0.5">
-                        <span class="text-large font-semibold">{item.source}</span>
-                        <time datetime={item.dateIso}>
-                          {item.publishedAt}
-                        </time>
+                        <span class="text-large font-semibold">
+                          {item.source}
+                        </span>
+                        <time datetime={item.dateIso}>{item.publishedAt}</time>
                       </div>
 
-                      <h3 class="text-h5 lg:text-h6">
-                        {item.title}
-                      </h3>
+                      <h3 class="text-h5 lg:text-h6">{item.title}</h3>
 
-                      <p class="line-clamp-2">
-                        {item.excerpt}
-                      </p>
+                      <p class="line-clamp-2">{item.excerpt}</p>
                     </div>
                   </a>
                 ))}
               </div>
 
-              <!-- Controls: dots + arrows -->
-              <div
-                class="flex flex-row items-center justify-between gap-4"
-              >
-                <!-- Dot breadcrumbs -->
+              {/* Controls: dots + arrows */}
+              <div class="flex flex-row items-center justify-between gap-4">
+                {/* Dot breadcrumbs */}
                 <div class="flex gap-4">
                   {pressItems.map((_, i) => (
                     <button
                       type="button"
                       data-index={i}
-                      class="press-slider-dot h-2 w-2 rounded-full bg-dot-inactive hover:bg-nav-btn-fg focus-visible:bg-nav-btn-fg"
-                       aria-label={PRESS.goToItem(i + 1)}
+                      class="press-slider-dot bg-dot-inactive hover:bg-nav-btn-fg focus-visible:bg-nav-btn-fg h-2 w-2 rounded-full"
+                      aria-label={PRESS.goToItem(i + 1)}
                     />
                   ))}
                 </div>
 
-                <!-- Arrow buttons — nav variant (48×48) -->
+                {/* Arrow buttons — nav variant (48×48) */}
                 <div class="flex gap-2">
                   <Button
                     id="press-slider-prev"
@@ -247,9 +240,7 @@ const pressItems: PressItem[] = rawItems.map((item) => ({
               </div>
             </>
           ) : (
-              <p class="text-center py-16 text-h6">
-                {PRESS.noItems}
-              </p>
+            <p class="text-h6 py-16 text-center">{PRESS.noItems}</p>
           )
         }
       </div>
@@ -303,10 +294,7 @@ const pressItems: PressItem[] = rawItems.map((item) => ({
     // Dot clicks
     dots.forEach((dot) => {
       dot.addEventListener('click', () => {
-        const idx = parseInt(
-          dot.getAttribute('data-index') ?? '0',
-          10,
-        )
+        const idx = parseInt(dot.getAttribute('data-index') ?? '0', 10)
         scrollToIndex(idx)
       })
     })
@@ -347,21 +335,5 @@ const pressItems: PressItem[] = rawItems.map((item) => ({
   .press-slider-dot:disabled {
     cursor: default;
     background-color: var(--color-nav-btn-fg);
-  }
-</style>
-
-<style is:global>
-  /* Override global @layer base .dark * !important transition-colors.
-     Must be in @layer base AND higher specificity than .dark * (0,2,0).
-     .press-card img/video = (0,2,0) — ties .dark * in specificity,
-     declared later in same layer → wins. */
-  @layer base {
-    .press-card img,
-    .press-card video {
-      transition: transform 400ms cubic-bezier(0.25, 0.1, 0.25, 1);
-      transform: scale(1);
-    }
-
-
   }
 </style>

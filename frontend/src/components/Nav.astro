@@ -60,12 +60,12 @@ const toggleId = 'mobile-menu-toggle'
   <div class="px-(--spacing-page-gutters)">
     <div class="h-(--nav-height) flex items-center justify-between max-md:h-16">
       {/* Logo + nav links — together on the left per Figma */}
-      <div class="flex items-center gap-f9">
+      <div class="gap-f9 flex items-center">
         {/* Logo slot */}
         <LogoLink class="shrink-0" />
 
         {/* Desktop nav links — hidden on mobile */}
-        <ul class="hidden list-disc items-center gap-f8 md:flex" role="list">
+        <ul class="gap-f8 hidden list-disc items-center md:flex" role="list">
           {
             links.map((link) => (
               <li>
@@ -83,7 +83,7 @@ const toggleId = 'mobile-menu-toggle'
       </div>
 
       {/* Actions + ThemeToggle — on the right */}
-      <div           class="hidden items-center gap-4 md:flex">
+      <div class="hidden items-center gap-4 md:flex">
         <!-- ThemeToggle is a client:load React island — added even if not in Figma -->
         <ThemeToggle client:load />
         {
@@ -103,7 +103,7 @@ const toggleId = 'mobile-menu-toggle'
         <ThemeToggle client:load />
         <button
           id={toggleId}
-          class="flex h-12 w-12 items-center justify-center transition-opacity hover:opacity-80 focus-visible:opacity-80"
+          class="flex h-12 w-12 items-center justify-center hover:opacity-80 focus-visible:opacity-80"
           aria-controls={menuId}
           aria-expanded="false"
           aria-label="Toggle navigation menu"
@@ -148,11 +148,11 @@ const toggleId = 'mobile-menu-toggle'
     {/* Mobile menu panel — hidden by default */}
     <div
       id={menuId}
-      class="border-nav-border hidden border-t pb-f8 pt-f4 md:hidden flex flex-col gap-f9"
+      class="border-nav-border pb-f8 pt-f4 gap-f9 flex hidden flex-col border-t md:hidden"
       role="region"
       aria-labelledby={toggleId}
     >
-      <ul class="flex flex-col gap-f4 self-start" role="list">
+      <ul class="gap-f4 flex flex-col self-start" role="list">
         {
           links.map((link) => (
             <li>
@@ -167,7 +167,7 @@ const toggleId = 'mobile-menu-toggle'
           ))
         }
       </ul>
-      <div             class="flex flex-row gap-4 self-start">
+      <div class="flex flex-row gap-4 self-start">
         {
           actions.map((action) => (
             <Button

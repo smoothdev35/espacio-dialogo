@@ -25,24 +25,21 @@ const { id, title, triggerLabel, class: className = '' } = Astro.props
   id={id}
   aria-labelledby={`${id}-title`}
   class:list={[
-    'rounded-large border border-border bg-surface p-0  backdrop:bg-black/50',
+    'rounded-large border-border bg-surface border p-0 backdrop:bg-black/50',
     'w-full max-w-lg',
     className,
   ]}
 >
   <div class="flex flex-col gap-4 p-6">
     <div class="flex items-center justify-between">
-      <h2
-        id={`${id}-title`}
-        class="text-lg font-semibold"
-      >
+      <h2 id={`${id}-title`} class="text-lg font-semibold">
         {title}
       </h2>
       <button
         type="button"
         data-modal-close={id}
         aria-label="Close dialog"
-        class="inline-flex h-8 w-8 items-center justify-center rounded-full  opacity-60 transition-opacity hover:bg-surface hover:opacity-100 focus-visible:bg-surface focus-visible:opacity-100"
+        class="hover:bg-surface focus-visible:bg-surface inline-flex h-8 w-8 items-center justify-center rounded-full opacity-60 hover:opacity-100 focus-visible:opacity-100"
       >
         <svg
           class="h-4 w-4"

@@ -32,7 +32,7 @@ const { name, placeholder = SEARCH.placeholder, class: className } = Astro.props
   data-search-bar={name}
   placeholder={placeholder}
   class:list={[
-    'px-4 py-2 text-input-text border border-input-border rounded-md placeholder:text-input-placeholder text-sm w-[280px]',
+    'text-input-text border-input-border placeholder:text-input-placeholder w-[280px] rounded-md border px-4 py-2 text-sm',
     className,
   ]}
 />
@@ -40,7 +40,6 @@ const { name, placeholder = SEARCH.placeholder, class: className } = Astro.props
 <style>
   [data-search-bar] {
     background: color-mix(in srgb, var(--brand-primary) 8%, var(--color-input));
-    transition: border-color 0.15s ease;
   }
 
   [data-search-bar]:focus {
