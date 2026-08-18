@@ -5,12 +5,33 @@ import { createWriteStream } from 'fs'
 import { Transform } from 'stream'
 import { pipeline } from 'stream/promises'
 
-import { categories, tags, authors, updates, blogPosts, blogPostAction, hero, toSlug } from './data'
+import type { Core } from '@strapi/strapi'
+
+import {
+  categories,
+  tags,
+  authors,
+  updates,
+  blogPosts,
+  blogPostAction,
+  hero,
+  presses,
+  toSlug,
+} from './data'
 
 const ALLOWED_IMAGE_HOSTS = ['picsum.photos']
 const FETCH_TIMEOUT_MS = 10_000
 const MAX_RESPONSE_BYTES = 5 * 1024 * 1024
-const EXPECTED_COUNTS = { categories: 4, tags: 10, authors: 2, updates: 12, blogPosts: 8, blogPostAction: 1, hero: 1 } as const
+const EXPECTED_COUNTS = {
+  categories: 4,
+  tags: 10,
+  authors: 2,
+  updates: 12,
+  blogPosts: 8,
+  blogPostAction: 1,
+  hero: 1,
+  press: 4,
+} as const
 const EXPECTED_TOTAL =
   EXPECTED_COUNTS.categories +
   EXPECTED_COUNTS.tags +
@@ -18,9 +39,10 @@ const EXPECTED_TOTAL =
   EXPECTED_COUNTS.updates +
   EXPECTED_COUNTS.blogPosts +
   EXPECTED_COUNTS.blogPostAction +
-  EXPECTED_COUNTS.hero
+  EXPECTED_COUNTS.hero +
+  EXPECTED_COUNTS.press
 
-export async function seed({ strapi }: { strapi: any }) {
+export async function seed({ strapi }: { strapi: Core.Strapi }) {
   const catsExist = await strapi.db.query('api::category.category').findOne({})
   if (catsExist) {
     strapi.log.info('Seed skipped: data already exists')
@@ -38,53 +60,19 @@ export async function seed({ strapi }: { strapi: any }) {
   await createBlogPosts(strapi, imageMap, tagMap, authorMap)
   await createBlogPostAction(strapi)
   await createHero(strapi, imageMap)
+  await createPresses(strapi, imageMap)
 
   await verifySeedCount(strapi)
   strapi.log.info('Seed completed')
 }
 
-async function cleanDrafts(strapi: any) {
-  const uids = [
-    'api::update.update',
-    'api::blog-post.blog-post',
-    'api::author.author',
-    'api::category.category',
-    'api::tag.tag',
-    'api::hero.hero',
-  ] as const
-
-  for (const uid of uids) {
-    const entries = await strapi.db.query(uid).findMany()
-    for (const entry of entries) {
-      try {
-        await strapi.documents(uid).delete({ documentId: entry.documentId })
-      } catch {
-        try {
-          await strapi.db.query(uid).delete({ where: { id: entry.id } })
-        } catch (err) {
-          strapi.log.warn(`Failed to delete ${uid} entry ${entry.id}: ${err}`)
-        }
-      }
-    }
-  }
-
-  const staleMedia = await strapi.db.query('plugin::upload.file').findMany()
-  for (const file of staleMedia) {
-    try {
-      await strapi.plugin('upload').service('upload').remove(file)
-    } catch {
-      try {
-        await strapi.db.query('plugin::upload.file').delete({ where: { id: file.id } })
-      } catch (err) {
-        strapi.log.warn(`Failed to delete media file ${file.id}: ${err}`)
-      }
-    }
-  }
-}
-
 type MediaEntry = { id: number }
 
-async function withRetry<T>(fn: () => Promise<T>, attempts = 2, delayMs = 1000): Promise<T> {
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  attempts = 2,
+  delayMs = 1000,
+): Promise<T> {
   let lastError: unknown
   for (let i = 0; i < attempts; i++) {
     try {
@@ -109,7 +97,9 @@ function validateImageUrl(imageUrl: string): URL {
 
 async function downloadToFile(url: string, filePath: string): Promise<void> {
   const validatedUrl = validateImageUrl(url)
-  const response = await fetch(validatedUrl.href, { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) })
+  const response = await fetch(validatedUrl.href, {
+    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+  })
 
   if (!response.ok || !response.body) {
     throw new Error(`HTTP ${response.status}`)
@@ -136,7 +126,13 @@ async function downloadToFile(url: string, filePath: string): Promise<void> {
   await pipeline(response.body, sizeGuard, writer)
 }
 
-async function uploadFromUrl(strapi: any, imageUrl: string, fileName: string, altText: string): Promise<MediaEntry> {
+async function uploadFromUrl(
+  strapi: Core.Strapi,
+  imageUrl: string,
+  fileName: string,
+  altText: string,
+  mimetype: string = 'image/jpeg',
+): Promise<MediaEntry> {
   const safeName = path.basename(fileName)
   const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'seed-'))
   const filePath = path.join(tmpDir, safeName)
@@ -145,22 +141,25 @@ async function uploadFromUrl(strapi: any, imageUrl: string, fileName: string, al
     await downloadToFile(imageUrl, filePath)
     const stat = await fs.stat(filePath)
 
-    const [uploaded] = await strapi.plugin('upload').service('upload').upload({
-      data: {
-        fileInfo: {
-          name: safeName,
-          alternativeText: altText,
+    const [uploaded] = await strapi
+      .plugin('upload')
+      .service('upload')
+      .upload({
+        data: {
+          fileInfo: {
+            name: safeName,
+            alternativeText: altText,
+          },
         },
-      },
-      files: [
-        {
-          filepath: filePath,
-          originalFilename: safeName,
-          mimetype: 'image/jpeg',
-          size: stat.size,
-        },
-      ],
-    })
+        files: [
+          {
+            filepath: filePath,
+            originalFilename: safeName,
+            mimetype,
+            size: stat.size,
+          },
+        ],
+      })
 
     return uploaded
   } finally {
@@ -168,7 +167,7 @@ async function uploadFromUrl(strapi: any, imageUrl: string, fileName: string, al
   }
 }
 
-async function uploadImages(strapi: any) {
+async function uploadImages(strapi: Core.Strapi) {
   const entries = [
     ...authors.map((a) => ({
       key: a.avatarSeed,
@@ -188,6 +187,22 @@ async function uploadImages(strapi: any) {
       fileName: `${b.imageSeed}.jpg`,
       altText: b.title,
     })),
+    ...presses
+      .filter((p) => p.kind === 'image' && p.imageSeed)
+      .map((p) => ({
+        key: p.imageSeed!,
+        url: `https://picsum.photos/seed/${p.imageSeed}/1200/600`,
+        fileName: `${p.imageSeed}.jpg`,
+        altText: p.title,
+      })),
+    ...presses
+      .filter((p) => p.kind === 'video' && p.posterSeed)
+      .map((p) => ({
+        key: p.posterSeed!,
+        url: `https://picsum.photos/seed/${p.posterSeed}/1200/675`,
+        fileName: `${p.posterSeed}.jpg`,
+        altText: p.title,
+      })),
     {
       key: 'hero',
       url: hero.heroImage,
@@ -217,7 +232,7 @@ async function uploadImages(strapi: any) {
   return map
 }
 
-async function createCategories(strapi: any) {
+async function createCategories(strapi: Core.Strapi) {
   const map: Record<string, string> = {}
 
   for (const cat of categories) {
@@ -245,7 +260,7 @@ async function createCategories(strapi: any) {
   return map
 }
 
-async function createTags(strapi: any) {
+async function createTags(strapi: Core.Strapi) {
   const map: Record<string, string> = {}
 
   for (const name of tags) {
@@ -273,7 +288,10 @@ async function createTags(strapi: any) {
   return map
 }
 
-async function createAuthors(strapi: any, imageMap: Record<string, MediaEntry>) {
+async function createAuthors(
+  strapi: Core.Strapi,
+  imageMap: Record<string, MediaEntry>,
+) {
   const map: Record<string, string> = {}
 
   for (const author of authors) {
@@ -305,7 +323,7 @@ async function createAuthors(strapi: any, imageMap: Record<string, MediaEntry>) 
 }
 
 async function createUpdates(
-  strapi: any,
+  strapi: Core.Strapi,
   imageMap: Record<string, MediaEntry>,
   categoryMap: Record<string, string>,
   tagMap: Record<string, string>,
@@ -313,7 +331,9 @@ async function createUpdates(
 ) {
   for (const update of updates) {
     if (update.authorIndex >= authors.length) {
-      strapi.log.warn(`Update "${update.title}" has invalid authorIndex ${update.authorIndex}, skipping`)
+      strapi.log.warn(
+        `Update "${update.title}" has invalid authorIndex ${update.authorIndex}, skipping`,
+      )
       continue
     }
 
@@ -348,14 +368,16 @@ async function createUpdates(
 }
 
 async function createBlogPosts(
-  strapi: any,
+  strapi: Core.Strapi,
   imageMap: Record<string, MediaEntry>,
   tagMap: Record<string, string>,
   authorMap: Record<string, string>,
 ) {
   for (const blogPost of blogPosts) {
     if (blogPost.authorIndex >= authors.length) {
-      strapi.log.warn(`BlogPost "${blogPost.title}" has invalid authorIndex ${blogPost.authorIndex}, skipping`)
+      strapi.log.warn(
+        `BlogPost "${blogPost.title}" has invalid authorIndex ${blogPost.authorIndex}, skipping`,
+      )
       continue
     }
 
@@ -387,8 +409,10 @@ async function createBlogPosts(
   }
 }
 
-async function createBlogPostAction(strapi: any) {
-  const existing = await strapi.db.query('api::blog-post-action.blog-post-action').findOne({})
+async function createBlogPostAction(strapi: Core.Strapi) {
+  const existing = await strapi.db
+    .query('api::blog-post-action.blog-post-action')
+    .findOne({})
   if (existing) return
 
   await strapi.documents('api::blog-post-action.blog-post-action').create({
@@ -397,7 +421,10 @@ async function createBlogPostAction(strapi: any) {
   })
 }
 
-async function createHero(strapi: any, imageMap: Record<string, MediaEntry>) {
+async function createHero(
+  strapi: Core.Strapi,
+  imageMap: Record<string, MediaEntry>,
+) {
   const existing = await strapi.db.query('api::hero.hero').findOne({})
   if (existing) return
 
@@ -412,13 +439,64 @@ async function createHero(strapi: any, imageMap: Record<string, MediaEntry>) {
   })
 }
 
-async function verifySeedCount(strapi: any) {
+async function createPresses(
+  strapi: Core.Strapi,
+  imageMap: Record<string, MediaEntry>,
+) {
+  for (const press of presses) {
+    const existing = await strapi.db
+      .query('api::press.press')
+      .findOne({ where: { title: press.title } })
+
+    if (existing) {
+      strapi.log.info(`Press "${press.title}" already exists, skipping`)
+      continue
+    }
+
+    const media =
+      press.kind === 'image' && press.imageSeed
+        ? imageMap[press.imageSeed]
+        : undefined
+    const videoPoster =
+      press.kind === 'video' && press.posterSeed
+        ? imageMap[press.posterSeed]
+        : undefined
+
+    if (press.kind === 'video') {
+      strapi.log.warn(
+        `Press video "${press.title}" seeded without media — mp4 URL pending`,
+      )
+    }
+
+    try {
+      await strapi.documents('api::press.press').create({
+        data: {
+          title: press.title,
+          source: press.source,
+          externalUrl: press.externalUrl,
+          publicationDate: press.publicationDate,
+          excerpt: press.excerpt,
+          media: media ? media.id : null,
+          videoPoster: videoPoster ? videoPoster.id : null,
+        },
+        status: 'published',
+      })
+    } catch (err) {
+      strapi.log.warn(`Failed to seed press "${press.title}": ${err}`)
+    }
+  }
+}
+
+async function verifySeedCount(strapi: Core.Strapi) {
   const allCats = await strapi.db.query('api::category.category').findMany()
   const allTags = await strapi.db.query('api::tag.tag').findMany()
   const allAuthors = await strapi.db.query('api::author.author').findMany()
   const allUpdates = await strapi.db.query('api::update.update').findMany()
-  const allBlogPosts = await strapi.db.query('api::blog-post.blog-post').findMany()
+  const allBlogPosts = await strapi.db
+    .query('api::blog-post.blog-post')
+    .findMany()
   const allHeroes = await strapi.db.query('api::hero.hero').findMany()
+  const allPress = await strapi.db.query('api::press.press').findMany()
 
   const categories = new Set(allCats.map((e: any) => e.documentId)).size
   const tags = new Set(allTags.map((e: any) => e.documentId)).size
@@ -426,11 +504,13 @@ async function verifySeedCount(strapi: any) {
   const updates = new Set(allUpdates.map((e: any) => e.documentId)).size
   const blogPosts = new Set(allBlogPosts.map((e: any) => e.documentId)).size
   const heroes = new Set(allHeroes.map((e: any) => e.documentId)).size
+  const press = new Set(allPress.map((e: any) => e.documentId)).size
 
-  const total = categories + tags + authors + updates + blogPosts + heroes
+  const total =
+    categories + tags + authors + updates + blogPosts + heroes + press
   if (total !== EXPECTED_TOTAL) {
     strapi.log.warn(
-      `Seed count mismatch: expected ${EXPECTED_TOTAL}, got ${total} (categories=${categories}, tags=${tags}, authors=${authors}, updates=${updates}, blogPosts=${blogPosts}, heroes=${heroes})`,
+      `Seed count mismatch: expected ${EXPECTED_TOTAL}, got ${total} (categories=${categories}, tags=${tags}, authors=${authors}, updates=${updates}, blogPosts=${blogPosts}, heroes=${heroes}, press=${press})`,
     )
   }
 }

@@ -1,23 +1,31 @@
+import type { Schema } from '@strapi/strapi'
+
+type BlocksBody = Schema.AttributeValueByName<'api::update.update', 'body'>
+
 export const categories = [
   {
     slug: 'campaign',
     name: 'Campaña',
-    description: 'Movilización social, activismos y luchas ciudadanas por la democracia y los derechos fundamentales en Nicaragua.',
+    description:
+      'Movilización social, activismos y luchas ciudadanas por la democracia y los derechos fundamentales en Nicaragua.',
   },
   {
     slug: 'news',
     name: 'Noticias',
-    description: 'Información oportuna sobre los acontecimientos políticos, sociales y económicos que marcan la realidad nicaragüense.',
+    description:
+      'Información oportuna sobre los acontecimientos políticos, sociales y económicos que marcan la realidad nicaragüense.',
   },
   {
     slug: 'analysis',
     name: 'Análisis',
-    description: 'Perspectivas profundas, contextualización histórica y lecturas expertas sobre la coyuntura nacional e internacional.',
+    description:
+      'Perspectivas profundas, contextualización histórica y lecturas expertas sobre la coyuntura nacional e internacional.',
   },
   {
     slug: 'voices',
     name: 'Voces',
-    description: 'Testimonios en primera persona, crónicas y artículos de opinión que reflejan la diversidad de la experiencia nicaragüense.',
+    description:
+      'Testimonios en primera persona, crónicas y artículos de opinión que reflejan la diversidad de la experiencia nicaragüense.',
   },
 ]
 
@@ -90,7 +98,7 @@ export interface UpdateSeed {
   title: string
   slug: string
   excerpt: string
-  body: Record<string, any>[]
+  body: BlocksBody
   imageSeed: string
 }
 
@@ -101,7 +109,8 @@ export const updates: UpdateSeed[] = [
     authorIndex: 0,
     title: 'Sociedad civil se organiza por la restauración democrática',
     slug: 'sociedad-civil-se-organiza-por-la-restauracion-democratica',
-    excerpt: 'Diversas organizaciones ciudadanas han retomado espacios de articulación para promover una agenda de reconciliación nacional y retorno al estado de derecho en Nicaragua.',
+    excerpt:
+      'Diversas organizaciones ciudadanas han retomado espacios de articulación para promover una agenda de reconciliación nacional y retorno al estado de derecho en Nicaragua.',
     body: [
       h2('Un nuevo capítulo en la lucha ciudadana'),
       ...p(
@@ -128,7 +137,8 @@ export const updates: UpdateSeed[] = [
     authorIndex: 1,
     title: 'Juventud nicaragüense alza la voz en nuevas jornadas pacíficas',
     slug: 'juventud-nicaraguense-alza-la-voz-en-nuevas-jornadas-pacificas',
-    excerpt: 'Estudiantes universitarios y colectivos juveniles han protagonizado jornadas de concientización en las principales ciudades del país, exigiendo reformas democráticas y libertad de expresión.',
+    excerpt:
+      'Estudiantes universitarios y colectivos juveniles han protagonizado jornadas de concientización en las principales ciudades del país, exigiendo reformas democráticas y libertad de expresión.',
     body: [
       h2('La generación del relevo'),
       ...p(
@@ -155,7 +165,8 @@ export const updates: UpdateSeed[] = [
     authorIndex: 0,
     title: 'Régimen intensifica restricciones a medios independientes',
     slug: 'regimen-intensifica-restricciones-a-medios-independientes',
-    excerpt: 'Nuevas disposiciones administrativas han forzado el cierre de dos medios digitales y la suspensión temporal de tres estaciones de radio en distintas regiones del país.',
+    excerpt:
+      'Nuevas disposiciones administrativas han forzado el cierre de dos medios digitales y la suspensión temporal de tres estaciones de radio en distintas regiones del país.',
     body: [
       h2('Cerco a la información'),
       ...p(
@@ -182,7 +193,8 @@ export const updates: UpdateSeed[] = [
     authorIndex: 1,
     title: 'Comunidad internacional condena nuevas detenciones arbitrarias',
     slug: 'comunidad-internacional-condena-nuevas-detenciones-arbitrarias',
-    excerpt: 'Gobiernos de América Latina, Europa y Estados Unidos han emitido pronunciamientos conjuntos exigiendo la liberación inmediata de los detenidos y el respeto al debido proceso.',
+    excerpt:
+      'Gobiernos de América Latina, Europa y Estados Unidos han emitido pronunciamientos conjuntos exigiendo la liberación inmediata de los detenidos y el respeto al debido proceso.',
     body: [
       h2('Reacción global ante la escalada represiva'),
       ...p(
@@ -207,9 +219,11 @@ export const updates: UpdateSeed[] = [
     categorySlug: 'analysis',
     tagNames: ['Economía', 'Política Exterior', 'Reformas'],
     authorIndex: 0,
-    title: 'El impacto de las sanciones internacionales en la economía nicaragüense',
+    title:
+      'El impacto de las sanciones internacionales en la economía nicaragüense',
     slug: 'el-impacto-de-las-sanciones-internacionales-en-la-economia-nicaraguense',
-    excerpt: 'Un análisis detallado de cómo las medidas restrictivas adoptadas por Estados Unidos y la Unión Europea están afectando los sectores clave de la economía nacional y las perspectivas a mediano plazo.',
+    excerpt:
+      'Un análisis detallado de cómo las medidas restrictivas adoptadas por Estados Unidos y la Unión Europea están afectando los sectores clave de la economía nacional y las perspectivas a mediano plazo.',
     body: [
       h2('Sanciones: ¿arma de presión o castigo colectivo?'),
       ...p(
@@ -234,9 +248,11 @@ export const updates: UpdateSeed[] = [
     categorySlug: 'analysis',
     tagNames: ['Elecciones', 'Reformas', 'Opinión'],
     authorIndex: 1,
-    title: '¿Hacia dónde va la oposición? Estrategias y desafíos del movimiento democrático',
+    title:
+      '¿Hacia dónde va la oposición? Estrategias y desafíos del movimiento democrático',
     slug: 'hacia-donde-va-la-oposicion-estrategias-y-desafios-del-movimiento-democratico',
-    excerpt: 'Un recorrido por las diferentes corrientes opositoras, sus visiones estratégicas encontradas y los obstáculos que enfrentan para construir una alternativa política creíble frente al régimen.',
+    excerpt:
+      'Un recorrido por las diferentes corrientes opositoras, sus visiones estratégicas encontradas y los obstáculos que enfrentan para construir una alternativa política creíble frente al régimen.',
     body: [
       h2('La oposición en la encrucijada'),
       ...p(
@@ -264,7 +280,8 @@ export const updates: UpdateSeed[] = [
     authorIndex: 1,
     title: 'Testimonio de un exilio forzado: dejar Nicaragua para sobrevivir',
     slug: 'testimonio-de-un-exilio-forzado-dejar-nicaragua-para-sobrevivir',
-    excerpt: 'En primera persona, la historia de un joven activista que tuvo que abandonar el país tras recibir amenazas directas contra su vida, y las dificultades de comenzar de cero en tierra extranjera.',
+    excerpt:
+      'En primera persona, la historia de un joven activista que tuvo que abandonar el país tras recibir amenazas directas contra su vida, y las dificultades de comenzar de cero en tierra extranjera.',
     body: [
       h2('La noche que cambió todo'),
       ...p(
@@ -291,7 +308,8 @@ export const updates: UpdateSeed[] = [
     authorIndex: 0,
     title: 'La resistencia cultural como herramienta de lucha ciudadana',
     slug: 'la-resistencia-cultural-como-herramienta-de-lucha-ciudadana',
-    excerpt: 'Músicos, poetas y artistas visuales han encontrado en la creación cultural una forma de eludir la censura y mantener viva la memoria histórica y la esperanza de un país distinto.',
+    excerpt:
+      'Músicos, poetas y artistas visuales han encontrado en la creación cultural una forma de eludir la censura y mantener viva la memoria histórica y la esperanza de un país distinto.',
     body: [
       h2('Cuando la palabra se vuelve resistencia'),
       ...p(
@@ -316,9 +334,11 @@ export const updates: UpdateSeed[] = [
     categorySlug: 'campaign',
     tagNames: ['Derechos Humanos', 'Sociedad Civil', 'Elecciones'],
     authorIndex: 0,
-    title: 'Mujeres organizadas: el liderazgo femenino en la resistencia nicaragüense',
+    title:
+      'Mujeres organizadas: el liderazgo femenino en la resistencia nicaragüense',
     slug: 'mujeres-organizadas-el-liderazgo-femenino-en-la-resistencia-nicaraguense',
-    excerpt: 'Colectivos de mujeres han emergido como actores clave en la defensa de derechos humanos y la reconstrucción del tejido social en comunidades urbanas y rurales del país.',
+    excerpt:
+      'Colectivos de mujeres han emergido como actores clave en la defensa de derechos humanos y la reconstrucción del tejido social en comunidades urbanas y rurales del país.',
     body: [
       h2('El rostro femenino de la resistencia'),
       ...p(
@@ -346,7 +366,8 @@ export const updates: UpdateSeed[] = [
     authorIndex: 1,
     title: 'Nuevo escándalo de corrupción sacude a la administración pública',
     slug: 'nuevo-escandalo-de-corrupcion-sacude-a-la-administracion-publica',
-    excerpt: 'Investigaciones periodísticas revelan un esquema de desvío de fondos públicos que involucra a altos funcionarios y empresas fantasma, con un monto estimado de 50 millones de dólares.',
+    excerpt:
+      'Investigaciones periodísticas revelan un esquema de desvío de fondos públicos que involucra a altos funcionarios y empresas fantasma, con un monto estimado de 50 millones de dólares.',
     body: [
       h2('Los mecanismos del desvío'),
       ...p(
@@ -371,9 +392,11 @@ export const updates: UpdateSeed[] = [
     categorySlug: 'analysis',
     tagNames: ['Política Exterior', 'Economía', 'Elecciones'],
     authorIndex: 0,
-    title: 'El tablero geopolítico de Centroamérica: Nicaragua en el nuevo orden regional',
+    title:
+      'El tablero geopolítico de Centroamérica: Nicaragua en el nuevo orden regional',
     slug: 'el-tablero-geopolitico-de-centroamerica-nicaragua-en-el-nuevo-orden-regional',
-    excerpt: 'Los cambios en la correlación de fuerzas en América Latina, el reposicionamiento de China y la nueva administración estadounidense reconfiguran el entorno estratégico de Nicaragua.',
+    excerpt:
+      'Los cambios en la correlación de fuerzas en América Latina, el reposicionamiento de China y la nueva administración estadounidense reconfiguran el entorno estratégico de Nicaragua.',
     body: [
       h2('Un vecindario en transformación'),
       ...p(
@@ -400,7 +423,8 @@ export const updates: UpdateSeed[] = [
     authorIndex: 1,
     title: 'Periodismo en la cuerda floja: reportear en un país sin garantías',
     slug: 'periodismo-en-la-cuerda-floja-reportear-en-un-pais-sin-garantias',
-    excerpt: 'La experiencia de una periodista independiente que documenta la realidad nicaragüense bajo amenaza constante, entre la autocensura y la necesidad de contar la verdad.',
+    excerpt:
+      'La experiencia de una periodista independiente que documenta la realidad nicaragüense bajo amenaza constante, entre la autocensura y la necesidad de contar la verdad.',
     body: [
       h2('El oficio del riesgo'),
       ...p(
@@ -428,7 +452,8 @@ export const updates: UpdateSeed[] = [
     authorIndex: 0,
     title: 'El campo nicaragüense: voces de una crisis silenciada',
     slug: 'el-campo-nicaraguense-voces-de-una-crisis-silenciada',
-    excerpt: 'Campesinos y pequeños productores relatan cómo la crisis política, la falta de insumos y el cambio climático están transformando la vida en las zonas rurales del país.',
+    excerpt:
+      'Campesinos y pequeños productores relatan cómo la crisis política, la falta de insumos y el cambio climático están transformando la vida en las zonas rurales del país.',
     body: [
       h2('La tierra que agoniza'),
       ...p(
@@ -458,7 +483,7 @@ export interface BlogPostSeed {
   title: string
   excerpt: string
   slug: string
-  body: Record<string, any>[]
+  body: BlocksBody
   imageSeed: string
 }
 
@@ -467,7 +492,8 @@ export const blogPosts: BlogPostSeed[] = [
     tagNames: ['Derechos Humanos', 'Sociedad Civil'],
     authorIndex: 0,
     title: 'Nicaragua: el largo camino hacia la reconciliación nacional',
-    excerpt: 'Reflexiones sobre los desafíos de construir paz en un país dividido',
+    excerpt:
+      'Reflexiones sobre los desafíos de construir paz en un país dividido',
     slug: 'nicaragua-el-largo-camino-hacia-la-reconciliacion-nacional',
     body: [
       h2('Una herida que no cierra'),
@@ -493,7 +519,8 @@ export const blogPosts: BlogPostSeed[] = [
     tagNames: ['Política Exterior', 'Economía'],
     authorIndex: 1,
     title: 'La diáspora nicaragüense: entre la nostalgia y la reinventión',
-    excerpt: 'Cómo cientos de miles de exiliados están transformando comunidades en el exterior',
+    excerpt:
+      'Cómo cientos de miles de exiliados están transformando comunidades en el exterior',
     slug: 'la-diaspora-nicaraguense-entre-la-nostalgia-y-la-reinvencion',
     body: [
       h2('Un éxodo sin precedentes'),
@@ -519,7 +546,8 @@ export const blogPosts: BlogPostSeed[] = [
     tagNames: ['Reformas', 'Opinión'],
     authorIndex: 0,
     title: 'La educación como campo de batalla silencioso',
-    excerpt: 'Cómo el control académico ha moldeado una generación de nicaragüenses',
+    excerpt:
+      'Cómo el control académico ha moldeado una generación de nicaragüenses',
     slug: 'la-educacion-como-campo-de-batalla-silencioso',
     body: [
       h2('Universidades bajo asedio'),
@@ -545,7 +573,8 @@ export const blogPosts: BlogPostSeed[] = [
     tagNames: ['Sociedad Civil', 'Derechos Humanos'],
     authorIndex: 1,
     title: 'La trata de personas en la ruta migratoria nicaragüense',
-    excerpt: 'Una investigación sobre cómo las redes de trata aprovechan la vulnerabilidad de quienes huyen del país, y las iniciativas ciudadanas que intentan proteger a los más expuestos.',
+    excerpt:
+      'Una investigación sobre cómo las redes de trata aprovechan la vulnerabilidad de quienes huyen del país, y las iniciativas ciudadanas que intentan proteger a los más expuestos.',
     slug: 'la-trata-de-personas-en-la-ruta-migratoria-nicaraguense',
     body: [
       h2('El negocio de la desesperación'),
@@ -571,8 +600,10 @@ export const blogPosts: BlogPostSeed[] = [
   {
     tagNames: ['Elecciones', 'Reformas', 'Opinión'],
     authorIndex: 0,
-    title: 'El sistema de justicia en Nicaragua: del estado de derecho al estado de excepción permanente',
-    excerpt: 'Un análisis exhaustivo de cómo el poder judicial ha sido instrumentalizado para perseguir a la oposición y consolidar el control gubernamental sobre todas las esferas de la vida pública.',
+    title:
+      'El sistema de justicia en Nicaragua: del estado de derecho al estado de excepción permanente',
+    excerpt:
+      'Un análisis exhaustivo de cómo el poder judicial ha sido instrumentalizado para perseguir a la oposición y consolidar el control gubernamental sobre todas las esferas de la vida pública.',
     slug: 'el-sistema-de-justicia-en-nicaragua-del-estado-de-derecho-al-estado-de-excepcion-permanente',
     body: [
       h2('La metamorfosis del poder judicial'),
@@ -598,8 +629,10 @@ export const blogPosts: BlogPostSeed[] = [
   {
     tagNames: ['Economía', 'Política Exterior', 'Reformas'],
     authorIndex: 0,
-    title: 'El cerco financiero: cómo las sanciones reconfiguraron la economía nicaragüense',
-    excerpt: 'Más allá del impacto macroeconómico, las sanciones internacionales han transformado las relaciones comerciales, el sistema bancario y las estrategias de supervivencia del empresariado local.',
+    title:
+      'El cerco financiero: cómo las sanciones reconfiguraron la economía nicaragüense',
+    excerpt:
+      'Más allá del impacto macroeconómico, las sanciones internacionales han transformado las relaciones comerciales, el sistema bancario y las estrategias de supervivencia del empresariado local.',
     slug: 'el-cerco-financiero-como-las-sanciones-reconfiguraron-la-economia-nicaraguense',
     body: [
       h2('La paradoja de las sanciones'),
@@ -626,7 +659,8 @@ export const blogPosts: BlogPostSeed[] = [
     tagNames: ['Sociedad Civil', 'Derechos Humanos', 'Opinión'],
     authorIndex: 1,
     title: 'Iglesias bajo presión: la fe como resistencia en Nicaragua',
-    excerpt: 'Las comunidades religiosas, tanto católicas como evangélicas, enfrentan un asedio creciente mientras intentan mantener espacios de esperanza y solidaridad en medio de la represión.',
+    excerpt:
+      'Las comunidades religiosas, tanto católicas como evangélicas, enfrentan un asedio creciente mientras intentan mantener espacios de esperanza y solidaridad en medio de la represión.',
     slug: 'iglesias-bajo-presion-la-fe-como-resistencia-en-nicaragua',
     body: [
       h2('Persecución selectiva'),
@@ -652,8 +686,10 @@ export const blogPosts: BlogPostSeed[] = [
   {
     tagNames: ['Política Exterior', 'Derechos Humanos', 'Sociedad Civil'],
     authorIndex: 1,
-    title: 'Exilio nicaragüense: la diáspora política más joven de América Latina',
-    excerpt: 'Una generación de profesionales, estudiantes y activistas reconstruye sus vidas fuera del país mientras mantiene viva la lucha por la democracia desde la distancia.',
+    title:
+      'Exilio nicaragüense: la diáspora política más joven de América Latina',
+    excerpt:
+      'Una generación de profesionales, estudiantes y activistas reconstruye sus vidas fuera del país mientras mantiene viva la lucha por la democracia desde la distancia.',
     slug: 'exilio-nicaraguense-la-diaspora-politica-mas-joven-de-america-latina',
     body: [
       h2('Una generación dispersa'),
@@ -679,15 +715,72 @@ export const blogPosts: BlogPostSeed[] = [
   },
 ]
 
+export interface PressSeed {
+  kind: 'image' | 'video'
+  title: string
+  source: string
+  externalUrl: string
+  publicationDate: string
+  excerpt: string
+  imageSeed?: string
+  posterSeed?: string
+}
+
+export const presses: PressSeed[] = [
+  {
+    kind: 'image',
+    title:
+      'Espacio Diálogo, referente del periodismo independiente nicaragüense',
+    source: 'El País',
+    externalUrl: 'https://example.org/press/el-pais',
+    publicationDate: '2026-07-28T09:00:00.000Z',
+    excerpt:
+      'El medio digital se consolida como una de las voces más leídas sobre la transición democrática en Nicaragua.',
+    imageSeed: 'press-1',
+  },
+  {
+    kind: 'image',
+    title: 'La prensa independiente que resiste desde el exilio',
+    source: 'Confidencial',
+    externalUrl: 'https://example.org/press/confidencial',
+    publicationDate: '2026-07-10T14:30:00.000Z',
+    excerpt:
+      'Un recorrido por las redacciones que siguen informando sobre Nicaragua pese a la censura y las amenazas.',
+    imageSeed: 'press-2',
+  },
+  {
+    kind: 'image',
+    title: 'El costo del periodismo libre en América Latina',
+    source: 'BBC Mundo',
+    externalUrl: 'https://example.org/press/bbc-mundo',
+    publicationDate: '2026-06-22T11:15:00.000Z',
+    excerpt:
+      'Reportaje especial sobre los desafíos que enfrentan los medios independientes de la región.',
+    imageSeed: 'press-3',
+  },
+  {
+    kind: 'video',
+    title: 'Nicaragua: la lucha por la información en la era de la censura',
+    source: 'DW Español',
+    externalUrl: 'https://example.org/press/dw-espanol',
+    publicationDate: '2026-06-05T18:00:00.000Z',
+    excerpt:
+      'Documental audiovisual sobre la resistencia del periodismo independiente nicaragüense.',
+    posterSeed: 'press-4-poster',
+  },
+]
+
 export const hero = {
   title: 'Espacio Diálogo',
-  subtitle: 'Periodismo independiente sobre la transición democrática en Nicaragua',
+  subtitle:
+    'Periodismo independiente sobre la transición democrática en Nicaragua',
   heroImage: 'https://picsum.photos/seed/hero/1200/600',
 }
 
 export const blogPostAction = {
   heading: 'Apoya el periodismo independiente',
-  description: 'Tu contribución nos permite seguir investigando y contando las historias que importan.',
+  description:
+    'Tu contribución nos permite seguir investigando y contando las historias que importan.',
   buttonLabel: 'Donar ahora',
   buttonUrl: 'https://example.org/donate',
 }
