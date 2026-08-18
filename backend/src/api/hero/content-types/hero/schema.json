@@ -17,11 +17,13 @@
       "required": true
     },
     "subtitle": {
-      "type": "text"
+      "type": "text",
+      "required": true
     },
     "heroImage": {
       "type": "media",
       "multiple": false,
+      "required": true,
       "allowedTypes": ["images"]
     }
   }

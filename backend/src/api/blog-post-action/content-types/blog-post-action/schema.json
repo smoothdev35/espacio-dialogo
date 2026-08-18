@@ -17,7 +17,8 @@
       "required": true
     },
     "description": {
-      "type": "text"
+      "type": "text",
+      "required": true
     },
     "buttonLabel": {
       "type": "string",

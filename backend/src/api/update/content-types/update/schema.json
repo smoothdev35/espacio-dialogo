@@ -22,14 +22,17 @@
       "required": true
     },
     "excerpt": {
-      "type": "text"
+      "type": "text",
+      "required": true
     },
     "body": {
-      "type": "blocks"
+      "type": "blocks",
+      "required": true
     },
     "featuredImage": {
       "type": "media",
       "multiple": false,
+      "required": true,
       "allowedTypes": ["images"]
     },
     "author": {
@@ -42,6 +45,7 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::category.category",
+      "required": true,
       "inversedBy": "updates"
     },
     "tags": {

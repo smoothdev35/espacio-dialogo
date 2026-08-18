@@ -22,14 +22,17 @@
       "required": true
     },
     "excerpt": {
-      "type": "text"
+      "type": "text",
+      "required": true
     },
     "body": {
-      "type": "blocks"
+      "type": "blocks",
+      "required": true
     },
     "featuredImage": {
       "type": "media",
       "multiple": false,
+      "required": true,
       "allowedTypes": ["images"]
     },
     "author": {
