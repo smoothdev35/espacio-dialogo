@@ -27,14 +27,14 @@ import { buildSrcSet } from '@/lib/media'
 import type { ResolvedImage } from '@/lib/media'
 
 interface Props {
-  slug: string;
-  title: string;
-  excerpt?: string;
-  featuredImage?: ResolvedImage | null;
+  slug: string
+  title: string
+  excerpt?: string
+  featuredImage?: ResolvedImage | null
   /** Optional data attrs for search/filter JS on listing pages */
-  dataTags?: string;
-  dataSearchable?: string;
-  class?: string;
+  dataTags?: string
+  dataSearchable?: string
+  class?: string
 }
 
 const {
@@ -45,7 +45,7 @@ const {
   dataTags,
   dataSearchable,
   class: className,
-} = Astro.props;
+} = Astro.props
 ---
 
 <a
@@ -53,29 +53,33 @@ const {
   data-tags={dataTags}
   data-searchable={dataSearchable}
   class:list={[
-    'text-page-text group flex flex-col hover:underline-0!',
+    'text-page-text hover:underline-0! group flex flex-col',
     className,
   ]}
 >
   <!-- Featured image: 3:2 aspect ratio, rounded corners -->
-  <div class="aspect-[3/2] overflow-hidden rounded-lg bg-muted">
-    {featuredImage ? (
-      <img
-        src={featuredImage.url}
-        alt={featuredImage.alternativeText ?? ''}
-        srcset={buildSrcSet(featuredImage)}
-        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-        class="h-full w-full object-cover"
-        loading="lazy"
-      />
-    ) : (
-      <div class="h-full w-full bg-muted" aria-hidden="true" />
-    )}
+  <div
+    class="media-zoom bg-surface-text/10 aspect-[3/2] overflow-hidden rounded-lg"
+  >
+    {
+      featuredImage ? (
+        <img
+          src={featuredImage.url}
+          alt={featuredImage.alternativeText ?? ''}
+          srcset={buildSrcSet(featuredImage)}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          class="h-full w-full object-cover"
+          loading="lazy"
+        />
+      ) : (
+        <div class="bg-surface-text/10 h-full w-full" aria-hidden="true" />
+      )
+    }
   </div>
 
   <!-- Card body: pt-6 matches UpdateCard image→tag distance (24px Figma) -->
-  <div class="flex flex-1 flex-col justify-between gap-f8 pt-6">
-    <div class="flex flex-col gap-f4">
+  <div class="gap-f8 flex flex-1 flex-col justify-between pt-6">
+    <div class="gap-f4 flex flex-col">
       <!-- Metadata: tags, readTime, date, etc. -->
       <slot name="metadata" />
 
@@ -83,9 +87,7 @@ const {
       <h3 class="text-h5 lg:text-h6">{title}</h3>
 
       <!-- Excerpt -->
-      {excerpt && (
-        <p class="line-clamp-2">{excerpt}</p>
-      )}
+      {excerpt && <p class="line-clamp-2">{excerpt}</p>}
     </div>
 
     <!-- Footer: author row, ReadMore, etc. -->

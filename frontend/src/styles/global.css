@@ -732,3 +732,33 @@
     color: var(--color-input-placeholder);
   }
 }
+
+/* ═══ Media zoom — shared by card sliders (blog + press) ═════ */
+/* Single source of truth: hover/focus zoom scale for card       */
+/* thumbnails. The wrapper must clip (`overflow-hidden`); the     */
+/* trigger is the whole card link (anchor), not the media box.    */
+@layer components {
+  .media-zoom img {
+    transition: transform 400ms cubic-bezier(0.25, 0.1, 0.25, 1);
+    transform-origin: center;
+  }
+
+  @media (hover: hover) {
+    a:has(> .media-zoom):hover > .media-zoom {
+      will-change: transform;
+    }
+    a:has(> .media-zoom):hover > .media-zoom img {
+      transform: scale(1.08);
+      will-change: transform;
+    }
+  }
+
+  /* Focus arrives on the anchor, zoom is on the inner image */
+  a:has(> .media-zoom):focus-visible > .media-zoom {
+    will-change: transform;
+  }
+  a:has(> .media-zoom):focus-visible > .media-zoom img {
+    transform: scale(1.08);
+    will-change: transform;
+  }
+}
