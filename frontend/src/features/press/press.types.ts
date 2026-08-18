@@ -20,13 +20,12 @@ export interface PressMedia {
 
 export interface PressItem {
   title: string
-  slug: string
   excerpt: string
   /** Formatted display date (e.g. "June 15, 2026") */
-  publishedAt: string
+  publicationDate: string
   /** Raw ISO date for `<time datetime>` — machine-readable */
   dateIso: string
   source: string
-  externalUrl?: string
+  externalUrl: string
   media: PressMedia | null
 }

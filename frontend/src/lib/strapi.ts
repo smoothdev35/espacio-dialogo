@@ -4,6 +4,7 @@ import type {
   BlogPostAction,
   Author,
   Category,
+  Press,
   StrapiCollectionResponse,
   StrapiQueryParams,
   StrapiSingleResponse,
@@ -192,4 +193,8 @@ export function getTags(params?: StrapiQueryParams) {
 
 export function getTag(documentId: string, params?: StrapiQueryParams) {
   return fetchSingle<Tag>('tags', documentId, params)
+}
+
+export function getPressItems(params?: StrapiQueryParams) {
+  return fetchCollection<Press>('presses', params)
 }

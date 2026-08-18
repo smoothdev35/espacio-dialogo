@@ -3,9 +3,10 @@
  * PressSliderSection
  *
  * Self-contained press coverage section with horizontal scrolling slider.
- * Hardcoded data (no Strapi fetch yet). Clone of BlogPostSlider pattern.
+ * Consumes Strapi Press data via props passed from the consumer page.
  *
  * Props: class? (string) — spread onto root <section> for consumer overrides
+ *        items (PressItem[]) — press coverage items to display
  * Slots: none
  * Tokens: --spacing-f10, --spacing-f4, --spacing-f6, --spacing-row-gap,
  *         --spacing-f4, --spacing-f5, --spacing-f6,
@@ -20,7 +21,6 @@
  *   - Card width 394px — inherited from BlogPostSlider Figma spec — confirm
  *   - Arrow buttons 48×48, gap-4 dots — layout-specific
  *   - Client JS: dots navigate cards, arrows prev/next, active dot on scroll — vanilla JS for interactivity
- *   - 4 hardcoded press items (one with video) — TODO: replace with Strapi fetch
  * Context variants: section uses --color-surface (theme-aware)
  * Composed from: Container, SectionHeader, Button
  */
@@ -29,79 +29,14 @@ import Container from '@/layouts/Container.astro'
 import SectionHeader from '@/components/ui/astro/SectionHeader.astro'
 import type { PressItem } from './press.types'
 import Button from '@/components/ui/astro/Button.astro'
-import { formatDate } from '@/lib/date'
 import { PRESS } from '@/lib/content'
 
 interface Props {
   class?: string
+  items: PressItem[]
 }
 
-const { class: className } = Astro.props
-
-// TODO: replace with Strapi fetch when press content type is available
-const rawItems: Omit<PressItem, 'dateIso'>[] = [
-  {
-    title: 'Espacio Diálogo Launches Community Initiative Across 12 Cities',
-    slug: 'community-initiative-2026',
-    excerpt:
-      'The organization announces a groundbreaking program aimed at fostering constructive dialogue across diverse communities in Spain.',
-    publishedAt: '2026-06-15',
-    source: 'El País',
-    externalUrl: 'https://elpais.com',
-    media: {
-      type: 'video',
-      url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-      posterUrl: 'https://placehold.co/600x400/1a2e60/ffffff?text=Press+Video',
-      alternativeText: null,
-    },
-  },
-  {
-    title: 'How Facilitated Dialogue Is Reshaping Civil Society',
-    slug: 'dialogue-reshaping-civil-society',
-    excerpt:
-      'A deep look at how facilitated conversation environments are transforming public discourse and bridging ideological divides.',
-    publishedAt: '2026-05-28',
-    source: 'La Vanguardia',
-    externalUrl: 'https://lavanguardia.com',
-    media: {
-      type: 'image',
-      url: 'https://placehold.co/600x400/213a78/ffffff?text=Dialogue+Cover',
-      alternativeText: 'Community dialogue session in progress',
-      posterUrl: null,
-    },
-  },
-  {
-    title: 'Annual Report Highlights Record Community Engagement',
-    slug: 'annual-report-2026',
-    excerpt:
-      'Espacio Diálogo latest annual report shows unprecedented participation levels, with over 50,000 participants in programs.',
-    publishedAt: '2026-04-10',
-    source: 'ABC',
-    externalUrl: 'https://abc.es',
-    media: null,
-  },
-  {
-    title: 'Expert Panel Tackles Polarization in Modern Media Landscape',
-    slug: 'expert-panel-media-polarization',
-    excerpt:
-      'Leading thinkers gather to address the challenges of media-driven polarization and propose evidence-based solutions.',
-    publishedAt: '2026-03-22',
-    source: 'El Mundo',
-    externalUrl: 'https://elmundo.es',
-    media: {
-      type: 'image',
-      url: 'https://placehold.co/600x400/ecae13/1b1c1e?text=Expert+Panel',
-      alternativeText: 'Expert panel discussion on media polarization',
-      posterUrl: null,
-    },
-  },
-]
-
-const pressItems: PressItem[] = rawItems.map((item) => ({
-  ...item,
-  dateIso: item.publishedAt,
-  publishedAt: formatDate(item.publishedAt),
-})) as PressItem[]
+const { class: className, items: pressItems } = Astro.props
 ---
 
 <!-- Containment: Contained — slider cards respect max-width column -->
@@ -128,15 +63,14 @@ const pressItems: PressItem[] = rawItems.map((item) => ({
               >
                 {pressItems.map((item, i) => (
                   <a
-                    href={item.externalUrl ?? `/press/${item.slug}`}
+                    href={item.externalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     data-index={i}
                     class="press-card bg-card-bg text-page-text hover:underline-0! group flex w-[85vw] shrink-0 snap-start flex-col rounded-lg sm:w-[380px] lg:w-[394px]"
-                    {...(item.externalUrl
-                      ? { target: '_blank', rel: 'noopener noreferrer' }
-                      : {})}
                   >
                     {/* Media: 3:2 ratio, rounded top corners only */}
-                    <div class="bg-surface-text/10 aspect-[3/2] overflow-hidden rounded-t-lg">
+                    <div class="media-zoom bg-surface-text/10 aspect-[3/2] overflow-hidden rounded-t-lg">
                       {item.media ? (
                         item.media.type === 'video' ? (
                           <video
@@ -193,7 +127,9 @@ const pressItems: PressItem[] = rawItems.map((item) => ({
                         <span class="text-large font-semibold">
                           {item.source}
                         </span>
-                        <time datetime={item.dateIso}>{item.publishedAt}</time>
+                        <time datetime={item.dateIso}>
+                          {item.publicationDate}
+                        </time>
                       </div>
 
                       <h3 class="text-h5 lg:text-h6">{item.title}</h3>
