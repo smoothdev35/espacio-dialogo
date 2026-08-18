@@ -52,7 +52,12 @@
 | **Epic1-chore-03** | `[chore]` | Rename Article → Update (schema, routes, UIDs, TS types, seed refs). Create BlogPost content type — schema, controller, services, routes, bootstrap permissions, TS types.                                                                     | P0  | M    | `[MERGED]` | None                         |
 | **Epic1-chore-04** | `[chore]` | Seed BlogPost bootstrap data — 3 sample blog posts in Spanish, reusing existing authors/tags, picsum images. Idempotent.                                                                                                       | P0  | S    | `[MERGED]` | 🔗 Related to Epic1-chore-03 |
 | **Epic1-chore-05** | `[chore]` | Seed Hero single type with default title/subtitle/image. Idempotent via findOne guard. Updated seed EXPECTED_COUNTS.                                                                                                            | P0  | S    | `[MERGED]` | 🔗 Related to US-01          |
-| **Epic1-chore-06** | `[chore]` | Create Press content type (Strapi collectionType) — schema: title, slug (uid), excerpt, source, externalUrl, media (images+videos), videoPoster (optional image for video thumbnails). Controller with media/videoPoster populate, routes with public find/findOne, services. Shared TypeScript type `Press` in types/strapi.ts. Seed 4 press items with placeholder images. | P1  | M    | `[DRAFT]` | 🔗 Related to US-07-feat-03 |
+| **Epic1-chore-06** | `[chore]` | Create Press content type (Strapi collectionType) — schema: title, source, externalUrl, publicationDate (datetime, required), excerpt, media (single media, required, allowedTypes: images+videos), videoPoster (single media, allowedTypes: images). No slug (not consumed). | P1  | M    | `[MERGED]` | 🔗 Related to US-07-feat-05 |
+| **Epic1-chore-07** | `[chore]` | Press controller — override find/findOne to populate media + videoPoster. `find` sorts by `publicationDate:desc` when no explicit sort. Public access. | P1  | S    | `[MERGED]` | 🔗 Related to Epic1-chore-06 |
+| **Epic1-chore-08** | `[chore]` | Press routes — createCoreRouter with `auth:false` on find/findOne. | P1  | S    | `[MERGED]` | 🔗 Related to Epic1-chore-06 |
+| **Epic1-chore-09** | `[chore]` | Press service — createCoreService. | P1  | S    | `[MERGED]` | 🔗 Related to Epic1-chore-06 |
+| **Epic1-chore-10** | `[chore]` | Shared TypeScript type `Press` in types/strapi.ts — title, source, externalUrl, publicationDate (string), excerpt (string\|null), media (Media, required), videoPoster (Media\|null). No slug. | P1  | S    | `[MERGED]` | 🔗 Related to Epic1-chore-06 |
+| **Epic1-chore-11** | `[chore]` | Seed presses — 3 images + 1 video entry (poster via picsum), ISO publicationDate, wire into seed pipeline, EXPECTED_COUNTS.press=4. Video mp4 URL deferred (create fails/guides until `PRESS_VIDEO_URL` supplied). | P1  | S    | `[MERGED]` | 🔗 Related to Epic1-chore-06 |
 
 #### US-01: Hero Section Content Type
 
@@ -185,10 +190,20 @@
 | **US-06-feat-02**  | `[feat]` | Build Update Header component — breadcrumb, category badge, h1 title, author byline, read time, publish date, share section, and featured image (desktop 2-col). Lives in `src/features/update/UpdateHeader.astro`. | P0  | M    | `[MERGED]` | 🔗 Related to US-06-feat-01                      |
 | **US-06-feat-03**  | `[feat]` | Build Update Body component — render Strapi block content (JSON array of headings, paragraphs, lists, quotes, code) as HTML. Lives in `src/features/update/UpdateBody.astro`.                      | P0  | M    | `[MERGED]` | 🔗 Related to US-06-feat-01                      |
 | **US-06-feat-04**  | `[feat]` | Build inline Breadcrumb — Home → Updates (→ homepage #updates) → current update title. Encapsulation only, no reuse. Integrated in UpdateHeader component.                                         | P1  | S    | `[MERGED]` | 🔗 Related to US-06-feat-01                      |
-| **US-06-feat-05**  | `[feat]` | Build Horizontal Timeline component — scrollable list of update items (title + date), click navigates by slug. On page load, script scrolls active item into view. Lives in `src/features/update/TimelineSection.astro` + `Timeline.tsx`. | P0  | M    | `[MERGED]` | 🔗 Related to US-06-feat-01, US-06-chore-02      |
-| **US-07-chore-03** | `[chore]` | Add `getPressItems()` to `src/lib/strapi.ts` — fetchCollection<Press> wrapper with public access.                                                                                                      | P1  | S    | `[DRAFT]` | 🛑 Blocked by Epic1-chore-06                     |
-| **US-07-chore-04** | `[chore]` | Create `src/features/press/press.api.ts` — `fetchPressItems()` + mapper: Press (Strapi doc) → PressItem (UI type). Determines image/video from media.mime, resolves posterUrl from videoPoster field. | P1  | S    | `[DRAFT]` | 🛑 Blocked by US-07-chore-03                     |
-| **US-07-feat-05**  | `[feat]` | Wire PressSliderSection to Strapi — accept `PressItem[]` as props (no more hardcoded data), update `blog.astro` to fetch press items server-side via `fetchPressItems()`, pass to component. Remove mock data and TODO comments. | P1  | S    | `[DRAFT]` | 🛑 Blocked by US-07-chore-04                     |
+| **US-06-feat-05**  | `[feat]` | Build Horizontal Timeline component — scrollable list of update items (title + date), click navigates by slug. On page load, script scrolls active item into view. Lives in `src/features/update/TimelineSection.astro` + `Timeline.tsx`. | P0  | M    | `[MERGED]` | 🔗 Related to US-06-feat-01                     |
+
+#### US-07: Press Items Slider
+
+- **Intent:** As a Reader, I want a horizontal press coverage slider on the blog page, so that I can browse media mentions (images and videos) with source attribution and external links.
+- **Scope Bounds:** Horizontal scroll slider of press items (image or video card, source, publication date, excerpt, external link). Consumes Strapi `Press` collection type. Server-side fetch in `blog.astro`, passed as `PressItem[]` props to `PressSliderSection`.
+- **Figma:** Provided during implementation.
+- **Artifact Link:** `docs/stories/US-07.md`
+
+| Task ID            | Type     | Target Technical Scope / Objective                                                                                                                                                                      | Pri | Size | Status    | Relations / Lineage                              |
+| :----------------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :-- | :--- | :-------- | :----------------------------------------------- |
+| **US-07-chore-03** | `[chore]` | Add `getPressItems()` to `src/lib/strapi.ts` — fetchCollection<Press> wrapper with public access.                                                                                                      | P1  | S    | `[DRAFT]` | 🛑 Blocked by Epic1-chore-10                     |
+| **US-07-chore-04** | `[chore]` | Create `src/features/press/press.api.ts` — `fetchPressItems()` + mapper: Press (Strapi doc) → PressItem (UI type). Applies `resolveMediaUrl()` to media.url + posterUrl; determines image/video from media.mime; `dateIso = publicationDate`, `publicationDate = formatDate(publicationDate)`. Rename UI type field `publishedAt` → `publicationDate`. | P1  | S    | `[DRAFT]` | 🛑 Blocked by US-07-chore-03                     |
+| **US-07-feat-05**  | `[feat]` | Wire PressSliderSection to Strapi — accept `PressItem[]` as props (no more hardcoded data), update `blog.astro` to fetch press items server-side via `fetchPressItems()`, pass to component. Remove mock data and TODO comments. Apply `publicationDate` rename in component. | P1  | S    | `[DRAFT]` | 🛑 Blocked by US-07-chore-04                     |
 
 #### US-08: BlogPost Detail Page
 
@@ -241,13 +256,17 @@
 
 ```
 Phase 1 — Shared Components + Backend Chores (parallel, no deps):
-  Epic1-chore-06  (Press content type + seed)
+  Epic1-chore-06  (Press content type schema)
+  Epic1-chore-07  (Press controller)
+  Epic1-chore-08  (Press routes)
+  Epic1-chore-09  (Press service)
+  Epic1-chore-10  (Shared Press type)
+  Epic1-chore-11  → Epic1-chore-06 (Press seed — video mp4 deferred)
   Epic2-chore-07  (FilterPills)
   Epic2-chore-08  (LoadMoreButton)
   Epic2-chore-13  (NotFound)
   Epic2-chore-15  (UpdatePagination)
   Epic3-chore-05  (BlogPostAction single type)
-  US-06-chore-02  (fetchTimelineUpdates API)
   US-08-chore-01  (TOC heading extraction utility)
   US-08-chore-02  (TableOfContents component)
   US-08-chore-03  (BlogPostAction API helper)
@@ -256,8 +275,7 @@ Phase 2 — Feature Implementation (depends on Phase 1):
   US-05-feat-01   (homepage restructure)
   US-05-feat-02   (blog slider "View All")
   US-06-feat-01   ✅ US-06-feat-02, ✅ US-06-feat-04, → US-06-feat-03, ✅ US-06-feat-05
-  US-07-feat-01   → US-07-feat-02, US-07-feat-03, US-07-feat-04
-  US-07-chore-03  🛑 Epic1-chore-06 → US-07-chore-04 → US-07-feat-05 (Press Strapi wiring)
+  US-07-chore-03  ✅ Epic1-chore-10 → US-07-chore-04 → US-07-feat-05 (Press Strapi wiring)
   US-08-feat-05   (BlogPostHeader)
   US-08-feat-03   🔗 Epic3-chore-05 (CTA section)
   US-08-feat-02   🛑 US-08-chore-02 (ToC sidebar)
