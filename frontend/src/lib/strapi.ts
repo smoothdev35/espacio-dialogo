@@ -1,12 +1,10 @@
 import type {
   Update,
-  UpdateCard,
   BlogPost,
   BlogPostAction,
   Author,
   Category,
   StrapiCollectionResponse,
-  StrapiMeta,
   StrapiQueryParams,
   StrapiSingleResponse,
   Tag,
@@ -17,7 +15,7 @@ interface StrapiConfig {
   token?: string
 }
 
-let config: StrapiConfig = {
+const config: StrapiConfig = {
   url: import.meta.env.STRAPI_URL,
 }
 

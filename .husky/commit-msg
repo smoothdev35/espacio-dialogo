@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+# Zero-dependency Conventional Commits check
+# Allows optional scope: type(scope): subject
+
+msg_file="$1"
+msg=$(cat "$msg_file" | head -1)
+
+if echo "$msg" | grep -Eq '^(feat|fix|refactor|perf|test|chore|docs|style|build|ci|revert)(\([a-z0-9._/-]+\))?: '; then
+  exit 0
+fi
+
+echo "husky - commit-msg: invalid conventional commit message"
+echo "Expected format: type(optional-scope): subject"
+echo "Got: $msg"
+echo "Valid types: feat fix refactor perf test chore docs style build ci revert"
+exit 1

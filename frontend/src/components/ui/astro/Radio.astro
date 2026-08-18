@@ -27,11 +27,9 @@ const errorId = `${groupId}-error`
 ---
 
 <fieldset class:list={['flex flex-col gap-2', className]} {...rest}>
-  <legend class="text-sm"
-    >{legend}</legend
-  >
+  <legend class="text-sm">{legend}</legend>
   {
-    options.map((opt, i) => {
+    options.map((opt) => {
       const optId = `${groupId}-${opt.value}`
       return (
         <label for={optId} class="flex cursor-pointer items-center gap-2">
@@ -47,21 +45,19 @@ const errorId = `${groupId}-error`
             class="peer sr-only"
           />
           <span
-            class="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-radio-border bg-radio-bg peer-checked:border-radio-bg-checked peer-checked:bg-radio-bg-checked peer-disabled:opacity-50"
+            class="border-radio-border bg-radio-bg peer-checked:border-radio-bg-checked peer-checked:bg-radio-bg-checked flex h-4 w-4 shrink-0 items-center justify-center rounded-full border peer-disabled:opacity-50"
             aria-hidden="true"
           >
-            <span class="h-2 w-2 rounded-full bg-radio-dot opacity-0 transition-opacity peer-checked:opacity-100" />
+            <span class="bg-radio-dot h-2 w-2 rounded-full opacity-0 transition-opacity peer-checked:opacity-100" />
           </span>
-           <span>
-            {opt.label}
-          </span>
+          <span>{opt.label}</span>
         </label>
       )
     })
   }
   {
     hasError && (
-      <p id={errorId} class="text-sm text-error" role="alert">
+      <p id={errorId} class="text-error text-sm" role="alert">
         {errorMessage}
       </p>
     )

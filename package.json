@@ -5,6 +5,10 @@
   },
   "devDependencies": {
     "eslint": "9.5.0",
+    "eslint-plugin-astro": "1.0.1",
+    "eslint-plugin-jsx-a11y": "6.8.0",
+    "eslint-plugin-react": "7.34.2",
+    "eslint-plugin-react-hooks": "4.6.2",
     "husky": "9.1.7",
     "lint-staged": "15.4.3",
     "prettier": "3.3.1",
@@ -15,15 +19,9 @@
     "@types/node": "22.15.3"
   },
   "lint-staged": {
-    "frontend/**/*.{ts,tsx,astro}": [
-      "eslint --config frontend/eslint.config.mjs --fix",
-      "prettier --config frontend/.prettierrc --write"
-    ],
-    "frontend/**/*.{css,json,md}": "prettier --config frontend/.prettierrc --write",
-    "backend/**/*.{ts,js,mjs,cjs}": [
-      "eslint --config backend/eslint.config.mjs --fix",
-      "prettier --config backend/.prettierrc --write"
-    ]
+    "**/*.{ts,tsx,js,jsx,mjs,cjs,astro}": "eslint --fix",
+    "frontend/**/*.{ts,tsx,astro,css,json,md}": "prettier --write",
+    "backend/**/*.{ts,js,mjs,cjs,json,md}": "prettier --write"
   },
   "packageManager": "pnpm@11.6.0"
 }
