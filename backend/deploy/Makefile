@@ -30,7 +30,7 @@ deploy:
 	@echo "==> Pulling latest code"
 	$(SSH) 'cd $(REPO_DIR) && git pull origin main'
 	@echo "==> Installing dependencies"
-	$(SSH) 'cd $(APP_DIR) && export COREPACK_DEFAULT_TO_LATEST=0 && (command -v corepack >/dev/null 2>&1 && corepack pnpm install || pnpm install)'
+	$(SSH) 'cd $(APP_DIR) && export COREPACK_DEFAULT_TO_LATEST=0 && (command -v corepack >/dev/null 2>&1 && corepack pnpm install --frozen-lockfile || pnpm install --frozen-lockfile)'
 	@echo "==> Building admin panel"
 	$(SSH) 'cd $(APP_DIR) && NODE_OPTIONS=--max-old-space-size=2048 pnpm run build'
 	@echo "==> Updating systemd service"
@@ -50,7 +50,7 @@ status:
 rollback:
 	$(SSH) 'cd $(REPO_DIR) && git log --oneline -5'
 	@read -p "Enter commit SHA to revert to: " sha; \
-	$(SSH) 'cd $(REPO_DIR) && git reset --hard $$sha && cd $(APP_DIR) && export COREPACK_DEFAULT_TO_LATEST=0 && (command -v corepack >/dev/null 2>&1 && corepack pnpm install || pnpm install) && NODE_OPTIONS=--max-old-space-size=2048 pnpm run build && sudo systemctl restart strapi'
+	$(SSH) 'cd $(REPO_DIR) && git reset --hard $$sha && cd $(APP_DIR) && export COREPACK_DEFAULT_TO_LATEST=0 && (command -v corepack >/dev/null 2>&1 && corepack pnpm install --frozen-lockfile || pnpm install --frozen-lockfile) && NODE_OPTIONS=--max-old-space-size=2048 pnpm run build && sudo systemctl restart strapi'
 
 backup:
 	@echo "==> Dumping database"

@@ -35,7 +35,7 @@ jobs:
             else
               pnpm_cmd="pnpm"
             fi
-            $pnpm_cmd install
+            $pnpm_cmd install --frozen-lockfile
 
             echo "[deploy] Building admin panel"
             NODE_OPTIONS=--max-old-space-size=2048 pnpm run build

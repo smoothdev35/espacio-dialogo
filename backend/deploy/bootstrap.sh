@@ -95,7 +95,7 @@ echo "       ssh root@<host> 'chmod 600 ${APP_DIR}/backend/.env && chown ${STACK
 echo "       ssh root@<host> 'nano ${APP_DIR}/backend/.env'  # fill secrets"
 echo ""
 echo "    2. Build and start:"
-echo "       ssh ${STACK_USER}@<host> 'cd ${APP_DIR}/backend && corepack pnpm install && NODE_OPTIONS=--max-old-space-size=2048 pnpm run build'"
+echo "       ssh ${STACK_USER}@<host> 'cd ${APP_DIR}/backend && corepack pnpm install --frozen-lockfile && NODE_OPTIONS=--max-old-space-size=2048 pnpm run build'"
 echo "       ssh root@<host> 'systemctl enable --now strapi'"
 echo ""
 echo "    3. Watch logs:"
